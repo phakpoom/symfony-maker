@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\App\Model;
+namespace App\OK\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Net;
+use Nette\PhpGenerator\PhpNamespace;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 use Sylius\Component\Resource\Model\ToggleableTrait;
 
@@ -26,7 +26,7 @@ class Test implements TestInterface
     protected $code;
 
     /**
-     * @var Collection|Net[]
+     * @var Collection|PhpNamespace[]
      */
     protected $test;
 
@@ -73,7 +73,7 @@ class Test implements TestInterface
     /**
      * {@inheritdoc}
      */
-    public function hasTest(Net $test): bool
+    public function hasTest(PhpNamespace $test): bool
     {
         return $this->tests->contains($test);
     }
@@ -81,7 +81,7 @@ class Test implements TestInterface
     /**
      * {@inheritdoc}
      */
-    public function addTest(Net $test)
+    public function addTest(PhpNamespace $test)
     {
         if (!$this->hasTest($test)) {
             $this->tests->add($test);
@@ -92,7 +92,7 @@ class Test implements TestInterface
     /**
      * {@inheritdoc}
      */
-    public function removeTest(Net $test)
+    public function removeTest(PhpNamespace $test)
     {
         if ($this->hasTest($test)) {
             $this->tests->removeElement($test);

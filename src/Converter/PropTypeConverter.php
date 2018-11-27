@@ -2,6 +2,12 @@
 
 namespace Bonn\Maker\Converter;
 
+use Bonn\Maker\ModelPropType\ArrayType;
+use Bonn\Maker\ModelPropType\BooleanType;
+use Bonn\Maker\ModelPropType\CollectionType;
+use Bonn\Maker\ModelPropType\DateTimeType;
+use Bonn\Maker\ModelPropType\FloatType;
+use Bonn\Maker\ModelPropType\InterfaceType;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
 use Bonn\Maker\ModelPropType\IntegerType;
@@ -14,6 +20,12 @@ final class PropTypeConverter implements PropTypeConverterInterface
     const TYPES = [
         StringType::class,
         IntegerType::class,
+        BooleanType::class,
+        ArrayType::class,
+        DateTimeType::class,
+        FloatType::class,
+        InterfaceType::class,
+        CollectionType::class,
     ];
 
     /**

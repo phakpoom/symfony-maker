@@ -10,6 +10,7 @@ use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\NameResolver;
+use phpDocumentor\Reflection\DocBlockFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -83,16 +84,16 @@ class GenerateModelCommand extends Command
         $classNameInput = $helper->ask($input, $output, $question);
 
         if ($isRollback = $input->getArgument('op') === 'rollback') {
-            $allVersions = $this->cache->listVersions(NameResolver::resolveOnlyClassName($className));
+            $allVersions = $this->cache->listVersions(NameResolver::resolveOnlyClassName($classNameInput));
 
             if (empty($allVersions)) {
-                $output->writeln('<info>No versions for class ' . $className . '</info>');
+                $output->writeln('<info>No versions for class ' . $classNameInput . '</info>');
 
                 return;
             }
 
             $question = new ChoiceQuestion(
-                "Please select your version:$className",
+                "Please select your version:$classNameInput",
                 array_keys($allVersions)
             );
 
@@ -156,18 +157,48 @@ class GenerateModelCommand extends Command
         }
 
         $this->props[] = $propertyName;
+        $supportedTypes = $this->converter->getSupportedType();
         $question = new ChoiceQuestion(
             "Please select your property:$propertyName type (default string) ",
-            array_map(function ($propTypeClass) {
+            $supportedTypeChoices = array_map(function ($propTypeClass) {
                 /** @var PropTypeInterface $propTypeClass */
                 return $propTypeClass::getTypeName();
-            }, $this->converter->getSupportedType()),
+            }, $supportedTypes),
             0
         );
-
         $propertyType = $helper->ask($input, $output, $question);
-        $question = new Question('Enter default value (enter for skip)');
-        $defaultValue = $helper->ask($input, $output, $question);
+
+        $oReflectionClass = new \ReflectionClass($supportedTypes[array_search($propertyType, $supportedTypeChoices)]);
+        $typeDocblock = $oReflectionClass->getDocComment();
+
+
+        $askForValue = true;
+        $valueRequired = false;
+        $valueQuestion = 'Enter value (enter for skip): ';
+        $defaultValue = '';
+        if (!empty($typeDocblock)) {
+            $docblock = DocBlockFactory::createInstance()->create($typeDocblock);
+            if (!empty($docblock->getTagsByName('commandValueSkip'))) {
+                $askForValue = false;
+            } else {
+                if (!empty($docblock->getTagsByName('commandValueRequired'))) {
+                    $valueRequired = true;
+                }
+
+                if (!empty($docblock->getTagsByName('commandValueDescription')[0])) {
+                    $valueQuestion = $docblock->getTagsByName('commandValueDescription')[0] . ': ';
+                }
+            }
+        }
+
+        if ($askForValue) {
+            $question = new Question($valueQuestion);
+            if (true === $valueRequired) {
+                $question->setValidator($this->notEmptyValidate())->setMaxAttempts(5);
+            }
+
+            $defaultValue = $helper->ask($input, $output, $question);
+        }
 
         $this->infos[] = $this->converter->buildInfoString($propertyName, $propertyType, $defaultValue);
 

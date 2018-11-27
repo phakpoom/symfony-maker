@@ -6,6 +6,7 @@ use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\ConstructResolveInterface;
 use Bonn\Maker\ModelPropType\IntegerType;
+use Bonn\Maker\ModelPropType\NamespaceModifyableInterface;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
 use Bonn\Maker\Utils\NameResolver;
@@ -118,6 +119,10 @@ final class ModelGenerator implements ModelGeneratorInterface
 
                 if ($prop instanceof ConstructResolveInterface) {
                     $prop->resolveConstruct($constructor);
+                }
+
+                if ($prop instanceof NamespaceModifyableInterface) {
+                    $prop->modify($classNamespace, $interfaceNamespace);
                 }
             }
 
