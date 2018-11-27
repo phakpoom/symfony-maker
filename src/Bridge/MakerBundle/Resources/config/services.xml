@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Bonn\Maker\Writer\FileWriter" id="bonn_maker.writer.file" />
+        <service class="Bonn\Maker\Writer\EchoWriter" id="bonn_maker.writer.echo" />
+
+        <service class="Bonn\Maker\Cache\ModelGeneratedCache" id="bonn_maker.cache.generated_model">
+            <argument /> <!-- inject by extension -->
+        </service>
+
+        <service class="Bonn\Maker\Converter\PropTypeConverter" id="bonn_maker.converter.prop_type">
+           <!-- inject by extension -->
+        </service>
+
+        <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
+
+        <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
+
+        <service class="Bonn\Maker\Manager\CodeManager" id="bonn_maker.manager.code_manager">
+            <argument type="service" id="bonn_maker.writer.file" />
+        </service>
+
+        <!--<service class="Bonn\Maker\Converter\PropTypeConverter" id="bonn_maker.converter.ddassadad">-->
+            <!--<tag name="bonn_maker.prop_type" />-->
+        <!--</service>-->
+
+        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateModelCommand" id="bonn_maker.command.generate_model">
+            <argument type="service" id="bonn_maker.generator.model" />
+            <argument type="service" id="bonn_maker.generator.doctrine_mapping" />
+            <argument type="service" id="bonn_maker.manager.code_manager" />
+            <argument type="service" id="bonn_maker.converter.prop_type" />
+            <argument type="service" id="bonn_maker.cache.generated_model" />
+            <argument>%bonn_maker.configs%</argument>
+            <tag name="console.command" />
+        </service>
+    </services>
+</container>
