@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -7,16 +9,16 @@ use Nette\PhpGenerator\ClassType;
 
 class IntegerType implements PropTypeInterface
 {
-    /** @var string  */
+    /** @var string */
     private $name;
 
-    /** @var int|null  */
+    /** @var int|null */
     private $defaultValue;
 
     public function __construct(string $name, ?string $defaultValue = null)
     {
         $this->name = $name;
-        $this->defaultValue = null !== $defaultValue ? (int)$defaultValue : null;;
+        $this->defaultValue = null !== $defaultValue ? (int) $defaultValue : null;
     }
 
     /**
@@ -40,6 +42,7 @@ class IntegerType implements PropTypeInterface
 
         if (null !== $this->defaultValue) {
             $prop->setComment("\n@var int\n");
+
             return;
         }
 
@@ -62,6 +65,7 @@ class IntegerType implements PropTypeInterface
 
         if ($isNullable) {
             $method->setComment("\n@return int|null\n");
+
             return;
         }
 
@@ -81,9 +85,10 @@ class IntegerType implements PropTypeInterface
         $method
             ->addParameter($this->name)
             ->setNullable($isNullable)
-            ->setTypeHint('int');;
+            ->setTypeHint('int');
         if ($isNullable) {
             $method->setComment("\n@param int|null $$this->name \n");
+
             return;
         }
         $method->setComment("\n@param int $$this->name\n");

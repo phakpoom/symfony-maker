@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -13,7 +15,7 @@ class ArrayType implements PropTypeInterface
     /** @var string */
     private $name;
 
-    /** @var null|string */
+    /** @var string|null */
     private $defaultValue;
 
     public function __construct(string $name, ?string $defaultValue = null)
@@ -69,7 +71,7 @@ class ArrayType implements PropTypeInterface
         $method
             ->addParameter($this->name)
             ->setNullable(false)
-            ->setTypeHint('array');;
+            ->setTypeHint('array');
         $method->setComment("\n@param array $$this->name \n");
     }
 

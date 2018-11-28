@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Bridge\MakerBundle\Command;
 
 use Bonn\Maker\Cache\ModelGeneratedCacheInterface;
@@ -22,28 +24,28 @@ use Symfony\Component\Finder\Finder;
 
 class GenerateModelCommand extends Command
 {
-    /** @var ModelGeneratorInterface  */
+    /** @var ModelGeneratorInterface */
     private $generator;
 
-    /** @var DoctrineGeneratorInterface  */
+    /** @var DoctrineGeneratorInterface */
     private $doctrineGenerator;
 
-    /** @var PropTypeConverterInterface  */
+    /** @var PropTypeConverterInterface */
     private $converter;
 
-    /** @var CodeManagerInterface  */
+    /** @var CodeManagerInterface */
     private $manager;
 
-    /** @var ModelGeneratedCacheInterface  */
+    /** @var ModelGeneratedCacheInterface */
     private $cache;
 
-    /** @var array  */
+    /** @var array */
     private $configs = [];
 
-    /** @var array  */
+    /** @var array */
     private $infos = [];
 
-    /** @var array  */
+    /** @var array */
     private $props = [];
 
     public function __construct(
@@ -53,8 +55,7 @@ class GenerateModelCommand extends Command
         PropTypeConverterInterface $converter,
         ModelGeneratedCacheInterface $cache,
         array $configs = []
-    )
-    {
+    ) {
         $this->converter = $converter;
         $this->doctrineGenerator = $doctrineGenerator;
         $this->manager = $manager;
@@ -107,29 +108,30 @@ class GenerateModelCommand extends Command
                 $choices[] = $dir->getRealPath();
             }
 
-            $question = new ChoiceQuestion("Please select your folder", $choices);
+            $question = new ChoiceQuestion('Please select your folder', $choices);
             $modelDir = $helper->ask($input, $output, $question);
 
-            while (true !== $this->askForProperty($input, $output)) {}
+            while (true !== $this->askForProperty($input, $output)) {
+            }
             $info = $this->converter->combineInfos($this->infos);
         }
 
         // resolve full class name with namespace
-        $className = str_replace($this->configs['project_source_dir'], "", $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
+        $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
         $className = str_replace('/', '\\', str_replace('\\\\', '\\', $className));
         $this->generator->generate([
             'class' => $className,
             'props' => $this->converter->convertMultiple($info),
-            'model_dir' => $modelDir . '/' . $this->configs['model_dir_name']
+            'model_dir' => $modelDir . '/' . $this->configs['model_dir_name'],
         ]);
         $this->doctrineGenerator->generate([
             'class' => $className,
             'props' => $this->converter->convertMultiple($info),
-            'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name']
+            'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name'],
         ]);
 
-        $createdFiles = array_map(function(Code $code) {
+        $createdFiles = array_map(function (Code $code) {
             return $code->getOutputPath();
         }, $this->manager->getCodes());
 
@@ -170,7 +172,6 @@ class GenerateModelCommand extends Command
 
         $oReflectionClass = new \ReflectionClass($supportedTypes[array_search($propertyType, $supportedTypeChoices)]);
         $typeDocblock = $oReflectionClass->getDocComment();
-
 
         $askForValue = true;
         $valueRequired = false;
@@ -213,6 +214,7 @@ class GenerateModelCommand extends Command
                     'Value cannot be empty'
                 );
             }
+
             return $answer;
         };
     }
@@ -228,6 +230,7 @@ class GenerateModelCommand extends Command
                     "$answer is already added"
                 );
             }
+
             return $answer;
         };
     }

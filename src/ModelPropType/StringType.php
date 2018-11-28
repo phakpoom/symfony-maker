@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -7,10 +9,10 @@ use Nette\PhpGenerator\ClassType;
 
 class StringType implements PropTypeInterface
 {
-    /** @var string  */
+    /** @var string */
     private $name;
 
-    /** @var null|string  */
+    /** @var string|null */
     private $defaultValue;
 
     public function __construct(string $name, ?string $defaultValue = null)
@@ -38,6 +40,7 @@ class StringType implements PropTypeInterface
         $prop->setValue($this->defaultValue);
         if (null !== $this->defaultValue) {
             $prop->setComment("\n@var string\n");
+
             return;
         }
         $prop->setComment("\n@var string|null\n");
@@ -59,6 +62,7 @@ class StringType implements PropTypeInterface
             ->setBody('return $this->' . $this->name . ';');
         if ($isNullable) {
             $method->setComment("\n@return string|null\n");
+
             return;
         }
         $method->setComment("\n@return string\n");
@@ -79,9 +83,10 @@ class StringType implements PropTypeInterface
             ->addParameter($this->name)
             ->setNullable($isNullable)
             ->setTypeHint('string');
-        ;
+
         if ($isNullable) {
             $method->setComment("\n@param string|null $$this->name \n");
+
             return;
         }
         $method->setComment("\n@param string $$this->name\n");

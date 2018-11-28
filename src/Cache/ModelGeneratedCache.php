@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Cache;
 
 use Symfony\Component\Filesystem\Filesystem;
@@ -7,15 +9,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ModelGeneratedCache implements ModelGeneratedCacheInterface
 {
-    /** @var Filesystem  */
+    /** @var Filesystem */
     private $fs;
 
-     /** @var array  */
+    /** @var array */
     private $options;
 
     public function __construct(array $options)
     {
-        $this->fs = new Filesystem;
+        $this->fs = new Filesystem();
         $this->options = (new OptionsResolver())->setDefaults([
             'max_keep_versions' => 20,
         ])
@@ -32,8 +34,8 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             $this->fs->mkdir($this->options['cache_dir']);
         }
 
-        $version = (new \DateTime)->format('YmdHis');
-        $this->fs->appendToFile($this->getFileLocate($className), $version . '||' . $modelDir .  '||' . $info . "\n");
+        $version = (new \DateTime())->format('YmdHis');
+        $this->fs->appendToFile($this->getFileLocate($className), $version . '||' . $modelDir . '||' . $info . "\n");
 
         return $version;
     }
@@ -59,10 +61,6 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
         return $lists;
     }
 
-    /**
-     * @param string $className
-     * @return string
-     */
     private function getFileLocate(string $className): string
     {
         return $this->options['cache_dir'] . '/' . $className . '.cache';

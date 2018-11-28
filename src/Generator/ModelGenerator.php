@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Generator;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -40,7 +42,7 @@ final class ModelGenerator implements ModelGeneratorInterface
             ])
             ->setRequired('class')
             ->setRequired('props')
-            ->setNormalizer('props', function(Options $options, $value) {
+            ->setNormalizer('props', function (Options $options, $value) {
                 foreach ((array) $value as $item) {
                     if (!$item instanceof PropTypeInterface) {
                         throw new InvalidOptionsException('all of props must be PropTypeInterface');
@@ -82,29 +84,29 @@ final class ModelGenerator implements ModelGeneratorInterface
         $idPropType = new IntegerType('id');
         $idPropType->addProperty($modelClass);
         $idPropType->addGetter($modelClass);
-        $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Model\\ResourceInterface");
-        $interfaceClass->addExtend("Sylius\\Component\\Resource\\Model\\ResourceInterface");
+        $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ResourceInterface');
+        $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ResourceInterface');
 
         // Extension
         if ($options['with_timestamp_able']) {
-            $classNamespace->addUse("Sylius\\Component\\Resource\\Model\\TimestampableTrait");
-            $modelClass->addTrait("Sylius\\Component\\Resource\\Model\\TimestampableTrait");
-            $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Model\\TimestampableInterface");
-            $interfaceClass->addExtend("Sylius\\Component\\Resource\\Model\\TimestampableInterface");
+            $classNamespace->addUse('Sylius\\Component\\Resource\\Model\\TimestampableTrait');
+            $modelClass->addTrait('Sylius\\Component\\Resource\\Model\\TimestampableTrait');
+            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\TimestampableInterface');
+            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\TimestampableInterface');
         }
         if ($options['with_code']) {
             $codePropType = new StringType('code');
             $codePropType->addProperty($modelClass);
             $codePropType->addGetter($modelClass);
             $codePropType->addSetter($modelClass);
-            $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Model\\CodeAwareInterface");
-            $interfaceClass->addExtend("Sylius\\Component\\Resource\\Model\\CodeAwareInterface");
+            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
+            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
         }
         if ($options['with_toggle']) {
-            $classNamespace->addUse("Sylius\\Component\\Resource\\Model\\ToggleableTrait");
-            $modelClass->addTrait("Sylius\\Component\\Resource\\Model\\ToggleableTrait");
-            $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Model\\ToggleableInterface");
-            $interfaceClass->addExtend("Sylius\\Component\\Resource\\Model\\ToggleableInterface");
+            $classNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
+            $modelClass->addTrait('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
+            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
+            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
         }
 
         if (!empty($props)) {

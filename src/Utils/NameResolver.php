@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Utils;
 
 class NameResolver
 {
     /**
-     * @param string $string
      * @return string|null
      */
     public static function resolveOnlyClassName(string $string): string
@@ -15,10 +16,6 @@ class NameResolver
         return end($arr);
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     public static function resolveNamespace(string $string): string
     {
         $explodeClassName = explode('\\', $string);
@@ -26,10 +23,6 @@ class NameResolver
         return implode('\\', array_slice($explodeClassName, 0, count($explodeClassName) - 1));
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     public static function camelToUnderScore(string $string): string
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $string, $matches);

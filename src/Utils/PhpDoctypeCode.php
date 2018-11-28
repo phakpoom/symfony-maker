@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Utils;
 
 use Nette\PhpGenerator\Helpers;
@@ -7,7 +9,6 @@ use Nette\PhpGenerator\Helpers;
 final class PhpDoctypeCode
 {
     /**
-     * @param string $content
      * @return string
      */
     public static function render(string $content)

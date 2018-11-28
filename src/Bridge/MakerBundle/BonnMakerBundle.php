@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Bridge\MakerBundle;
 
 use Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Compiler\PropTypePass;

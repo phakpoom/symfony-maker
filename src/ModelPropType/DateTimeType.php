@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -10,7 +12,7 @@ use Nette\PhpGenerator\ClassType;
  */
 class DateTimeType implements PropTypeInterface
 {
-    /** @var string  */
+    /** @var string */
     private $name;
 
     public function __construct(string $name, ?string $defaultValue = null)

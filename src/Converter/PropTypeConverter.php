@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Converter;
 
 use Bonn\Maker\ModelPropType\ArrayType;
@@ -7,17 +9,17 @@ use Bonn\Maker\ModelPropType\BooleanType;
 use Bonn\Maker\ModelPropType\CollectionType;
 use Bonn\Maker\ModelPropType\DateTimeType;
 use Bonn\Maker\ModelPropType\FloatType;
+use Bonn\Maker\ModelPropType\IntegerType;
 use Bonn\Maker\ModelPropType\InterfaceType;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
-use Bonn\Maker\ModelPropType\IntegerType;
 
 final class PropTypeConverter implements PropTypeConverterInterface
 {
-    const VALUE_SEPARATOR = ':';
-    const PROP_SEPARATOR = '|';
+    public const VALUE_SEPARATOR = ':';
+    public const PROP_SEPARATOR = '|';
 
-    const TYPES = [
+    public const TYPES = [
         StringType::class,
         IntegerType::class,
         BooleanType::class,
@@ -28,9 +30,7 @@ final class PropTypeConverter implements PropTypeConverterInterface
         CollectionType::class,
     ];
 
-    /**
-     * @var PropTypeInterface[]|array
-     */
+    /** @var PropTypeInterface[]|array */
     private $types = self::TYPES;
 
     public function __construct(?array $types = null)
@@ -40,16 +40,12 @@ final class PropTypeConverter implements PropTypeConverterInterface
         }
     }
 
-    /**
-     * @return array
-     */
     public function getSupportedType(): array
     {
         return $this->types;
     }
 
     /**
-     * @param string $infosString
      * @return array|PropTypeInterface[]
      */
     public function convertMultiple(string $infosString): array
@@ -64,9 +60,6 @@ final class PropTypeConverter implements PropTypeConverterInterface
     }
 
     /**
-     * @param string $infoString
-     *
-     * @return PropTypeInterface
      * @throws \InvalidArgumentException
      */
     public function convert(string $infoString): PropTypeInterface
@@ -82,13 +75,6 @@ final class PropTypeConverter implements PropTypeConverterInterface
         throw new \InvalidArgumentException('Unsupported propType "' . $p[1] . '"');
     }
 
-    /**
-     * @param string $name
-     * @param string $type
-     * @param null|string $value
-     *
-     * @return string
-     */
     public function buildInfoString(string $name, string $type, ?string $value = null): string
     {
         $str = $name . self::VALUE_SEPARATOR . $type;
@@ -99,11 +85,6 @@ final class PropTypeConverter implements PropTypeConverterInterface
         return $str;
     }
 
-    /**
-     * @param array $infos
-     *
-     * @return string
-     */
     public function combineInfos(array $infos): string
     {
         return implode(self::PROP_SEPARATOR, $infos);

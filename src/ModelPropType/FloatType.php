@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -7,10 +9,10 @@ use Nette\PhpGenerator\ClassType;
 
 class FloatType implements PropTypeInterface
 {
-    /** @var string  */
+    /** @var string */
     private $name;
 
-    /** @var float|null  */
+    /** @var float|null */
     private $defaultValue;
 
     public function __construct(string $name, ?string $defaultValue = null)
@@ -38,6 +40,7 @@ class FloatType implements PropTypeInterface
         $prop->setValue($this->defaultValue);
         if (null !== $this->defaultValue) {
             $prop->setComment("\n@var float\n");
+
             return;
         }
         $prop->setComment("\n@var float|null\n");
@@ -59,6 +62,7 @@ class FloatType implements PropTypeInterface
             ->setBody('return $this->' . $this->name . ';');
         if ($isNullable) {
             $method->setComment("\n@return float|null\n");
+
             return;
         }
         $method->setComment("\n@return float\n");
@@ -78,9 +82,10 @@ class FloatType implements PropTypeInterface
             ->addParameter($this->name)
             ->setNullable($isNullable)
             ->setTypeHint('float');
-        ;
+
         if ($isNullable) {
             $method->setComment("\n@param float|null $$this->name \n");
+
             return;
         }
         $method->setComment("\n@param float $$this->name\n");

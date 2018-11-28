@@ -8,19 +8,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Code
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $content;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $outputPath;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $extra;
 
     public function __construct(string $content, string $outputPath, array $extra = [])
@@ -28,29 +22,20 @@ class Code
         $this->content = $content;
         $this->outputPath = $outputPath;
         $this->extra = (new OptionsResolver())->setDefaults([
-            'dump_only' => false
+            'dump_only' => false,
         ])->resolve($extra);
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOutputPath(): ?string
     {
         return $this->outputPath;
     }
 
-    /**
-     * @return array
-     */
     public function getExtra(): array
     {
         return $this->extra;

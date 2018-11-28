@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -24,7 +26,6 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
     private $interfaceName;
 
     /**
-     * @param string $name
      * @param string $interfaceName
      */
     public function __construct(string $name, string $interfaceName = null)
@@ -82,7 +83,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
      */
     public function addSetter(ClassType $classType)
     {
-        if ("s" !== substr($this->name, -1, 1)) {
+        if ('s' !== substr($this->name, -1, 1)) {
             $this->name = $this->name . 's';
         }
 

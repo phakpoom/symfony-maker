@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

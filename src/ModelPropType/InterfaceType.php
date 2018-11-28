@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -16,14 +18,13 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /** @var string */
     private $name;
 
-    /** @var string  */
+    /** @var string */
     private $fullInterfaceName;
 
-    /** @var string  */
+    /** @var string */
     private $interfaceName;
 
     /**
-     * @param string $name
      * @param string $interfaceName
      */
     public function __construct(string $name, string $interfaceName = null)

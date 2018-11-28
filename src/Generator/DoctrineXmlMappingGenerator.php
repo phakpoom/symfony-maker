@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Generator;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
@@ -33,7 +35,7 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
             ])
             ->setRequired('class')
             ->setRequired('props')
-            ->setNormalizer('props', function(Options $options, $value) {
+            ->setNormalizer('props', function (Options $options, $value) {
                 foreach ((array) $value as $item) {
                     if (!$item instanceof PropTypeInterface) {
                         throw new InvalidOptionsException('all of props must be PropTypeInterface');
@@ -104,18 +106,16 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
         $dom->formatOutput = true;
         $dom->loadXML($root->asXML());
 
-        $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName.'.orm.xml'));
+        $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
     }
 
-    /**
-     * @return \SimpleXMLElement
-     */
     public static function createDoctrineMappingXml(): \SimpleXMLElement
     {
         $doctrineMapping = new \SimpleXMLElement('<doctrine-mapping />');
         $doctrineMapping->addAttribute('xmlns', 'http://doctrine-project.org/schemas/orm/doctrine-mapping');
-        $doctrineMapping->addAttribute("xmlns:xmlns:xsi", 'http://www.w3.org/2001/XMLSchema-instance');
-        $doctrineMapping->addAttribute("xmlns:xsi:schemaLocation", "http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd");
+        $doctrineMapping->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $doctrineMapping->addAttribute('xmlns:xsi:schemaLocation', 'http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd');
+
         return $doctrineMapping;
     }
 }

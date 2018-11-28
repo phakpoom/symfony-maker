@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\Bridge\MakerBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension as BaseExtension;
-use Symfony\Component\DependencyInjection\Loader;
 
 class Extension extends BaseExtension
 {
@@ -39,7 +41,7 @@ class Extension extends BaseExtension
         $config['cache_dir'] = $config['cache_dir'] ?: $container->getParameter('kernel.cache_dir') . '/bonn-symfony-maker/';
         $config['project_source_dir'] = $config['project_source_dir'] ?: $container->getParameter('kernel.project_dir') . '/src/';
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
         $container->setParameter('bonn_maker.configs', $config);
@@ -47,7 +49,7 @@ class Extension extends BaseExtension
         $cacheDef = $container->getDefinition('bonn_maker.cache.generated_model');
         $cacheDef->replaceArgument(0, [
             'max_keep_versions' => $config['cache_max_keep_versions'],
-            'cache_dir' => $config['cache_dir']
+            'cache_dir' => $config['cache_dir'],
         ]);
         $container->setDefinition('bonn_maker.cache.generated_model', $cacheDef);
 

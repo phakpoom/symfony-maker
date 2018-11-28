@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bonn\Maker\ModelPropType;
 
 use Nette\PhpGenerator\Method;
 
 interface ConstructResolveInterface
 {
-    /**
-     * @param Method $construct
-     */
-    public function resolveConstruct(Method $construct): void ;
+    public function resolveConstruct(Method $construct): void;
 }
