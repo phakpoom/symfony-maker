@@ -12,14 +12,9 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Main Test Suite">
+            <directory>./tests/</directory>
+            <exclude>./tests/framework/</exclude>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>tests</directory>
-        </whitelist>
-    </filter>
 </phpunit>

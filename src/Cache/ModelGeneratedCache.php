@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bonn\Maker\Cache;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ModelGeneratedCache implements ModelGeneratedCacheInterface
@@ -22,6 +24,17 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             'max_keep_versions' => 20,
         ])
             ->setRequired('cache_dir')
+            ->setNormalizer('max_keep_versions', function(Options $options, $value) {
+                if (0 === $value) {
+                    throw new InvalidArgumentException('max_keep_versions must be positive value or -1');
+                }
+
+                if (-1 > $value) {
+                    throw new InvalidArgumentException('max_keep_versions must be positive value or -1');
+                }
+
+                return $value;
+            })
             ->resolve($options);
     }
 
@@ -34,8 +47,20 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             $this->fs->mkdir($this->options['cache_dir']);
         }
 
-        $version = (new \DateTime())->format('YmdHis');
-        $this->fs->appendToFile($this->getFileLocate($className), $version . '||' . $modelDir . '||' . $info . "\n");
+        $versions = $this->listVersions($className);
+        if (-1 !== $this->options['max_keep_versions'] && count($versions) >= $this->options['max_keep_versions']) {
+            $versions = array_slice($versions, -($this->options['max_keep_versions'] - 1), $this->options['max_keep_versions'] - 1);
+        }
+
+        $versionsString = "";
+        foreach ($versions as $version => $data) {
+            $versionsString .= $version . '||' . $data[0] . '||' . $data[1] . "\n";
+        }
+
+        $version = uniqid();
+        $versionsString .= $version . '||' . $modelDir . '||' . $info . "\n";
+
+        $this->fs->dumpFile($this->getFileLocate($className), $versionsString);
 
         return $version;
     }
@@ -50,7 +75,6 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
         }
 
         $content = file_get_contents($this->getFileLocate($className));
-
         $lists = [];
         foreach (explode("\n", trim($content, "\n")) as $line) {
             [$version, $modelDir, $info] = explode('||', $line);
