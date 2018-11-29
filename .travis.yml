@@ -1,0 +1,19 @@
+language: php
+
+php:
+- 7.2
+- 7.3
+
+cache:
+    directories:
+    - $HOME/.composer/cache
+
+# Commands to be run before your environment runs.
+before_script:
+- composer self-update
+- composer install --prefer-source --no-interaction --dev
+
+script: ./vendor/bin/phpunit
+
+notifications:
+    email: false
