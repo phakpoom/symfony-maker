@@ -12,7 +12,7 @@ final class EchoWriter implements WriterInterface
     public function write(string $content, string $locate): void
     {
         echo '=========' . $locate . '==========' . "\n";
-        echo $content;
+        echo $content . "\n";
         echo '=========' . $locate . '==========' . "\n";
     }
 }
