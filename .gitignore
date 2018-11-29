@@ -1,2 +1,4 @@
-./vendor/
-./.idea/
+/vendor/
+/.idea/
+/tests/Cache/_cache/*
+/tests/Cache/_cache/!.gitkeep

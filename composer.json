@@ -1,0 +1,35 @@
+{
+  "name": "phakpoom/symfony-maker",
+  "description": "",
+  "license": "MIT",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Bonn\\Maker\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=7.2",
+    "nette/php-generator": "^3.1",
+    "phpdocumentor/reflection-docblock": "^4.3",
+    "symfony/filesystem": "^3.4 || ^4.1",
+    "symfony/finder": "^3.4 || ^4.1",
+    "symfony/framework-bundle": "^3.4 || ^4.1",
+    "symfony/options-resolver": "^3.4 || ^4.1"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": null
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7",
+    "sylius-labs/coding-standard": "^3.0"
+  }
+}
