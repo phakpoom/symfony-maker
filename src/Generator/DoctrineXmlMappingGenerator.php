@@ -7,6 +7,7 @@ namespace Bonn\Maker\Generator;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
+use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
@@ -29,9 +30,9 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
     {
         $resolver
             ->setDefaults([
-                'with_timestamp_able' => true,
-                'with_code' => true,
-                'with_toggle' => true,
+                'with_timestamp_able' => false,
+                'with_code' => false,
+                'with_toggle' => false,
             ])
             ->setRequired('class')
             ->setRequired('props')
@@ -101,10 +102,12 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
             $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->codeManager);
         }
 
-        $dom = new \DOMDocument('1.0');
+        $dom = new DOMIndent('1.0');
+        $dom->setWhiteSpaceForIndentation('    ');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
         $dom->loadXML($root->asXML());
+        $dom->xmlIndent();
 
         $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
     }

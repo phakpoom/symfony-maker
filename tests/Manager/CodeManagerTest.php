@@ -78,4 +78,18 @@ final class CodeManagerTest extends TestCase
         $this->assertCount(0, $this->manager->getCodes());
         $this->assertContains('test code', $output);
     }
+
+    public function testFlushDumpOnly()
+    {
+        $this->manager->persist(new Code('test code', __DIR__, [
+            'dump_only' => true
+        ]));
+        \ob_start();
+        $this->manager->flush();
+        $output = \ob_get_contents();
+        \ob_end_clean();
+
+        $this->assertCount(0, $this->manager->getCodes());
+        $this->assertContains('test code', $output);
+    }
 }

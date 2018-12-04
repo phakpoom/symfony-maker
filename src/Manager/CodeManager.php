@@ -51,7 +51,7 @@ final class CodeManager implements CodeManagerInterface
     {
         foreach ($this->codes as $code) {
             if (true === $code->getExtra()['dump_only']) {
-                echo $code->getCode();
+                echo $code->getContent();
 
                 continue;
             }

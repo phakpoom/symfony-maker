@@ -105,6 +105,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
         $method = $classType
             ->addMethod('add' . ucfirst($singleName));
         $method
+            ->setReturnType('void')
             ->setVisibility('public')
             ->addBody('if (!$this->has' . ucfirst($singleName) . '($' . $singleName . ')) {')
             ->addBody("\t" . '$this->' . $this->name . '->add($' . $singleName . ');')
@@ -114,12 +115,14 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
             ->addParameter($singleName);
         $method
             ->setComment("\n @param " . $this->interfaceName . " $$singleName" . "\n");
+        $method->addComment("@return void\n");
         $parameter->setTypeHint($this->fullInterfaceName);
 
         // remove
         $method = $classType
             ->addMethod('remove' . ucfirst($singleName));
         $method
+            ->setReturnType('void')
             ->setVisibility('public')
             ->addBody('if ($this->has' . ucfirst($singleName) . '($' . $singleName . ')) {')
             ->addBody("\t" . '$this->' . $this->name . '->removeElement($' . $singleName . ');')
@@ -128,6 +131,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
         $parameter = $method
             ->addParameter($singleName);
         $method->setComment("\n @param " . $this->interfaceName . " $$singleName" . "\n");
+        $method->addComment("@return void\n");
         $parameter->setTypeHint($this->fullInterfaceName);
     }
 
@@ -140,7 +144,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
         $field = $XMLElement->addChild('one-to-many');
         $field->addAttribute('field', $this->name);
         $field->addAttribute('target-entity', $this->fullInterfaceName);
-        $field->addAttribute('mapped-by', $onlyClassName);
+        $field->addAttribute('mapped-by', lcfirst($onlyClassName));
         $field->addAttribute('fetch', 'EXTRA_LAZY');
         $field->addAttribute('orphan-removal', 'true');
         $cascade = $field->addChild('cascade');

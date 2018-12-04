@@ -21,7 +21,7 @@ class ArrayType implements PropTypeInterface
     public function __construct(string $name, ?string $defaultValue = null)
     {
         $this->name = $name;
-        $this->defaultValue = $defaultValue ?: [];
+        $this->defaultValue = [];
     }
 
     /**
@@ -66,6 +66,7 @@ class ArrayType implements PropTypeInterface
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
+            ->setReturnType('void')
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $method
@@ -73,6 +74,7 @@ class ArrayType implements PropTypeInterface
             ->setNullable(false)
             ->setTypeHint('array');
         $method->setComment("\n@param array $$this->name \n");
+        $method->addComment("@return void \n");
     }
 
     /**
