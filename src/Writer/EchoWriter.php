@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Writer;
 
-final class EchoWriter implements WriterInterface
+class EchoWriter implements WriterInterface
 {
     /**
      * {@inheritdoc}

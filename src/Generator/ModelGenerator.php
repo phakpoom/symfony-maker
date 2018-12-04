@@ -36,9 +36,9 @@ final class ModelGenerator implements ModelGeneratorInterface
     {
         $resolver
             ->setDefaults([
-                'with_timestamp_able' => true,
-                'with_code' => true,
-                'with_toggle' => true,
+                'with_timestamp_able' => false,
+                'with_code' => false,
+                'with_toggle' => false,
             ])
             ->setRequired('class')
             ->setRequired('props')

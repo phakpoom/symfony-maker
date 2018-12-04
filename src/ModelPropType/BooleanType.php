@@ -67,6 +67,7 @@ class BooleanType implements PropTypeInterface
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
+            ->setReturnType('void')
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $parameter = $method
@@ -74,6 +75,7 @@ class BooleanType implements PropTypeInterface
             ->setNullable(false)
         ;
         $method->setComment("\n@param bool $$this->name \n");
+        $method->addComment("@return void\n");
         $parameter->setTypeHint('bool');
     }
 

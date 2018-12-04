@@ -36,7 +36,7 @@ class DateTimeType implements PropTypeInterface
         $prop = $classType
             ->addProperty($this->name)
             ->setVisibility('protected');
-        $prop->setComment("\n@var \\Datetime|null\n");
+        $prop->setComment("\n@var \\DateTime|null\n");
     }
 
     /**
@@ -49,8 +49,8 @@ class DateTimeType implements PropTypeInterface
             ->setVisibility('public')
         ;
         $method->setReturnNullable(true);
-        $method->setComment("\n@return \\Datetime|null\n");
-        $method->setReturnType('Datetime');
+        $method->setComment("\n@return \\DateTime|null\n");
+        $method->setReturnType('DateTime');
         $method
             ->setBody('return $this->' . $this->name . ';');
     }
@@ -62,14 +62,16 @@ class DateTimeType implements PropTypeInterface
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
+            ->setReturnType('void')
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $parameter = $method
             ->addParameter($this->name)
             ->setNullable(true)
         ;
-        $method->setComment("\n@param \\Datetime|null $$this->name \n");
-        $parameter->setTypeHint('Datetime');
+        $method->setComment("\n@param \\DateTime|null $$this->name \n");
+        $method->addComment("@return void \n");
+        $parameter->setTypeHint('DateTime');
     }
 
     /**
@@ -80,5 +82,6 @@ class DateTimeType implements PropTypeInterface
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);
         $field->addAttribute('type', 'datetime');
+        $field->addAttribute('nullable', 'true');
     }
 }

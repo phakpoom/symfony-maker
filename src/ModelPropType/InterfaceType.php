@@ -76,6 +76,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
+            ->setReturnType('void')
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $parameter = $method
@@ -83,6 +84,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
             ->setNullable(true)
         ;
         $method->setComment("\n@param $this->interfaceName|null $$this->name \n");
+        $method->addComment("@return void \n");
         $parameter->setTypeHint($this->fullInterfaceName);
     }
 

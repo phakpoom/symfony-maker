@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Writer;
 
-final class FileWriter implements WriterInterface
+class FileWriter implements WriterInterface
 {
     /**
      * {@inheritdoc}

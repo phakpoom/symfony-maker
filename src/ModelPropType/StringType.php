@@ -15,10 +15,14 @@ class StringType implements PropTypeInterface
     /** @var string|null */
     private $defaultValue;
 
+    /** @var bool */
+    private $nullable;
+
     public function __construct(string $name, ?string $defaultValue = null)
     {
         $this->name = $name;
         $this->defaultValue = $defaultValue;
+        $this->nullable = null === $defaultValue;
     }
 
     /**
@@ -38,7 +42,7 @@ class StringType implements PropTypeInterface
             ->addProperty($this->name)
             ->setVisibility('protected');
         $prop->setValue($this->defaultValue);
-        if (null !== $this->defaultValue) {
+        if (!$this->nullable) {
             $prop->setComment("\n@var string\n");
 
             return;
@@ -55,12 +59,12 @@ class StringType implements PropTypeInterface
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public')
         ;
-        $isNullable = null === $this->defaultValue;
-        $method->setReturnNullable($isNullable);
+        ;
+        $method->setReturnNullable($this->nullable);
         $method->setReturnType('string');
         $method
             ->setBody('return $this->' . $this->name . ';');
-        if ($isNullable) {
+        if ($this->nullable) {
             $method->setComment("\n@return string|null\n");
 
             return;
@@ -78,18 +82,19 @@ class StringType implements PropTypeInterface
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $method->setReturnType('void');
-        $isNullable = null === $this->defaultValue;
+
         $method
             ->addParameter($this->name)
-            ->setNullable($isNullable)
+            ->setNullable($this->nullable)
             ->setTypeHint('string');
 
-        if ($isNullable) {
+        if ($this->nullable) {
             $method->setComment("\n@param string|null $$this->name \n");
-
-            return;
+        } else {
+            $method->setComment("\n@param string $$this->name\n");
         }
-        $method->setComment("\n@param string $$this->name\n");
+
+        $method->addComment("@return void \n");
     }
 
     /**
@@ -100,5 +105,8 @@ class StringType implements PropTypeInterface
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);
         $field->addAttribute('type', 'string');
+        if ($this->nullable) {
+            $field->addAttribute('nullable', 'true');
+        }
     }
 }

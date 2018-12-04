@@ -15,10 +15,14 @@ class IntegerType implements PropTypeInterface
     /** @var int|null */
     private $defaultValue;
 
+    /** @var bool */
+    private $nullable;
+
     public function __construct(string $name, ?string $defaultValue = null)
     {
         $this->name = $name;
         $this->defaultValue = null !== $defaultValue ? (int) $defaultValue : null;
+        $this->nullable = null === $defaultValue;
     }
 
     /**
@@ -40,7 +44,7 @@ class IntegerType implements PropTypeInterface
 
         $prop->setValue($this->defaultValue);
 
-        if (null !== $this->defaultValue) {
+        if (!$this->nullable) {
             $prop->setComment("\n@var int\n");
 
             return;
@@ -57,13 +61,13 @@ class IntegerType implements PropTypeInterface
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public');
-        $isNullable = null === $this->defaultValue;
-        $method->setReturnNullable($isNullable);
+
+        $method->setReturnNullable($this->nullable);
         $method->setReturnType('int');
         $method
             ->setBody('return $this->' . $this->name . ';');
 
-        if ($isNullable) {
+        if ($this->nullable) {
             $method->setComment("\n@return int|null\n");
 
             return;
@@ -79,19 +83,21 @@ class IntegerType implements PropTypeInterface
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
+            ->setReturnType('void')
             ->setVisibility('public')
             ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
-        $isNullable = null === $this->defaultValue;
+
         $method
             ->addParameter($this->name)
-            ->setNullable($isNullable)
+            ->setNullable($this->nullable)
             ->setTypeHint('int');
-        if ($isNullable) {
+        if ($this->nullable) {
             $method->setComment("\n@param int|null $$this->name \n");
-
-            return;
+        } else {
+            $method->setComment("\n@param int $$this->name\n");
         }
-        $method->setComment("\n@param int $$this->name\n");
+
+        $method->addComment("@return void \n");
     }
 
     /**
@@ -102,5 +108,8 @@ class IntegerType implements PropTypeInterface
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);
         $field->addAttribute('type', 'integer');
+        if ($this->nullable) {
+            $field->addAttribute('nullable', 'true');
+        }
     }
 }
