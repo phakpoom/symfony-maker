@@ -34,17 +34,17 @@ abstract class AbstractPropTypeTest extends TestCase
         $this->doctrineGenerator = new DoctrineXmlMappingGenerator($this->manager);
     }
 
-    protected function generate(PropTypeInterface $propType)
+    protected function generate(/* array|PropTypeInterface */ $propType)
     {
         $this->generator->generate([
             'class' => 'App\\Model\\Mock',
-            'props' => [$propType],
+            'props' => is_array($propType) ? $propType : [$propType],
             'model_dir' => $this->codeDir()
         ]);
 
         $this->doctrineGenerator->generate([
             'class' => 'App\\Model\\Mock',
-            'props' => [$propType],
+            'props' => is_array($propType) ? $propType : [$propType],
             'doctrine_mapping_dir' => $this->codeDir()
         ]);
     }

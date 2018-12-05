@@ -8,6 +8,7 @@ use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\ConstructResolveInterface;
 use Bonn\Maker\ModelPropType\IntegerType;
+use Bonn\Maker\ModelPropType\ManagerAwareInterface;
 use Bonn\Maker\ModelPropType\NamespaceModifyableInterface;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
@@ -112,6 +113,12 @@ final class ModelGenerator implements ModelGeneratorInterface
         if (!empty($props)) {
             /** @var PropTypeInterface $prop */
             foreach ($props as $prop) {
+                // use for advance props eg. translation
+                if ($prop instanceof ManagerAwareInterface) {
+                    $prop->setManager($this->codeManager);
+                    $prop->setOption($options);
+                }
+
                 $prop->addProperty($modelClass);
                 $prop->addGetter($modelClass);
                 $prop->addSetter($modelClass);

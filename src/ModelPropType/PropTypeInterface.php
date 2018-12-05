@@ -17,5 +17,5 @@ interface PropTypeInterface
 
     public function addSetter(ClassType $classType);
 
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager);
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options);
 }

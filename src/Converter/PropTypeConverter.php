@@ -13,6 +13,7 @@ use Bonn\Maker\ModelPropType\IntegerType;
 use Bonn\Maker\ModelPropType\InterfaceType;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
+use Bonn\Maker\ModelPropType\TranslationType;
 
 final class PropTypeConverter implements PropTypeConverterInterface
 {
@@ -28,6 +29,7 @@ final class PropTypeConverter implements PropTypeConverterInterface
         FloatType::class,
         InterfaceType::class,
         CollectionType::class,
+        TranslationType::class,
     ];
 
     /** @var PropTypeInterface[]|array */
