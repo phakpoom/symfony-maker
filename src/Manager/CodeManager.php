@@ -50,7 +50,7 @@ final class CodeManager implements CodeManagerInterface
     public function flush(): void
     {
         foreach ($this->codes as $code) {
-            if (true === $code->getExtra()['dump_only']) {
+            if ($code->getExtra()['dump_only'] ?? false) {
                 echo $code->getContent();
 
                 continue;
