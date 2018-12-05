@@ -59,7 +59,7 @@ class StringType implements PropTypeInterface
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public')
         ;
-        ;
+
         $method->setReturnNullable($this->nullable);
         $method->setReturnType('string');
         $method

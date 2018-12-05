@@ -105,7 +105,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
 
         $dom = DoctrineXmlMappingGenerator::createDomWithRoot($xml);
         $codeManager->persist(new Code($dom->saveXML(), $translationMappingLocaled, [
-            'doctrine_mapping_xml' => $xml
+            'doctrine_mapping_xml' => $xml,
         ]));
     }
 
@@ -123,7 +123,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
             $classType->addTrait('Sylius\\Component\\Resource\\Model\\TranslatableTrait', ['__construct as protected initializeTranslationsCollection']);
             $classNameSpace->addUse('Sylius\\Component\\Resource\\Model\\TranslatableTrait');
             $classNameSpace->addUse('Sylius\\Component\\Resource\\Model\\TranslationInterface');
-            $classType->addComment("@method " . $this->getTranslationInterfaceName($classNameSpace, $classType) . " getTranslation()");
+            $classType->addComment('@method ' . $this->getTranslationInterfaceName($classNameSpace, $classType) . ' getTranslation()');
             $classType->getMethod('__construct')->addBody('$this->initializeTranslationsCollection();');
             $classNameSpace->addUse($this->getTranslationClassName($classNameSpace, $classType, true));
             $translationClassNameSpace = new PhpNamespace($classNameSpace->getName());
@@ -160,7 +160,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($translationClassNameSpace->__toString()),
             $this->getOption()['model_dir'] . "/{$translationClass->getName()}.php", [
-                'namespace' => $translationClassNameSpace
+                'namespace' => $translationClassNameSpace,
             ]));
 
         // ClassTranslationInterface.php
@@ -193,13 +193,11 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($translationInterfaceNameSpace->__toString()),
             $this->getOption()['model_dir'] . "/{$translationInterfaceClass->getName()}.php", [
-                'namespace' => $translationInterfaceNameSpace
+                'namespace' => $translationInterfaceNameSpace,
             ]));
     }
 
     /**
-     * @param PhpNamespace $namespace
-     * @param ClassType $classType
      * @param bool $isFull
      *
      * @return string
@@ -208,12 +206,11 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     {
         $className = str_replace('Interface', '', $classType->getName());
         $className = $className . 'TranslationInterface';
+
         return $isFull ? $namespace->getName() . '\\' . $className : $className;
     }
 
     /**
-     * @param PhpNamespace $namespace
-     * @param ClassType $classType
      * @param bool $isFull
      *
      * @return string
@@ -221,6 +218,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     private function getTranslationClassName(PhpNamespace $namespace, ClassType $classType, $isFull = false)
     {
         $className = $classType->getName() . 'Translation';
+
         return $isFull ? $namespace->getName() . '\\' . $className : $className;
     }
 }
