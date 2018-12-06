@@ -17,13 +17,13 @@ use Nette\PhpGenerator\PhpNamespace;
 class CollectionType implements PropTypeInterface, NamespaceModifyableInterface, ConstructResolveInterface
 {
     /** @var string */
-    private $name;
+    protected $name;
 
     /** @var string */
-    private $fullInterfaceName;
+    protected $fullInterfaceName;
 
     /** @var string */
-    private $interfaceName;
+    protected $interfaceName;
 
     /**
      * @param string $interfaceName
