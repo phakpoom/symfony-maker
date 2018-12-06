@@ -36,4 +36,13 @@ class Code
     {
         return $this->extra;
     }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setExtra(string $key, $value): void
+    {
+        $this->extra[$key] = $value;
+    }
 }
