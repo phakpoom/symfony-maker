@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Model;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class Code
 {
     /** @var string */
@@ -21,9 +19,7 @@ class Code
     {
         $this->content = $content;
         $this->outputPath = $outputPath;
-        $this->extra = (new OptionsResolver())->setDefaults([
-            'dump_only' => false,
-        ])->resolve($extra);
+        $this->extra = $extra;
     }
 
     public function getContent(): string

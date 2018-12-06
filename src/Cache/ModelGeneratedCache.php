@@ -24,7 +24,7 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             'max_keep_versions' => 20,
         ])
             ->setRequired('cache_dir')
-            ->setNormalizer('max_keep_versions', function(Options $options, $value) {
+            ->setNormalizer('max_keep_versions', function (Options $options, $value) {
                 if (0 === $value) {
                     throw new InvalidArgumentException('max_keep_versions must be positive value or -1');
                 }
@@ -52,7 +52,7 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             $versions = array_slice($versions, -($this->options['max_keep_versions'] - 1), $this->options['max_keep_versions'] - 1);
         }
 
-        $versionsString = "";
+        $versionsString = '';
         foreach ($versions as $version => $data) {
             $versionsString .= $version . '||' . $data[0] . '||' . $data[1] . "\n";
         }

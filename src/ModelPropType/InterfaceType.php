@@ -91,7 +91,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
     {
         $field = $XMLElement->addChild('many-to-one');
         $field->addAttribute('field', $this->name);

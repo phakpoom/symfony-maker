@@ -100,7 +100,7 @@ class FloatType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
     {
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);

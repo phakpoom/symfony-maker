@@ -138,7 +138,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);
         $field = $XMLElement->addChild('one-to-many');

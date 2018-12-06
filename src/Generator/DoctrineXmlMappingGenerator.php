@@ -99,9 +99,16 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
 
         /** @var PropTypeInterface $prop */
         foreach ($props as $prop) {
-            $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->codeManager);
+            $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->codeManager, $options);
         }
 
+        $dom = self::createDomWithRoot($root);
+
+        $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
+    }
+
+    public static function createDomWithRoot(\SimpleXMLElement $root)
+    {
         $dom = new DOMIndent('1.0');
         $dom->setWhiteSpaceForIndentation('    ');
         $dom->preserveWhiteSpace = false;
@@ -109,7 +116,7 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
         $dom->loadXML($root->asXML());
         $dom->xmlIndent();
 
-        $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
+        return $dom;
     }
 
     public static function createDoctrineMappingXml(): \SimpleXMLElement
