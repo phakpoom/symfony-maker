@@ -14,6 +14,8 @@ use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\NameResolver;
 use phpDocumentor\Reflection\DocBlockFactory;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,6 +23,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
+use Webmozart\Assert\Assert;
 
 class GenerateModelCommand extends Command
 {
@@ -48,6 +51,9 @@ class GenerateModelCommand extends Command
     /** @var array */
     private $props = [];
 
+    /** @var array */
+    private $supportOps = [];
+
     public function __construct(
         ModelGeneratorInterface $generator,
         DoctrineGeneratorInterface $doctrineGenerator,
@@ -63,6 +69,12 @@ class GenerateModelCommand extends Command
         $this->cache = $cache;
         $this->configs = $configs;
 
+        $this->supportOps = [
+            'make',
+            'dump',
+            'rollback'
+        ];
+
         parent::__construct();
     }
 
@@ -71,55 +83,37 @@ class GenerateModelCommand extends Command
         $this
             ->setName('bonn:model:maker')
             ->setDescription('Generate model')
-            ->addArgument('op', InputArgument::OPTIONAL, 'mode can be make|rollback', 'make')
+            ->addArgument('op', InputArgument::OPTIONAL, 'mode can be ' . implode('|', $this->supportOps), 'make')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $op = $input->getArgument('op');
+        if (!in_array($input->getArgument('op'), $this->supportOps)) {
+            throw new InvalidArgumentException(
+                sprintf('Operation must be one of %s, got %s', implode('|', $this->supportOps), $op));
+        }
+
         $helper = $this->getHelper('question');
 
-        // Ask Class name
-        $question = new Question('Please enter the class name (eg. MyClass): ');
-        $question->setValidator($this->notEmptyValidate())->setMaxAttempts(5);
-        $classNameInput = $helper->ask($input, $output, $question);
-
-        if ($isRollback = $input->getArgument('op') === 'rollback') {
-            $allVersions = $this->cache->listVersions(NameResolver::resolveOnlyClassName($classNameInput));
-
-            if (empty($allVersions)) {
-                $output->writeln('<info>No versions for class ' . $classNameInput . '</info>');
-
-                return;
-            }
-
-            $question = new ChoiceQuestion(
-                "Please select your version:$classNameInput",
-                array_keys($allVersions)
-            );
-
-            $versionSelected = $helper->ask($input, $output, $question);
-            [$modelDir, $info] = $allVersions[$versionSelected];
+        if ('dump' !== $op) {
+            // Ask Class name
+            $question = new Question('Please enter the class name (eg. MyClass): ');
+            $question->setValidator($this->notEmptyValidate())->setMaxAttempts(5);
+            $classNameInput = $helper->ask($input, $output, $question);
         } else {
-            $finder = new Finder();
-            // Ask Bundle
-            $choices = [];
-            foreach ($finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0') as $dir) {
-                $choices[] = $dir->getRealPath();
-            }
-
-            $question = new ChoiceQuestion('Please select your folder', $choices);
-            $modelDir = $helper->ask($input, $output, $question);
-
-            while (true !== $this->askForProperty($input, $output)) {
-            }
-            $info = $this->converter->combineInfos($this->infos);
+            $classNameInput = 'Dummy';
         }
+
+        [$modelDir, $info] = $this->handleOp($op, $classNameInput, $input, $output, $helper);
 
         // resolve full class name with namespace
         $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
-        $className = str_replace('/', '\\', str_replace('\\\\', '\\', $className));
+        $className = str_replace('/', '\\', $className);
+        $className = preg_replace('/\\\+/','\\', $className);
+
         $this->generator->generate([
             'class' => $className,
             'props' => $this->converter->convertMultiple($info),
@@ -131,9 +125,16 @@ class GenerateModelCommand extends Command
             'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name'],
         ]);
 
-        $createdFiles = array_map(function (Code $code) {
-            return $code->getOutputPath();
-        }, $this->manager->getCodes());
+        $createdFiles = [];
+        if ('dump' !== $op) {
+            $createdFiles = array_map(function (Code $code) {
+                return $code->getOutputPath();
+            }, $this->manager->getCodes());
+        } else {
+            foreach ($this->manager->getCodes() as $code) {
+                $code->setExtra('dump_only', true);
+            }
+        }
 
         $this->manager->flush();
 
@@ -143,9 +144,58 @@ class GenerateModelCommand extends Command
             $io->success($createdFile);
         }
 
-        if (!$isRollback) {
+        if ('rollback' === $op) {
             $this->cache->appendVersion(NameResolver::resolveOnlyClassName($className), $info, $modelDir);
         }
+    }
+
+    /**
+     * @param string $op
+     * @param string $classNameInput
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param HelperInterface $helper
+     * @return array
+     */
+    protected function handleOp(string $op, string $classNameInput, InputInterface $input, OutputInterface $output, HelperInterface $helper): array
+    {
+        if ($op === 'rollback') {
+            $allVersions = $this->cache->listVersions(NameResolver::resolveOnlyClassName($classNameInput));
+
+            if (empty($allVersions)) {
+                $output->writeln('<info>No versions for class ' . $classNameInput . '</info>');
+
+                die();
+            }
+
+            $question = new ChoiceQuestion(
+                "Please select your version:$classNameInput",
+                array_keys($allVersions)
+            );
+
+            $versionSelected = $helper->ask($input, $output, $question);
+            return $allVersions[$versionSelected];
+        } elseif ('make' === $op) {
+            $finder = new Finder();
+            // Ask Bundle
+            $choices = [];
+            foreach ($finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0') as $dir) {
+                $choices[] = $dir->getRealPath();
+            }
+
+            $question = new ChoiceQuestion('Please select your folder', $choices);
+            $modelDir = $helper->ask($input, $output, $question);
+
+            while (true !== $this->askForProperty($input, $output)) {}
+            $info = $this->converter->combineInfos($this->infos);
+            return [$modelDir, $info];
+        } elseif ('dump' === $op) {
+            while (true !== $this->askForProperty($input, $output)) {}
+            $info = $this->converter->combineInfos($this->infos);
+            return ['', $info];
+        }
+
+        return [];
     }
 
     private function askForProperty(InputInterface $input, OutputInterface $output)

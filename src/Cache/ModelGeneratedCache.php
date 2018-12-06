@@ -21,10 +21,13 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
     {
         $this->fs = new Filesystem();
         $this->options = (new OptionsResolver())->setDefaults([
-            'max_keep_versions' => 20,
+            'max_keep_versions' => 20
         ])
             ->setRequired('cache_dir')
             ->setNormalizer('max_keep_versions', function (Options $options, $value) {
+                if (null === $value) {
+                    return 20;
+                }
                 if (0 === $value) {
                     throw new InvalidArgumentException('max_keep_versions must be positive value or -1');
                 }
