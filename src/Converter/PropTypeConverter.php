@@ -6,6 +6,9 @@ namespace Bonn\Maker\Converter;
 
 use Bonn\Maker\ModelPropType\ArrayType;
 use Bonn\Maker\ModelPropType\BooleanType;
+use Bonn\Maker\ModelPropType\CollectionManyToManyInverseType;
+use Bonn\Maker\ModelPropType\CollectionManyToManyOwnerBidirectionalType;
+use Bonn\Maker\ModelPropType\CollectionManyToManyOwnerUnidirectionalType;
 use Bonn\Maker\ModelPropType\CollectionType;
 use Bonn\Maker\ModelPropType\DateTimeType;
 use Bonn\Maker\ModelPropType\FloatType;
@@ -27,9 +30,12 @@ final class PropTypeConverter implements PropTypeConverterInterface
         ArrayType::class,
         DateTimeType::class,
         FloatType::class,
+        TranslationType::class,
         InterfaceType::class,
         CollectionType::class,
-        TranslationType::class,
+        CollectionManyToManyOwnerUnidirectionalType::class,
+        CollectionManyToManyOwnerBidirectionalType::class,
+        CollectionManyToManyInverseType::class,
     ];
 
     /** @var PropTypeInterface[]|array */
