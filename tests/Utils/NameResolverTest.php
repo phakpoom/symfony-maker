@@ -29,4 +29,18 @@ final class NameResolverTest extends TestCase
         $this->assertEquals('post_comments', NameResolver::camelToUnderScore('PostComments'));
         $this->assertEquals('oh_my_god', NameResolver::camelToUnderScore('oh_my_god'));
     }
+
+    public function testResolveToSingular()
+    {
+        $this->assertEquals('bon', NameResolver::resolveToSingular('bon'));
+        $this->assertEquals('comment', NameResolver::resolveToSingular('comments'));
+        $this->assertEquals('computer', NameResolver::resolveToSingular('computers'));
+    }
+
+    public function testResolveToPlural()
+    {
+        $this->assertEquals('bons', NameResolver::resolveToPlural('bons'));
+        $this->assertEquals('comments', NameResolver::resolveToPlural('comment'));
+        $this->assertEquals('computers', NameResolver::resolveToPlural('computer'));
+    }
 }

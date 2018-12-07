@@ -6,9 +6,6 @@ namespace Bonn\Maker\Utils;
 
 class NameResolver
 {
-    /**
-     * @return string|null
-     */
     public static function resolveOnlyClassName(string $string): string
     {
         $arr = explode('\\', $string);
@@ -21,6 +18,20 @@ class NameResolver
         $explodeClassName = explode('\\', $string);
 
         return implode('\\', array_slice($explodeClassName, 0, count($explodeClassName) - 1));
+    }
+
+    public static function resolveToSingular(string $string): string
+    {
+        return preg_replace('/s$/i', '', $string);
+    }
+
+    public static function resolveToPlural(string $string)
+    {
+        if ('s' === substr($string, -1)) {
+            return $string;
+        }
+
+        return $string . 's';
     }
 
     public static function camelToUnderScore(string $string): string

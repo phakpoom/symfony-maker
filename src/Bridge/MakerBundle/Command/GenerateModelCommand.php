@@ -27,6 +27,12 @@ use Webmozart\Assert\Assert;
 
 class GenerateModelCommand extends Command
 {
+    const SUPPORT_OPS = [
+        'make',
+        'dump',
+        'rollback'
+    ];
+    
     /** @var ModelGeneratorInterface */
     private $generator;
 
@@ -51,9 +57,6 @@ class GenerateModelCommand extends Command
     /** @var array */
     private $props = [];
 
-    /** @var array */
-    private $supportOps = [];
-
     public function __construct(
         ModelGeneratorInterface $generator,
         DoctrineGeneratorInterface $doctrineGenerator,
@@ -68,13 +71,7 @@ class GenerateModelCommand extends Command
         $this->generator = $generator;
         $this->cache = $cache;
         $this->configs = $configs;
-
-        $this->supportOps = [
-            'make',
-            'dump',
-            'rollback'
-        ];
-
+        
         parent::__construct();
     }
 
@@ -83,16 +80,16 @@ class GenerateModelCommand extends Command
         $this
             ->setName('bonn:model:maker')
             ->setDescription('Generate model')
-            ->addArgument('op', InputArgument::OPTIONAL, 'mode can be ' . implode('|', $this->supportOps), 'make')
+            ->addArgument('op', InputArgument::OPTIONAL, 'mode can be ' . implode('|', self::SUPPORT_OPS), 'make')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $op = $input->getArgument('op');
-        if (!in_array($input->getArgument('op'), $this->supportOps)) {
+        if (!in_array($input->getArgument('op'), self::SUPPORT_OPS)) {
             throw new InvalidArgumentException(
-                sprintf('Operation must be one of %s, got %s', implode('|', $this->supportOps), $op));
+                sprintf('Operation must be one of %s, got %s', implode('|', self::SUPPORT_OPS), $op));
         }
 
         $helper = $this->getHelper('question');
