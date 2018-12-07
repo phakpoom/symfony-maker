@@ -25,7 +25,7 @@ class PropTypePass implements CompilerPassInterface
         }
 
         $propTypeConverterDef = $container->getDefinition('bonn_maker.converter.prop_type');
-        $propTypeConverterDef->replaceArgument(0, $types);
+        $propTypeConverterDef->setArgument(0, $types);
         $container->setDefinition('bonn_maker.converter.prop_type', $propTypeConverterDef);
     }
 }
