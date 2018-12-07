@@ -1,2 +1,36 @@
-# symfony-maker
+# Symfony-maker
 [![Build Status](https://travis-ci.org/phakpoom/symfony-maker.svg?branch=master)](https://travis-ci.org/phakpoom/symfony-maker)
+
+
+## Installation with composer
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/phakpoom/symfony-maker.git"
+        }
+    ]
+},
+"require-dev": {
+    "phakpoom/symfony-maker": "dev-master",
+},
+```
+
+## Enabled Bundle
+For symfony 3.4.x
+```php
+if ('dev' === $this->getEnvironment()) {
+    new Bonn\Maker\Bridge\MakerBundle\BonnMakerBundle();
+}
+```
+For symfony 4
+```php
+Bonn\Maker\Bridge\MakerBundle\BonnMakerBundle::class => ['dev' => true]
+```
+
+## Usage
+
+#### Generate model and doctrine mapping
+`./bin/console bonn:model:maker --help`
