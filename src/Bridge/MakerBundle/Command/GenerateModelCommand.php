@@ -110,6 +110,7 @@ class GenerateModelCommand extends Command
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
         $className = str_replace('/', '\\', $className);
         $className = preg_replace('/\\\+/','\\', $className);
+        $className = ltrim('\\', $className);
 
         $this->generator->generate([
             'class' => $className,
