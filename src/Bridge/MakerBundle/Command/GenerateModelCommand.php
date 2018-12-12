@@ -87,6 +87,7 @@ class GenerateModelCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $op = $input->getArgument('op');
+
         if (!in_array($input->getArgument('op'), self::SUPPORT_OPS)) {
             throw new InvalidArgumentException(
                 sprintf('Operation must be one of %s, got %s', implode('|', self::SUPPORT_OPS), $op));
@@ -103,7 +104,11 @@ class GenerateModelCommand extends Command
             $classNameInput = 'Dummy';
         }
 
-        [$modelDir, $info] = $this->handleOp($op, $classNameInput, $input, $output, $helper);
+        if ([] === $returnFromOp = $this->handleOp($op, $classNameInput, $input, $output, $helper)) {
+            return;
+        }
+
+        [$modelDir, $info] = $returnFromOp;
 
         // resolve full class name with namespace
         $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
@@ -142,9 +147,12 @@ class GenerateModelCommand extends Command
             $io->success($createdFile);
         }
 
-        if ('rollback' === $op) {
+        if ('rollback' !== $op) {
             $this->cache->appendVersion(NameResolver::resolveOnlyClassName($className), $info, $modelDir);
         }
+
+        // reset
+        $this->infos = [];
     }
 
     /**
@@ -163,7 +171,7 @@ class GenerateModelCommand extends Command
             if (empty($allVersions)) {
                 $output->writeln('<info>No versions for class ' . $classNameInput . '</info>');
 
-                die();
+                return [];
             }
 
             $question = new ChoiceQuestion(
@@ -177,12 +185,18 @@ class GenerateModelCommand extends Command
             $finder = new Finder();
             // Ask Bundle
             $choices = [];
-            foreach ($finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0') as $dir) {
+            $dirs = iterator_to_array($finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0'));
+            asort($dirs);
+            foreach ($dirs as $dir) {
                 $choices[] = $dir->getRealPath();
             }
 
-            $question = new ChoiceQuestion('Please select your folder', $choices);
-            $modelDir = $helper->ask($input, $output, $question);
+            if (1 < count($choices)) {
+                $question = new ChoiceQuestion('Please select your folder', $choices);
+                $modelDir = $helper->ask($input, $output, $question);
+            } else {
+                $modelDir = $choices[0];
+            }
 
             while (true !== $this->askForProperty($input, $output)) {}
             $info = $this->converter->combineInfos($this->infos);
@@ -202,6 +216,7 @@ class GenerateModelCommand extends Command
         $question = new Question('Please enter the property name: ');
         $question->setValidator($this->propertyNameValidate())->setMaxAttempts(5);
         $propertyName = $helper->ask($input, $output, $question);
+
         if (empty($propertyName)) {
             return true;
         }
@@ -281,5 +296,25 @@ class GenerateModelCommand extends Command
 
             return $answer;
         };
+    }
+
+    /**
+     * Easy testing
+     *
+     * @return array
+     */
+    public function getConfigs(): array
+    {
+        return $this->configs;
+    }
+
+    /**
+     * Easy testing
+     *
+     * @param array $configs
+     */
+    public function setConfigs(array $configs): void
+    {
+        $this->configs = $configs;
     }
 }

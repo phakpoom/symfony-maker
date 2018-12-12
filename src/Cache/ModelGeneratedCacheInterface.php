@@ -12,4 +12,6 @@ interface ModelGeneratedCacheInterface
      * @return array contains key = version and value = info
      */
     public function listVersions(string $className): array;
+
+    public function clear(string $className): void;
 }

@@ -88,6 +88,18 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
         return $lists;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function clear(string $className): void
+    {
+        if (!$this->fs->exists($this->getFileLocate($className))) {
+            return;
+        }
+
+        $this->fs->remove($this->getFileLocate($className));
+    }
+
     private function getFileLocate(string $className): string
     {
         return $this->options['cache_dir'] . '/' . $className . '.cache';
