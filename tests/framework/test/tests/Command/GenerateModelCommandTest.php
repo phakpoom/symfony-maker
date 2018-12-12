@@ -115,6 +115,29 @@ class GenerateModelCommandTest extends WebTestCase
         $this->assertContains('protected $description', $output);
     }
 
+    public function testPropTypeAskDocBlock()
+    {
+        // no docblock
+        $command = $this->getCommand();
+        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', ''], 'make');
+        $this->assertContains('Enter value (enter for skip)', $output);
+
+        // @commandValueSkip
+        $command = $this->getCommand();
+        $output = $this->runWithInput($command, ['Test', 'name', '3', null, ''], 'make');
+        $this->assertNotContains('Enter value (enter for skip)', $output);
+
+        // @commandValueDescription
+        $command = $this->getCommand();
+        $output = $this->runWithInput($command, ['Test', 'name', '2', null, '', ''], 'make');
+        $this->assertContains('Enter true|false (default false)', $output);
+
+        // @commandValueRequired
+        $command = $this->getCommand();
+        $output = $this->runWithInput($command, ['Test', 'name', '7', null, null, null, 'TestInterface', '', ''], 'make');
+        $this->assertContains('Value cannot be empty', $output);
+    }
+
     protected function runWithInput(Command $commandClass, array $inputs, string $op = 'make'): string
     {
         $kernel = self::bootKernel();
