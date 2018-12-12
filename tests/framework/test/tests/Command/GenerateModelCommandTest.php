@@ -115,30 +115,6 @@ class GenerateModelCommandTest extends WebTestCase
         $this->assertContains('protected $description', $output);
     }
 
-    public function testMakeOp()
-    {
-        $command = $this->getCommand();
-        self::$container->get('bonn_maker.cache.generated_model')->clear('Test');
-        // version 0
-        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', ''], 'make');
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Test.php', $output);
-
-        // version 1
-        $output = $this->runWithInput($command, ['Test', 'description', '0', null, '', ''], 'make');
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Test.php', $output);
-
-        $output = $this->runWithInput($command, ['NoClassCache', 'name', '0', null, '', ''], 'rollback');
-        $this->assertContains('No versions for class', $output);
-
-        $output = $this->runWithInput($command, ['Test', '0'], 'rollback');
-        $this->assertContains('Please select your version:Test', $output);
-        $this->assertContains('protected $name', $output);
-
-        $output = $this->runWithInput($command, ['Test', '1'], 'rollback');
-        $this->assertContains('Please select your version:Test', $output);
-        $this->assertContains('protected $description', $output);
-    }
-
     protected function runWithInput(Command $commandClass, array $inputs, string $op = 'make'): string
     {
         $kernel = self::bootKernel();
@@ -172,11 +148,11 @@ class GenerateModelCommandTest extends WebTestCase
 
     protected function assertFileHasCreated(string $path, string $output)
     {
-        $this->assertContains('[OK] ' . $path, $output);
+        $this->assertContains('======' . $path . '======', $output);
     }
 
     protected function assertFileHasNotCreated(string $path, string $output)
     {
-        $this->assertNotContains('[OK] ' . $path, $output);
+        $this->assertNotContains('======' . $path . '======' . $path, $output);
     }
 }
