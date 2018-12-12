@@ -10,9 +10,9 @@ cache:
 before_script:
 - composer self-update
 - composer install --prefer-source --no-interaction --dev
-- cd tests/framework/test && composer install --prefer-source --no-interaction --dev
+- cd tests/framework/test && composer install --prefer-source --no-interaction --dev && cd ../../..
 
-script: ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit
+script: ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit && cd ../../..
 
 notifications:
     email: false
