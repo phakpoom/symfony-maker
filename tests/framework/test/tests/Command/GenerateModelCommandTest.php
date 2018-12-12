@@ -161,7 +161,7 @@ class GenerateModelCommandTest extends WebTestCase
             $commandTester->execute(['command' => $command->getName(), 'op' => $op]);
         }
 
-        return $commandTester->getDisplay() . $output;
+        return preg_replace('/\\n/', '', $commandTester->getDisplay() . $output);
     }
 
     protected function getCommand(): GenerateModelCommand
