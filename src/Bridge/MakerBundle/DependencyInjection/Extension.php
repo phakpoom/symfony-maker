@@ -30,11 +30,17 @@ class Extension extends BaseExtension
         $config = $this->processConfiguration($configuration, $configs);
 
         // auto detect bundle folder
+
         if (null === $config['bundle_root_dir']) {
             $finder = new Finder();
+            $sourceDir = $container->getParameter('kernel.project_dir') . '/src/';
             /** @var \SplFileInfo $folder */
-            foreach ($finder->directories()->in($container->getParameter('kernel.project_dir') . '/src/')->depth('< 3')->name('Bundle') as $folder) {
+            foreach ($finder->directories()->in($sourceDir)->depth('< 3')->name('Bundle') as $folder) {
                 $config['bundle_root_dir'] = $folder->getRealPath();
+            }
+
+            if (null === $config['bundle_root_dir']) {
+                $config['bundle_root_dir'] = $sourceDir;
             }
         }
 

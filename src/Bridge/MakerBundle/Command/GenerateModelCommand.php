@@ -182,13 +182,19 @@ class GenerateModelCommand extends Command
             $versionSelected = $helper->ask($input, $output, $question);
             return $allVersions[$versionSelected];
         } elseif ('make' === $op) {
-            $finder = new Finder();
             // Ask Bundle
             $choices = [];
-            $dirs = iterator_to_array($finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0'));
+
+            $finder = new Finder();
+            $dirs = [];
+
+            $iterator = $finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0')->getIterator();
+            foreach ($iterator as $dir) {
+                $dirs[] = $dir->getRealPath();
+            }
             asort($dirs);
             foreach ($dirs as $dir) {
-                $choices[] = $dir->getRealPath();
+                $choices[] = $dir;
             }
 
             if (1 < count($choices)) {
