@@ -7,12 +7,13 @@ cache:
     directories:
     - $HOME/.composer/cache
 
-# Commands to be run before your environment runs.
 before_script:
 - composer self-update
 - composer install --prefer-source --no-interaction --dev
+- cd $TRAVIS_BUILD_DIR && cd tests/framework/test && composer install --prefer-source --no-interaction --dev
+- cd $TRAVIS_BUILD_DIR && cd tests/framework/test@3.4 && composer install --prefer-source --no-interaction --dev
 
-script: ./vendor/bin/phpunit
+script: cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit && cd $TRAVIS_BUILD_DIR && cd tests/framework/test@3.4 && ./bin/phpunit
 
 notifications:
     email: false

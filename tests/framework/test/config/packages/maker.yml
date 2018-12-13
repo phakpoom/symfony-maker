@@ -5,4 +5,4 @@ bonn_maker:
     #doctrine_mapping_dir: ~
     cache_dir: ~
     cache_max_keep_versions: ~
-    writer_dev: ~
+    writer_dev: true
