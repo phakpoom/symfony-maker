@@ -114,4 +114,25 @@ final class ModelGeneratedCacheTest extends TestCase
         [$modelDir, $infos] = end($versions);
         $this->assertEquals('ok:string:10', $infos);
     }
+
+    public function testClearCache()
+    {
+        $this->_clearCache();
+        $cacheFile = self::CACHE_DIR . '/Test.cache';
+
+        $cache = new ModelGeneratedCache([
+            'cache_dir' => self::CACHE_DIR,
+            'max_keep_versions' => -1
+        ]);
+
+        $cache->appendVersion('Test', 'ok:string:' . uniqid(), __DIR__);
+        $this->assertTrue(\file_exists($cacheFile));
+
+
+        $cache->clear('ClassNotExists');
+        $this->assertTrue(\file_exists($cacheFile));
+
+        $cache->clear('Test');
+        $this->assertFalse(\file_exists($cacheFile));
+    }
 }
