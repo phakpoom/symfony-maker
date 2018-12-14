@@ -30,6 +30,19 @@ For symfony 4
 Bonn\Maker\Bridge\MakerBundle\BonnMakerBundle::class => ['dev' => true]
 ```
 
+## Config
+> Beware! make sure that config only dev `config_dev.yml`
+```yaml
+bonn_maker:
+    namespace_prefix: "App" # prefix namespace
+    bundle_root_dir: "%kernel.project_dir%/src/App/" # use for list directories for generate class
+    #model_dir_name: ~ # default Model
+    #doctrine_mapping_dir: ~ # default Resources/config/doctrine/model
+    cache_dir: ~ # default cache_dir symfony
+    cache_max_keep_versions: ~ # maximum keep class version for rollback
+    writer_dev: ~ # if `true` it will echo on console instead create file
+```
+
 ## Usage
 
 #### Generate model and doctrine mapping
