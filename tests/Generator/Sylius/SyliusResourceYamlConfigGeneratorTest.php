@@ -43,7 +43,7 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
 
         $this
             ->assertCountFilesWillBeCreated(1)
-            ->assertFileWillBeCreated(__DIR__ . '/config/app/sylius_resource/sylius_resource_yaml_config_generator_test.yml',
+            ->assertFileWillBeCreated(__DIR__ . '/app/sylius_resource/sylius_resource_yaml_config_generator_test.yml',
 <<<EOL
 sylius_resource:
     resources:

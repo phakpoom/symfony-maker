@@ -8,7 +8,6 @@ use Bonn\Maker\Cache\ModelGeneratedCacheInterface;
 use Bonn\Maker\Converter\PropTypeConverterInterface;
 use Bonn\Maker\Generator\DoctrineGeneratorInterface;
 use Bonn\Maker\Generator\ModelGeneratorInterface;
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\NameResolver;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -24,12 +23,12 @@ use Symfony\Component\Finder\Finder;
 
 class GenerateModelCommand extends AbstractGenerateCommand
 {
-    const SUPPORT_OPS = [
+    public const SUPPORT_OPS = [
         'make',
         'dump',
-        'rollback'
+        'rollback',
     ];
-    
+
     /** @var ModelGeneratorInterface */
     private $generator;
 
@@ -58,7 +57,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         $this->doctrineGenerator = $doctrineGenerator;
         $this->generator = $generator;
         $this->cache = $cache;
-        
+
         parent::__construct();
     }
 
@@ -101,7 +100,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
         $className = str_replace('/', '\\', $className);
-        $className = preg_replace('/\\\+/','\\', $className);
+        $className = preg_replace('/\\\+/', '\\', $className);
         $className = ltrim($className, '\\');
 
         $this->generator->generate([
@@ -133,14 +132,6 @@ class GenerateModelCommand extends AbstractGenerateCommand
         $this->infos = [];
     }
 
-    /**
-     * @param string $op
-     * @param string $classNameInput
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @param HelperInterface $helper
-     * @return array
-     */
     protected function handleOp(string $op, string $classNameInput, InputInterface $input, OutputInterface $output, HelperInterface $helper): array
     {
         if ($op === 'rollback') {
@@ -158,8 +149,10 @@ class GenerateModelCommand extends AbstractGenerateCommand
             );
 
             $versionSelected = $helper->ask($input, $output, $question);
+
             return $allVersions[$versionSelected];
-        } elseif ('make' === $op) {
+        }
+        if ('make' === $op) {
             // Ask Bundle
             $choices = [];
 
@@ -182,12 +175,17 @@ class GenerateModelCommand extends AbstractGenerateCommand
                 $modelDir = $choices[0];
             }
 
-            while (true !== $this->askForProperty($input, $output)) {}
+            while (true !== $this->askForProperty($input, $output)) {
+            }
             $info = $this->converter->combineInfos($this->infos);
+
             return [$modelDir, $info];
-        } elseif ('dump' === $op) {
-            while (true !== $this->askForProperty($input, $output)) {}
+        }
+        if ('dump' === $op) {
+            while (true !== $this->askForProperty($input, $output)) {
+            }
             $info = $this->converter->combineInfos($this->infos);
+
             return ['', $info];
         }
 
@@ -284,8 +282,6 @@ class GenerateModelCommand extends AbstractGenerateCommand
 
     /**
      * Easy testing
-     *
-     * @return array
      */
     public function getConfigs(): array
     {
@@ -294,8 +290,6 @@ class GenerateModelCommand extends AbstractGenerateCommand
 
     /**
      * Easy testing
-     *
-     * @param array $configs
      */
     public function setConfigs(array $configs): void
     {

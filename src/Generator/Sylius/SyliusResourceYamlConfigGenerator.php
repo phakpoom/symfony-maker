@@ -33,7 +33,7 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
 //            $resourceArr['classes']['repository'] = RepositoryGenerator::getRepositoryNameSpace($options['class']) . '\\' . $className . 'Repository';
 //        }
 
-        if (in_array("Sylius\\Component\\Resource\\Model\\TranslatableInterface", $reflection->getInterfaceNames())) {
+        if (in_array('Sylius\\Component\\Resource\\Model\\TranslatableInterface', $reflection->getInterfaceNames())) {
             $resourceArr['translation']['classes']['model'] = $options['class'] . 'Translation';
             $resourceArr['translation']['classes']['interface'] = $options['class'] . 'TranslationInterface';
         }
@@ -47,6 +47,7 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
     public function resolveConfigFileName(array $options = []): string
     {
         $className = NameResolver::resolveOnlyClassName($options['class']);
+
         return $options['resource_dir'] . '/app/sylius_resource/' . NameResolver::camelToUnderScore($className) . '.yml';
     }
 }

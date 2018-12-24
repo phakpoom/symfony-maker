@@ -11,40 +11,27 @@ use Symfony\Component\Console\Style\StyleInterface;
 
 abstract class AbstractGenerateCommand extends Command
 {
-    /** @var array  */
+    /** @var array */
     protected $configs = [];
 
-    /** @var CodeManagerInterface  */
+    /** @var CodeManagerInterface */
     protected $manager = [];
 
-    /**
-     * @param CodeManagerInterface $manager
-     */
     public function setManager(CodeManagerInterface $manager): void
     {
         $this->manager = $manager;
     }
 
-    /**
-     * @return array
-     */
     public function getConfigs(): array
     {
         return $this->configs;
     }
 
-    /**
-     * @param array $configs
-     */
     public function setConfigs(array $configs): void
     {
         $this->configs = $configs;
     }
 
-    /**
-     * @param CodeManagerInterface $manager
-     * @param StyleInterface $io
-     */
     protected function writeCreatedFiles(CodeManagerInterface $manager, StyleInterface $io)
     {
         $createdFiles = array_filter($manager->getCodes(), function (Code $code) {

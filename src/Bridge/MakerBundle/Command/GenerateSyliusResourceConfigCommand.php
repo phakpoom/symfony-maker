@@ -19,7 +19,7 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
         SyliusResourceGeneratorInterface $generator
     ) {
         $this->generator = $generator;
-        
+
         parent::__construct();
     }
 

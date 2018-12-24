@@ -8,9 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 interface GeneratorInterface
 {
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configurationOptions(OptionsResolver $resolver);
 
     /**

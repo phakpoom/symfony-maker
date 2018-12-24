@@ -9,9 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSyliusGenerator
 {
-    /**
-     * @var CodeManagerInterface
-     */
+    /** @var CodeManagerInterface */
     protected $manager;
 
     public function __construct(CodeManagerInterface $manager)
@@ -19,20 +17,14 @@ abstract class AbstractSyliusGenerator
         $this->manager = $manager;
     }
 
-    /**
-     * @param array $options
-     */
     abstract protected function _generateWithResolvedOptions(array $options);
 
-    /**
-     * {@inheritdoc}
-     */
     public function configurationOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'class' => null,
             'resource_name' => null,
-            'resource_dir' => null
+            'resource_dir' => null,
         ]);
 
         $resolver
@@ -42,9 +34,6 @@ abstract class AbstractSyliusGenerator
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generate($options = [])
     {
         $optionResolver = new OptionsResolver();
@@ -57,13 +46,10 @@ abstract class AbstractSyliusGenerator
         $this->_generateWithResolvedOptions($options);
     }
 
-    /**
-     * @param string $class
-     */
     protected function ensureClassExists(string $class)
     {
         if (!class_exists($class)) {
-            throw new \InvalidArgumentException(sprintf("Class %s do not exists", $class));
+            throw new \InvalidArgumentException(sprintf('Class %s do not exists', $class));
         }
     }
 }

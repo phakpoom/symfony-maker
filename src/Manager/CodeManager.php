@@ -54,6 +54,7 @@ final class CodeManager implements CodeManagerInterface
                 echo '>>>>' . $code->getOutputPath() . '<<<<' . "\n";
                 echo $code->getContent();
                 echo "\n";
+
                 continue;
             }
 
