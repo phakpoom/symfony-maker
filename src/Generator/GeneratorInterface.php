@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Bonn\Maker\Generator\Sylius;
+namespace Bonn\Maker\Generator;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-interface SyliusGeneratorInterface
+interface GeneratorInterface
 {
     /**
      * @param OptionsResolver $resolver

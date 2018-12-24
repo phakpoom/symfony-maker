@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Bonn\Maker\Tests;
 
 trait PrivateAccessorTrait
 {

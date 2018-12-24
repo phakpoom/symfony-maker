@@ -10,8 +10,8 @@ use Bonn\Maker\ModelPropType\CollectionType;
 use Bonn\Maker\ModelPropType\IntegerType;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
+use Bonn\Maker\Tests\PrivateAccessorTrait;
 use PHPUnit\Framework\TestCase;
-use Test\PrivateAccessorTrait;
 
 final class PropTypeConverterTest extends TestCase
 {

@@ -7,7 +7,7 @@ namespace Bonn\Maker\Generator\Sylius;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractSyliusGenerator implements SyliusGeneratorInterface
+abstract class AbstractSyliusGenerator
 {
     /**
      * @var CodeManagerInterface

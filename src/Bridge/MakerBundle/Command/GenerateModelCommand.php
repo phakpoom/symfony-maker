@@ -9,11 +9,9 @@ use Bonn\Maker\Converter\PropTypeConverterInterface;
 use Bonn\Maker\Generator\DoctrineGeneratorInterface;
 use Bonn\Maker\Generator\ModelGeneratorInterface;
 use Bonn\Maker\Manager\CodeManagerInterface;
-use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\NameResolver;
 use phpDocumentor\Reflection\DocBlockFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,9 +21,8 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
-use Webmozart\Assert\Assert;
 
-class GenerateModelCommand extends Command
+class GenerateModelCommand extends AbstractGenerateCommand
 {
     const SUPPORT_OPS = [
         'make',
@@ -42,14 +39,8 @@ class GenerateModelCommand extends Command
     /** @var PropTypeConverterInterface */
     private $converter;
 
-    /** @var CodeManagerInterface */
-    private $manager;
-
     /** @var ModelGeneratedCacheInterface */
     private $cache;
-
-    /** @var array */
-    private $configs = [];
 
     /** @var array */
     private $infos = [];
@@ -60,17 +51,13 @@ class GenerateModelCommand extends Command
     public function __construct(
         ModelGeneratorInterface $generator,
         DoctrineGeneratorInterface $doctrineGenerator,
-        CodeManagerInterface $manager,
         PropTypeConverterInterface $converter,
-        ModelGeneratedCacheInterface $cache,
-        array $configs = []
+        ModelGeneratedCacheInterface $cache
     ) {
         $this->converter = $converter;
         $this->doctrineGenerator = $doctrineGenerator;
-        $this->manager = $manager;
         $this->generator = $generator;
         $this->cache = $cache;
-        $this->configs = $configs;
         
         parent::__construct();
     }
@@ -128,24 +115,15 @@ class GenerateModelCommand extends Command
             'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name'],
         ]);
 
-        $createdFiles = [];
-        if ('dump' !== $op) {
-            $createdFiles = array_map(function (Code $code) {
-                return $code->getOutputPath();
-            }, $this->manager->getCodes());
-        } else {
+        if ('dump' === $op) {
             foreach ($this->manager->getCodes() as $code) {
                 $code->setExtra('dump_only', true);
             }
         }
 
-        $this->manager->flush();
+        $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
 
-        // Print success
-        $io = new SymfonyStyle($input, $output);
-        foreach ($createdFiles as $createdFile) {
-            $io->success($createdFile);
-        }
+        $this->manager->flush();
 
         if ('rollback' !== $op) {
             $this->cache->appendVersion(NameResolver::resolveOnlyClassName($className), $info, $modelDir);

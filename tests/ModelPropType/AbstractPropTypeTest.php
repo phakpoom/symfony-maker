@@ -8,19 +8,12 @@ use Bonn\Maker\Generator\DoctrineGeneratorInterface;
 use Bonn\Maker\Generator\DoctrineXmlMappingGenerator;
 use Bonn\Maker\Generator\ModelGenerator;
 use Bonn\Maker\Generator\ModelGeneratorInterface;
-use Bonn\Maker\Manager\CodeManager;
-use Bonn\Maker\Manager\CodeManagerInterface;
-use Bonn\Maker\ModelPropType\PropTypeInterface;
-use Bonn\Maker\Writer\EchoWriter;
-use PHPUnit\Framework\TestCase;
+use Bonn\Maker\Tests\AbstractMakerTestCase;
 
-abstract class AbstractPropTypeTest extends TestCase
+abstract class AbstractPropTypeTest extends AbstractMakerTestCase
 {
     /** @var ModelGeneratorInterface */
     protected $generator;
-
-    /** @var CodeManagerInterface */
-    protected $manager;
 
     /** @var DoctrineGeneratorInterface */
     protected $doctrineGenerator;
@@ -29,7 +22,6 @@ abstract class AbstractPropTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->manager = new CodeManager(new EchoWriter());
         $this->generator = new ModelGenerator($this->manager);
         $this->doctrineGenerator = new DoctrineXmlMappingGenerator($this->manager);
     }

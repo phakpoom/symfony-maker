@@ -6,11 +6,12 @@ namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
+use Symfony\Component\Yaml\Yaml;
 
-class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator
+class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implements SyliusResourceGeneratorInterface
 {
     /**
-     * @param array $options
+     * {@inheritdoc}
      */
     protected function _generateWithResolvedOptions(array $options)
     {
@@ -37,6 +38,15 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator
             $resourceArr['translation']['classes']['interface'] = $options['class'] . 'TranslationInterface';
         }
 
-        $this->manager->persist(new Code("", $options['resource_dir'] . 'config/app/sylius_resource/' . NameResolver::camelToUnderScore($className) .'.yml'));
+        $this->manager->persist(new Code(Yaml::dump($arr, 10), $this->resolveConfigFileName($options)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveConfigFileName(array $options = []): string
+    {
+        $className = NameResolver::resolveOnlyClassName($options['class']);
+        return $options['resource_dir'] . '/app/sylius_resource/' . NameResolver::camelToUnderScore($className) . '.yml';
     }
 }
