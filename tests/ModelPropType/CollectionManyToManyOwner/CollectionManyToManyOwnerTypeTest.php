@@ -14,15 +14,15 @@ class CollectionManyToManyOwnerTypeTest extends AbstractPropTypeTest
     {
         $this->generate(new CollectionManyToManyOwnerUnidirectionalType('comments', 'App\\Model\\CommentInterface'));
 
-        $allCodes = $this->manager->getCodes();
-
-        $this->assertCount(3, $allCodes);
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedModel.php'),
-            $allCodes[$this->codeDir() . '/Mock.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedInterface.php'),
-            $allCodes[$this->codeDir() . '/MockInterface.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedDoctrine.orm.xml'),
-            $allCodes[$this->codeDir() . '/Mock.orm.xml']->getContent());
+        $this
+            ->assertCountFilesWillBeCreated(3)
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.php',
+                file_get_contents(__DIR__ . '/ExpectedModel.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockInterface.php',
+                file_get_contents(__DIR__ . '/ExpectedInterface.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.orm.xml',
+                file_get_contents(__DIR__ . '/ExpectedDoctrine.orm.xml'))
+        ;
     }
 
     public function testBidirectionalGenerated()
@@ -33,15 +33,15 @@ class CollectionManyToManyOwnerTypeTest extends AbstractPropTypeTest
             ]
         );
 
-        $allCodes = $this->manager->getCodes();
-
-        $this->assertCount(3, $allCodes);
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedModel.php'),
-            $allCodes[$this->codeDir() . '/Mock.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedInterface.php'),
-            $allCodes[$this->codeDir() . '/MockInterface.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedDoctrine1.orm.xml'),
-            $allCodes[$this->codeDir() . '/Mock.orm.xml']->getContent());
+        $this
+            ->assertCountFilesWillBeCreated(3)
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.php',
+                file_get_contents(__DIR__ . '/ExpectedModel.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockInterface.php',
+                file_get_contents(__DIR__ . '/ExpectedInterface.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.orm.xml',
+                file_get_contents(__DIR__ . '/ExpectedDoctrine1.orm.xml'))
+        ;
     }
 
     public function testBidirectionalMultipleGenerated()
@@ -53,14 +53,14 @@ class CollectionManyToManyOwnerTypeTest extends AbstractPropTypeTest
             ]
         );
 
-        $allCodes = $this->manager->getCodes();
-
-        $this->assertCount(3, $allCodes);
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedModel1.php'),
-            $allCodes[$this->codeDir() . '/Mock.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedInterface1.php'),
-            $allCodes[$this->codeDir() . '/MockInterface.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedDoctrine2.orm.xml'),
-            $allCodes[$this->codeDir() . '/Mock.orm.xml']->getContent());
+        $this
+            ->assertCountFilesWillBeCreated(3)
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.php',
+                file_get_contents(__DIR__ . '/ExpectedModel1.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockInterface.php',
+                file_get_contents(__DIR__ . '/ExpectedInterface1.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.orm.xml',
+                file_get_contents(__DIR__ . '/ExpectedDoctrine2.orm.xml'))
+        ;
     }
 }

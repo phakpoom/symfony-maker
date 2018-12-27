@@ -16,29 +16,31 @@
            <!-- inject by extension -->
         </service>
 
-        <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
-        </service>
-
-        <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
-        </service>
-
         <service class="Bonn\Maker\Manager\CodeManager" id="bonn_maker.manager.code_manager">
             <argument type="service" id="bonn_maker.writer.file" />
         </service>
 
-        <!--<service class="Bonn\Maker\Converter\PropTypeConverter" id="bonn_maker.converter.ddassadad">-->
-            <!--<tag name="bonn_maker.prop_type" />-->
-        <!--</service>-->
+        <!--GENERATORS-->
+        <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
+        <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
+        <service class="Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator" id="bonn_maker.generator.sylius_resource_config_generator">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
 
+        <!--COMMANDS-->
         <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateModelCommand" id="bonn_maker.command.generate_model">
             <argument type="service" id="bonn_maker.generator.model" />
             <argument type="service" id="bonn_maker.generator.doctrine_mapping" />
-            <argument type="service" id="bonn_maker.manager.code_manager" />
             <argument type="service" id="bonn_maker.converter.prop_type" />
             <argument type="service" id="bonn_maker.cache.generated_model" />
-            <argument>%bonn_maker.configs%</argument>
+            <tag name="console.command" />
+        </service>
+        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateSyliusResourceConfigCommand" id="bonn_maker.command.generate_sylius_resource_config">
+            <argument type="service" id="bonn_maker.generator.sylius_resource_config_generator" />
             <tag name="console.command" />
         </service>
     </services>

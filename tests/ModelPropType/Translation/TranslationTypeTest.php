@@ -15,25 +15,21 @@ class TranslationTypeTest extends AbstractPropTypeTest
             new TranslationType('name'),
         ]);
 
-        $allCodes = $this->manager->getCodes();
-
-        $this->assertCount(6, $allCodes);
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedModel.php'),
-            $allCodes[$this->codeDir() . '/Mock.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedInterface.php'),
-            $allCodes[$this->codeDir() . '/MockInterface.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedModelTranslation.php'),
-            $allCodes[$this->codeDir() . '/MockTranslation.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedInterfaceTranslation.php'),
-            $allCodes[$this->codeDir() . '/MockTranslationInterface.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedDoctrine.orm.xml'),
-            $allCodes[$this->codeDir() . '/Mock.orm.xml']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/1ExpectedDoctrineTranslation.orm.xml'),
-            $allCodes[$this->codeDir() . '/MockTranslation.orm.xml']->getContent());
+        $this
+            ->assertCountFilesWillBeCreated(6)
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.php',
+                file_get_contents(__DIR__ . '/1ExpectedModel.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockInterface.php',
+                file_get_contents(__DIR__ . '/1ExpectedInterface.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslation.php',
+                file_get_contents(__DIR__ . '/1ExpectedModelTranslation.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslationInterface.php',
+                file_get_contents(__DIR__ . '/1ExpectedInterfaceTranslation.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.orm.xml',
+                file_get_contents(__DIR__ . '/1ExpectedDoctrine.orm.xml'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslation.orm.xml',
+                file_get_contents(__DIR__ . '/1ExpectedDoctrineTranslation.orm.xml'))
+        ;
     }
 
     public function testMultipleFieldGenerated()
@@ -43,24 +39,20 @@ class TranslationTypeTest extends AbstractPropTypeTest
             new TranslationType('description'),
         ]);
 
-        $allCodes = $this->manager->getCodes();
-
-        $this->assertCount(6, $allCodes);
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedModel.php'),
-            $allCodes[$this->codeDir() . '/Mock.php']->getContent());
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedInterface.php'),
-            $allCodes[$this->codeDir() . '/MockInterface.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedModelTranslation.php'),
-            $allCodes[$this->codeDir() . '/MockTranslation.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedInterfaceTranslation.php'),
-            $allCodes[$this->codeDir() . '/MockTranslationInterface.php']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedDoctrine.orm.xml'),
-            $allCodes[$this->codeDir() . '/Mock.orm.xml']->getContent());
-
-        $this->assertEquals(file_get_contents(__DIR__ . '/ExpectedDoctrineTranslation.orm.xml'),
-            $allCodes[$this->codeDir() . '/MockTranslation.orm.xml']->getContent());
+        $this
+            ->assertCountFilesWillBeCreated(6)
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.php',
+                file_get_contents(__DIR__ . '/ExpectedModel.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockInterface.php',
+                file_get_contents(__DIR__ . '/ExpectedInterface.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslation.php',
+                file_get_contents(__DIR__ . '/ExpectedModelTranslation.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslationInterface.php',
+                file_get_contents(__DIR__ . '/ExpectedInterfaceTranslation.php'))
+            ->assertFileWillBeCreated($this->codeDir() . '/Mock.orm.xml',
+                file_get_contents(__DIR__ . '/ExpectedDoctrine.orm.xml'))
+            ->assertFileWillBeCreated($this->codeDir() . '/MockTranslation.orm.xml',
+                file_get_contents(__DIR__ . '/ExpectedDoctrineTranslation.orm.xml'))
+        ;
     }
 }

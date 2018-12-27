@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('namespace_prefix')->defaultNull()->end()
                 ->scalarNode('bundle_root_dir')->defaultNull()->end()
                 ->scalarNode('project_source_dir')->defaultNull()->end()
+                ->scalarNode('config_dir')->defaultValue('Resources/config')->end()
                 ->scalarNode('doctrine_mapping_dir_name')->defaultValue('Resources/config/doctrine/model')->end()
                 ->scalarNode('model_dir_name')->defaultValue('Model')->end()
                 ->scalarNode('cache_dir')->defaultNull()->end()

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Cache;
 
+use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
@@ -21,7 +22,7 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
     {
         $this->fs = new Filesystem();
         $this->options = (new OptionsResolver())->setDefaults([
-            'max_keep_versions' => 20
+            'max_keep_versions' => 20,
         ])
             ->setRequired('cache_dir')
             ->setNormalizer('max_keep_versions', function (Options $options, $value) {
@@ -91,17 +92,23 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clear(string $className): void
+    public function clear(?string $className = null): void
     {
-        if (!$this->fs->exists($this->getFileLocate($className))) {
+        if (!empty($className)) {
+            $cacheFileDir = $this->getFileLocate($className);
+        } else {
+            $cacheFileDir = glob(NameResolver::replaceDoubleSlash($this->options['cache_dir'] . '/*'));
+        }
+
+        if (!$this->fs->exists($cacheFileDir)) {
             return;
         }
 
-        $this->fs->remove($this->getFileLocate($className));
+        $this->fs->remove($cacheFileDir);
     }
 
     private function getFileLocate(string $className): string
     {
-        return $this->options['cache_dir'] . '/' . $className . '.cache';
+        return NameResolver::replaceDoubleSlash($this->options['cache_dir'] . '/' . $className . '.cache');
     }
 }

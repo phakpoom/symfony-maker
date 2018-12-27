@@ -8,12 +8,9 @@ use Bonn\Maker\Cache\ModelGeneratedCacheInterface;
 use Bonn\Maker\Converter\PropTypeConverterInterface;
 use Bonn\Maker\Generator\DoctrineGeneratorInterface;
 use Bonn\Maker\Generator\ModelGeneratorInterface;
-use Bonn\Maker\Manager\CodeManagerInterface;
-use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\NameResolver;
 use phpDocumentor\Reflection\DocBlockFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,16 +20,15 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
-use Webmozart\Assert\Assert;
 
-class GenerateModelCommand extends Command
+class GenerateModelCommand extends AbstractGenerateCommand
 {
-    const SUPPORT_OPS = [
+    public const SUPPORT_OPS = [
         'make',
         'dump',
-        'rollback'
+        'rollback',
     ];
-    
+
     /** @var ModelGeneratorInterface */
     private $generator;
 
@@ -42,14 +38,8 @@ class GenerateModelCommand extends Command
     /** @var PropTypeConverterInterface */
     private $converter;
 
-    /** @var CodeManagerInterface */
-    private $manager;
-
     /** @var ModelGeneratedCacheInterface */
     private $cache;
-
-    /** @var array */
-    private $configs = [];
 
     /** @var array */
     private $infos = [];
@@ -60,18 +50,14 @@ class GenerateModelCommand extends Command
     public function __construct(
         ModelGeneratorInterface $generator,
         DoctrineGeneratorInterface $doctrineGenerator,
-        CodeManagerInterface $manager,
         PropTypeConverterInterface $converter,
-        ModelGeneratedCacheInterface $cache,
-        array $configs = []
+        ModelGeneratedCacheInterface $cache
     ) {
         $this->converter = $converter;
         $this->doctrineGenerator = $doctrineGenerator;
-        $this->manager = $manager;
         $this->generator = $generator;
         $this->cache = $cache;
-        $this->configs = $configs;
-        
+
         parent::__construct();
     }
 
@@ -114,7 +100,7 @@ class GenerateModelCommand extends Command
         $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
         $className = str_replace('/', '\\', $className);
-        $className = preg_replace('/\\\+/','\\', $className);
+        $className = preg_replace('/\\\+/', '\\', $className);
         $className = ltrim($className, '\\');
 
         $this->generator->generate([
@@ -128,24 +114,15 @@ class GenerateModelCommand extends Command
             'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name'],
         ]);
 
-        $createdFiles = [];
-        if ('dump' !== $op) {
-            $createdFiles = array_map(function (Code $code) {
-                return $code->getOutputPath();
-            }, $this->manager->getCodes());
-        } else {
+        if ('dump' === $op) {
             foreach ($this->manager->getCodes() as $code) {
                 $code->setExtra('dump_only', true);
             }
         }
 
-        $this->manager->flush();
+        $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
 
-        // Print success
-        $io = new SymfonyStyle($input, $output);
-        foreach ($createdFiles as $createdFile) {
-            $io->success($createdFile);
-        }
+        $this->manager->flush();
 
         if ('rollback' !== $op) {
             $this->cache->appendVersion(NameResolver::resolveOnlyClassName($className), $info, $modelDir);
@@ -155,14 +132,6 @@ class GenerateModelCommand extends Command
         $this->infos = [];
     }
 
-    /**
-     * @param string $op
-     * @param string $classNameInput
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @param HelperInterface $helper
-     * @return array
-     */
     protected function handleOp(string $op, string $classNameInput, InputInterface $input, OutputInterface $output, HelperInterface $helper): array
     {
         if ($op === 'rollback') {
@@ -180,8 +149,10 @@ class GenerateModelCommand extends Command
             );
 
             $versionSelected = $helper->ask($input, $output, $question);
+
             return $allVersions[$versionSelected];
-        } elseif ('make' === $op) {
+        }
+        if ('make' === $op) {
             // Ask Bundle
             $choices = [];
 
@@ -204,12 +175,17 @@ class GenerateModelCommand extends Command
                 $modelDir = $choices[0];
             }
 
-            while (true !== $this->askForProperty($input, $output)) {}
+            while (true !== $this->askForProperty($input, $output)) {
+            }
             $info = $this->converter->combineInfos($this->infos);
+
             return [$modelDir, $info];
-        } elseif ('dump' === $op) {
-            while (true !== $this->askForProperty($input, $output)) {}
+        }
+        if ('dump' === $op) {
+            while (true !== $this->askForProperty($input, $output)) {
+            }
             $info = $this->converter->combineInfos($this->infos);
+
             return ['', $info];
         }
 
@@ -306,8 +282,6 @@ class GenerateModelCommand extends Command
 
     /**
      * Easy testing
-     *
-     * @return array
      */
     public function getConfigs(): array
     {
@@ -316,8 +290,6 @@ class GenerateModelCommand extends Command
 
     /**
      * Easy testing
-     *
-     * @param array $configs
      */
     public function setConfigs(array $configs): void
     {

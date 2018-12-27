@@ -30,7 +30,6 @@ class Extension extends BaseExtension
         $config = $this->processConfiguration($configuration, $configs);
 
         // auto detect bundle folder
-
         if (null === $config['bundle_root_dir']) {
             $finder = new Finder();
             $sourceDir = $container->getParameter('kernel.project_dir') . '/src/';

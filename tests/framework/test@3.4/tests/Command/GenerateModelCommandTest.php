@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use Bonn\Maker\Bridge\MakerBundle\Command\GenerateModelCommand;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Command\Command;
+use Bonn\Maker\Bridge\MakerBundle\Tests\AbstractGenerateCommandWebTestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Tester\CommandTester;
 
-class GenerateModelCommandTest extends WebTestCase
+class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
 {
     public function testWithBundleConfig()
     {
@@ -77,40 +74,41 @@ class GenerateModelCommandTest extends WebTestCase
             'writer_dev' => false,
         ]));
 
-        $this->runWithInput($command, [], 'test');
+        $this->runWithInput($command, [], ['op' => 'test']);
     }
 
     public function testDumpOp()
     {
         $command = $this->getCommand();
 
-        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', '']);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/AppBundle/') . '/Model/Test.php', $output);
 
-        $output = $this->runWithInput($command, ['name', '0', null, '', ''], 'dump');
+        $output = $this->runWithInput($command, ['name', '0', null, '', ''], ['op' => 'dump']);
         $this->assertFileHasNotCreated(realpath(__DIR__ . '/../../src/AppBundle/') . '/Model/Dummy.php', $output);
     }
 
     public function testRollbackOp()
     {
         $command = $this->getCommand();
-        self::$kernel->getContainer()->get('bonn_maker.cache.generated_model')->clear('Test');
+        self::$kernel->getContainer()->get('bonn_maker.cache.generated_model')->clear();
+
         // version 0
-        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', '']);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/AppBundle/') . '/Model/Test.php', $output);
 
         // version 1
-        $output = $this->runWithInput($command, ['Test', 'description', '0', null, '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'description', '0', null, '', '']);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/AppBundle/') . '/Model/Test.php', $output);
 
-        $output = $this->runWithInput($command, ['NoClassCache', 'name', '0', null, '', ''], 'rollback');
+        $output = $this->runWithInput($command, ['NoClassCache', 'name', '0', null, '', ''], ['op' => 'rollback']);
         $this->assertContains('No versions for class', $output);
 
-        $output = $this->runWithInput($command, ['Test', '0'], 'rollback');
+        $output = $this->runWithInput($command, ['Test', '0'], ['op' => 'rollback']);
         $this->assertContains('Please select your version:Test', $output);
         $this->assertContains('protected $name', $output);
 
-        $output = $this->runWithInput($command, ['Test', '1'], 'rollback');
+        $output = $this->runWithInput($command, ['Test', '1'], ['op' => 'rollback']);
         $this->assertContains('Please select your version:Test', $output);
         $this->assertContains('protected $description', $output);
     }
@@ -119,63 +117,28 @@ class GenerateModelCommandTest extends WebTestCase
     {
         // no docblock
         $command = $this->getCommand();
-        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', '']);
         $this->assertContains('Enter value (enter for skip)', $output);
 
         // @commandValueSkip
         $command = $this->getCommand();
-        $output = $this->runWithInput($command, ['Test', 'name', '3', null, ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '3', null, '']);
         $this->assertNotContains('Enter value (enter for skip)', $output);
 
         // @commandValueDescription
         $command = $this->getCommand();
-        $output = $this->runWithInput($command, ['Test', 'name', '2', null, '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '2', null, '', '']);
         $this->assertContains('Enter true|false (default false)', $output);
 
         // @commandValueRequired
         $command = $this->getCommand();
-        $output = $this->runWithInput($command, ['Test', 'name', '7', null, null, null, 'TestInterface', '', ''], 'make');
+        $output = $this->runWithInput($command, ['Test', 'name', '7', null, null, null, 'TestInterface', '', '']);
         $this->assertContains('Value cannot be empty', $output);
-    }
-
-    protected function runWithInput(Command $commandClass, array $inputs, string $op = 'make'): string
-    {
-        $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
-        $application->add($commandClass);
-
-        $commandTester = new CommandTester($command = $application->find('bonn:model:maker'));
-
-        $commandTester->setInputs($inputs);
-
-        if ($commandClass->getConfigs()['writer_dev']) {
-            \ob_start();
-            $commandTester->execute(['command' => $command->getName(), 'op' => $op]);
-            $output = \ob_get_contents();
-            \ob_end_clean();
-        } else {
-            $output = '';
-            $commandTester->execute(['command' => $command->getName(), 'op' => $op]);
-        }
-
-        return preg_replace('/\\n/', '', $commandTester->getDisplay() . $output);
     }
 
     protected function getCommand(): GenerateModelCommand
     {
         self::bootKernel();
         return self::$kernel->getContainer()->get('bonn_maker.command.generate_model');
-    }
-
-    protected function assertFileHasCreated(string $path, string $output)
-    {
-        $this->assertContains('======' . $path . '======', $output);
-    }
-
-    protected function assertFileHasNotCreated(string $path, string $output)
-    {
-        $this->assertNotContains('======' . $path . '======' . $path, $output);
     }
 }
