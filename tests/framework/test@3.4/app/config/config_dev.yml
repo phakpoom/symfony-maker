@@ -41,4 +41,4 @@ monolog:
 #    delivery_addresses: ['me@example.com']
 
 bonn_maker:
-    writer_dev: false
+    writer_dev: true

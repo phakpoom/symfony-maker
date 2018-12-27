@@ -128,11 +128,23 @@ final class ModelGeneratedCacheTest extends TestCase
         $cache->appendVersion('Test', 'ok:string:' . uniqid(), __DIR__);
         $this->assertTrue(\file_exists($cacheFile));
 
-
         $cache->clear('ClassNotExists');
         $this->assertTrue(\file_exists($cacheFile));
 
         $cache->clear('Test');
         $this->assertFalse(\file_exists($cacheFile));
+
+
+        // clear all
+        $cache->appendVersion('Test1', 'ok:string:' . uniqid(), __DIR__);
+        $cache->appendVersion('Test2', 'ok:string:' . uniqid(), __DIR__);
+
+        $this->assertTrue(\file_exists(self::CACHE_DIR . '/Test1.cache'));
+        $this->assertTrue(\file_exists(self::CACHE_DIR . '/Test2.cache'));
+
+        $cache->clear();
+
+        $this->assertFalse(\file_exists(self::CACHE_DIR . '/Test1.cache'));
+        $this->assertFalse(\file_exists(self::CACHE_DIR . '/Test2.cache'));
     }
 }

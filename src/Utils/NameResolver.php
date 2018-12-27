@@ -13,6 +13,11 @@ class NameResolver
         return end($arr);
     }
 
+    public static function replaceDoubleSlash(string $string): string
+    {
+        return str_replace('//', '/', $string);
+    }
+
     public static function resolveNamespace(string $string): string
     {
         $explodeClassName = explode('\\', $string);
