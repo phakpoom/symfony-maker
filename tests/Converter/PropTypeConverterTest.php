@@ -84,6 +84,7 @@ final class PropTypeConverterTest extends TestCase
     public function testBuildInfoString()
     {
         $converter = new PropTypeConverter();
+        $this->assertEquals('name:integer:0', $converter->buildInfoString("name", "integer", "0"));
         $this->assertEquals('name:string:bon', $converter->buildInfoString("name", "string", "bon"));
         $this->assertEquals('name:string', $converter->buildInfoString("name", "string", ""));
         $this->assertEquals('name:string', $converter->buildInfoString("name", "string"));
