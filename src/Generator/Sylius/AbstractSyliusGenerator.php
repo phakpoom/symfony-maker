@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
+use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSyliusGenerator
@@ -23,14 +24,10 @@ abstract class AbstractSyliusGenerator
     {
         $resolver->setDefaults([
             'class' => null,
-            'resource_name' => null,
-            'resource_dir' => null,
         ]);
 
         $resolver
             ->setRequired('class')
-            ->setRequired('resource_name')
-            ->setRequired('resource_dir')
         ;
     }
 

@@ -30,6 +30,10 @@
         <service class="Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator" id="bonn_maker.generator.sylius_resource_config_generator">
             <argument id="bonn_maker.manager.code_manager" type="service" />
         </service>
+        <service class="Bonn\Maker\Generator\Sylius\FactoryGenerator" id="bonn_maker.generator.factory">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
+        </service>
 
         <!--COMMANDS-->
         <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateModelCommand" id="bonn_maker.command.generate_model">
@@ -41,6 +45,10 @@
         </service>
         <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateSyliusResourceConfigCommand" id="bonn_maker.command.generate_sylius_resource_config">
             <argument type="service" id="bonn_maker.generator.sylius_resource_config_generator" />
+            <tag name="console.command" />
+        </service>
+        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateFactoryCommand" id="bonn_maker.command.generate_factory">
+            <argument type="service" id="bonn_maker.generator.factory" />
             <tag name="console.command" />
         </service>
     </services>

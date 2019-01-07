@@ -1,0 +1,7 @@
+sylius_resource:
+    resources:
+        app.test:
+            classes:
+                model: Test\Generator\Sylius\Factory
+                interface: Test\Generator\Sylius\Factory
+                factory: Test\Generator\Sylius\Factory\FactoryGeneratorTestFactory

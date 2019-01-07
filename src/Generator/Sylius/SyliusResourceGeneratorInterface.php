@@ -8,5 +8,5 @@ use Bonn\Maker\Generator\GeneratorInterface;
 
 interface SyliusResourceGeneratorInterface extends GeneratorInterface
 {
-    public function resolveConfigFileName(array $options = []): string;
+    public function resolveConfigFileName(string $className, string $dir): string;
 }
