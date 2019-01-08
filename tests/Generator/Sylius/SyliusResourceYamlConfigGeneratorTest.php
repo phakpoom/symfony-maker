@@ -28,7 +28,7 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         $this->generator->generate([
             'class' => 'App\\Test',
-            'resource_name' => 'app',
+            'resource_prefix_name' => 'app',
             'resource_dir' => __DIR__
         ]);
     }
@@ -37,7 +37,7 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         $this->generator->generate([
             'class' => __CLASS__,
-            'resource_name' => 'app',
+            'resource_prefix_name' => 'app',
             'resource_dir' => __DIR__
         ]);
 

@@ -30,30 +30,17 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
             ->setName('bonn:sylius:maker')
             ->setDescription('Generate sylius resource config')
             ->addArgument('class', InputArgument::REQUIRED, 'name of class')
-            ->addArgument('resource_name', InputArgument::REQUIRED, 'resource name')
+            ->addArgument('resource_prefix_name', InputArgument::REQUIRED, 'resource prefix name')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $resourceDir = $this->configs['config_dir'];
-        if (class_exists($class = $input->getArgument('class'))) {
-            $classDir = (new \ReflectionClass($class))->getFileName();
-
-            $resourceDir = str_replace($this->configs['model_dir_name'], $resourceDir, $classDir);
-            $resourceDir = explode('/', $resourceDir);
-            $resourceDir = implode('/', array_slice($resourceDir, 0, count($resourceDir) - 1));
-
-
-            $classDetail = new \ReflectionClass($class);
-            if (!in_array("Sylius\\Component\\Resource\\Model\\ResourceInterface", $classDetail->getInterfaceNames())) {
-                throw new \InvalidArgumentException(sprintf('Class %s must implement %s', $class, "Sylius\\Component\\Resource\\Model\\ResourceInterface"));
-            }
-        }
+        $resourceDir = $this->guessRootModelDir($input->getArgument('class')) . $this->configs['config_dir'];
 
         $this->generator->generate([
             'class' => $input->getArgument('class'),
-            'resource_name' => $input->getArgument('resource_name'),
+            'resource_prefix_name' => $input->getArgument('resource_prefix_name'),
             'resource_dir' => $resourceDir,
         ]);
 

@@ -1,0 +1,6 @@
+sylius_resource:
+    resources:
+        app.dummy:
+            classes:
+                model: App\App\Model\Dummy
+                interface: App\App\Model\Dummy

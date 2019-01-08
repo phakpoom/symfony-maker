@@ -6,6 +6,7 @@ namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Yaml\Yaml;
 
 class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implements SyliusResourceGeneratorInterface
@@ -13,11 +14,29 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
     /**
      * {@inheritdoc}
      */
+    public function configurationOptions(OptionsResolver $resolver)
+    {
+        parent::configurationOptions($resolver);
+
+        $resolver->setDefaults([
+            'resource_prefix_name' => null,
+            'resource_dir' => null,
+        ]);
+
+        $resolver
+            ->setRequired('resource_prefix_name')
+            ->setRequired('resource_dir')
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function _generateWithResolvedOptions(array $options)
     {
         $className = NameResolver::resolveOnlyClassName($options['class']);
         $reflection = new \ReflectionClass($options['class']);
-        $resourceName = $options['resource_name'] . '.' . NameResolver::camelToUnderScore($className);
+        $resourceName = $options['resource_prefix_name'] . '.' . NameResolver::camelToUnderScore($className);
         $arr = [];
         $arr['sylius_resource']['resources'][$resourceName] = [];
         $resourceArr = &$arr['sylius_resource']['resources'][$resourceName];
@@ -38,16 +57,16 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
             $resourceArr['translation']['classes']['interface'] = $options['class'] . 'TranslationInterface';
         }
 
-        $this->manager->persist(new Code(Yaml::dump($arr, 10), $this->resolveConfigFileName($options)));
+        $this->manager->persist(new Code(Yaml::dump($arr, 10), $this->resolveConfigFileName($options['class'], $options['resource_dir'])));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolveConfigFileName(array $options = []): string
+    public function resolveConfigFileName(string $className, string $dir): string
     {
-        $className = NameResolver::resolveOnlyClassName($options['class']);
+        $className = NameResolver::resolveOnlyClassName($className);
 
-        return $options['resource_dir'] . '/app/sylius_resource/' . NameResolver::camelToUnderScore($className) . '.yml';
+        return NameResolver::replaceDoubleSlash($dir . '/app/sylius_resource/' . NameResolver::camelToUnderScore($className) . '.yml');
     }
 }

@@ -17,7 +17,7 @@ class GenerateSyliusResourceConfiglCommandTest extends AbstractGenerateCommandWe
             'writer_dev' => true,
         ]));
 
-        $output = $this->runWithInput($command, [], ['class' => Dummy::class, 'resource_name' => 'my_app']);
+        $output = $this->runWithInput($command, [], ['class' => Dummy::class, 'resource_prefix_name' => 'my_app']);
 
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/app/sylius_resource/dummy.yml' , $output);
     }
