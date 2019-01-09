@@ -1,0 +1,7 @@
+sylius_resource:
+    resources:
+        app.test:
+            classes:
+                model: Test\Generator\Sylius\Repository
+                interface: Test\Generator\Sylius\Repository
+                repository: Test\Generator\Sylius\Repository\RepositoryGeneratorTestRepository

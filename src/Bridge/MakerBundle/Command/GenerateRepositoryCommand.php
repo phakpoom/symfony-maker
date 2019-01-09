@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class GenerateFactoryCommand extends AbstractGenerateCommand
+class GenerateRepositoryCommand extends AbstractGenerateCommand
 {
     /** @var AbstractSyliusGenerator */
     private $generator;
@@ -25,8 +25,8 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
     protected function configure()
     {
         $this
-            ->setName('bonn:factory:maker')
-            ->setDescription('Generate factory')
+            ->setName('bonn:repository:maker')
+            ->setDescription('Generate repository')
             ->addArgument('class', InputArgument::REQUIRED, 'class name')
         ;
     }
@@ -35,9 +35,9 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
     {
         $this->generator->generate([
             'class' => $class = $input->getArgument('class'),
-            'factory_dir' => $this->guessRootModelDir($class) . $this->configs['factory_dir'],
+            'repository_dir' => $this->guessRootModelDir($class) . $this->configs['repository_dir'],
             'resource_dir' => $this->guessRootModelDir($class) . $this->configs['config_dir'],
-            'namespace' => $this->getNamespaceFromClass($class, $this->configs['factory_dir']),
+            'namespace' => $this->getNamespaceFromClass($class, $this->configs['repository_dir']),
         ]);
 
         $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));

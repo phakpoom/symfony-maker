@@ -54,7 +54,7 @@ abstract class AbstractGenerateCommand extends Command
 
     protected function guessRootModelDir(string $className): string
     {
-        $resourceDir = "";
+        $resourceDir = '';
         if (class_exists($className)) {
             $classDir = (new \ReflectionClass($className))->getFileName();
 
@@ -63,8 +63,8 @@ abstract class AbstractGenerateCommand extends Command
             $resourceDir = implode('/', array_slice($resourceDir, 0, count($resourceDir) - 1));
 
             $classDetail = new \ReflectionClass($className);
-            if (!in_array("Sylius\\Component\\Resource\\Model\\ResourceInterface", $classDetail->getInterfaceNames())) {
-                throw new \InvalidArgumentException(sprintf('Class %s must implement %s', $className, "Sylius\\Component\\Resource\\Model\\ResourceInterface"));
+            if (!in_array('Sylius\\Component\\Resource\\Model\\ResourceInterface', $classDetail->getInterfaceNames())) {
+                throw new \InvalidArgumentException(sprintf('Class %s must implement %s', $className, 'Sylius\\Component\\Resource\\Model\\ResourceInterface'));
             }
         }
 
@@ -74,6 +74,7 @@ abstract class AbstractGenerateCommand extends Command
     protected function getNamespaceFromClass(string $className, string $postFix): string
     {
         $namespace = NameResolver::resolveNamespace($className);
-        return str_replace(str_replace("/", "\\", $this->configs['model_dir_name']), str_replace("/", "\\", $postFix), $namespace);
+
+        return str_replace(str_replace('/', '\\', $this->configs['model_dir_name']), str_replace('/', '\\', $postFix), $namespace);
     }
 }

@@ -38,14 +38,14 @@ abstract class AbstractGenerateCommandWebTestCase extends WebTestCase
 
     protected function assertFileHasCreated(string $path, string $output)
     {
-        $this->assertContains('======' . $path . '======', $output);
+        $this->assertContains('======' . $path . '======', $output, "$output hasn't created");
 
         return $this;
     }
 
     protected function assertFileHasNotCreated(string $path, string $output)
     {
-        $this->assertNotContains('======' . $path . '======' . $path, $output);
+        $this->assertNotContains('======' . $path . '======' . $path, $output, "$output has created");
 
         return $this;
     }
