@@ -15,7 +15,8 @@ class GenerateRepositoryCommand extends AbstractGenerateCommand
     /** @var AbstractSyliusGenerator */
     private $generator;
 
-    public function __construct(AbstractSyliusGenerator $generator) {
+    public function __construct(AbstractSyliusGenerator $generator)
+    {
         $this->generator = $generator;
 
         parent::__construct();
@@ -36,7 +37,7 @@ class GenerateRepositoryCommand extends AbstractGenerateCommand
             'class' => $class = $input->getArgument('class'),
             'repository_dir' => $this->guessRootModelDir($class) . $this->configs['repository_dir'],
             'resource_dir' => $this->guessRootModelDir($class) . $this->configs['config_dir'],
-            'namespace' => $this->getNamespaceFromClass($class, $this->configs['repository_dir'])
+            'namespace' => $this->getNamespaceFromClass($class, $this->configs['repository_dir']),
         ]);
 
         $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));

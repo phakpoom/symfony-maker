@@ -13,8 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RepositoryGenerator extends AbstractSyliusGenerator
 {
-    /** @var SyliusResourceGeneratorInterface  */
-    private  $syliusConfigGenerator;
+    /** @var SyliusResourceGeneratorInterface */
+    private $syliusConfigGenerator;
 
     public function __construct(CodeManagerInterface $manager, SyliusResourceGeneratorInterface $syliusConfigGenerator)
     {
@@ -49,13 +49,13 @@ class RepositoryGenerator extends AbstractSyliusGenerator
         $classNamespace = new PhpNamespace($options['namespace']);
         $interfaceNamespace = new PhpNamespace($options['namespace']);
 
-        $repositoryClass = $classNamespace->addClass($className. 'Repository');
+        $repositoryClass = $classNamespace->addClass($className . 'Repository');
 
-        $classNamespace->addUse("Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository");
-        $repositoryClass->addExtend("Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository");
-        $repositoryInterfaceClass = $interfaceNamespace->addInterface($className. 'RepositoryInterface');
-        $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Repository\\RepositoryInterface");
-        $repositoryInterfaceClass->addExtend("Sylius\\Component\\Resource\\Repository\\RepositoryInterface");
+        $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
+        $repositoryClass->addExtend('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
+        $repositoryInterfaceClass = $interfaceNamespace->addInterface($className . 'RepositoryInterface');
+        $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Repository\\RepositoryInterface');
+        $repositoryInterfaceClass->addExtend('Sylius\\Component\\Resource\\Repository\\RepositoryInterface');
 
         $repositoryClass->addImplement($interfaceNamespace->getName() . '\\' . $repositoryInterfaceClass->getName());
 
@@ -64,6 +64,6 @@ class RepositoryGenerator extends AbstractSyliusGenerator
 
         $configFileName = $this->syliusConfigGenerator->resolveConfigFileName($options['class'], $options['resource_dir']);
 
-        $this->appendSyliusResourceConfig($configFileName, 'repository', $classNamespace->getName() . '\\' .current($classNamespace->getClasses())->getName());
+        $this->appendSyliusResourceConfig($configFileName, 'repository', $classNamespace->getName() . '\\' . current($classNamespace->getClasses())->getName());
     }
 }

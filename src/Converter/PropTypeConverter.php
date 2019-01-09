@@ -86,7 +86,7 @@ final class PropTypeConverter implements PropTypeConverterInterface
     public function buildInfoString(string $name, string $type, ?string $value = null): string
     {
         $str = $name . self::VALUE_SEPARATOR . $type;
-        if ("" !== $value && null !== $value) {
+        if ('' !== $value && null !== $value) {
             $str .= self::VALUE_SEPARATOR . $value;
         }
 

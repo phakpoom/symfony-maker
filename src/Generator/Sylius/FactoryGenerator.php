@@ -13,8 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FactoryGenerator extends AbstractSyliusGenerator
 {
-    /** @var SyliusResourceGeneratorInterface  */
-    private  $syliusConfigGenerator;
+    /** @var SyliusResourceGeneratorInterface */
+    private $syliusConfigGenerator;
 
     public function __construct(CodeManagerInterface $manager, SyliusResourceGeneratorInterface $syliusConfigGenerator)
     {
@@ -50,8 +50,8 @@ class FactoryGenerator extends AbstractSyliusGenerator
         $classNamespace = new PhpNamespace($options['namespace']);
         $interfaceNamespace = new PhpNamespace($options['namespace']);
 
-        $factoryClass = $classNamespace->addClass($className. 'Factory');
-        $classNamespace->addUse("Sylius\\Component\\Resource\\Factory\\FactoryInterface");
+        $factoryClass = $classNamespace->addClass($className . 'Factory');
+        $classNamespace->addUse('Sylius\\Component\\Resource\\Factory\\FactoryInterface');
         $classNamespace->addUse($options['class'] . 'Interface');
         $factoryClass->addProperty('className')->setComment("\n @var string \n");
         $factoryClass->addMethod('__construct')
@@ -60,9 +60,9 @@ class FactoryGenerator extends AbstractSyliusGenerator
         $factoryClass->addMethod('createNew')
             ->setVisibility('public')->setBody('return new $this->className();')
             ->setComment("\n @var " . NameResolver::resolveOnlyClassName($options['class']) . "Interface \n");
-        $factoryInterfaceClass = $interfaceNamespace->addInterface($className. 'FactoryInterface');
-        $interfaceNamespace->addUse("Sylius\\Component\\Resource\\Factory\\FactoryInterface");
-        $factoryInterfaceClass->addExtend("Sylius\\Component\\Resource\\Factory\\FactoryInterface");
+        $factoryInterfaceClass = $interfaceNamespace->addInterface($className . 'FactoryInterface');
+        $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Factory\\FactoryInterface');
+        $factoryInterfaceClass->addExtend('Sylius\\Component\\Resource\\Factory\\FactoryInterface');
 
         $factoryClass->addImplement($interfaceNamespace->getName() . '\\' . $factoryInterfaceClass->getName());
 
@@ -71,6 +71,6 @@ class FactoryGenerator extends AbstractSyliusGenerator
 
         $configFileName = $this->syliusConfigGenerator->resolveConfigFileName($options['class'], $options['resource_dir']);
 
-        $this->appendSyliusResourceConfig($configFileName, 'factory', $classNamespace->getName() . '\\' .current($classNamespace->getClasses())->getName());
+        $this->appendSyliusResourceConfig($configFileName, 'factory', $classNamespace->getName() . '\\' . current($classNamespace->getClasses())->getName());
     }
 }

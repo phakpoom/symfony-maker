@@ -6,7 +6,6 @@ namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
-use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Yaml\Yaml;
 

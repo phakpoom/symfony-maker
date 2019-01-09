@@ -15,7 +15,8 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
     /** @var AbstractSyliusGenerator */
     private $generator;
 
-    public function __construct(AbstractSyliusGenerator $generator) {
+    public function __construct(AbstractSyliusGenerator $generator)
+    {
         $this->generator = $generator;
 
         parent::__construct();
@@ -36,7 +37,7 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
             'class' => $class = $input->getArgument('class'),
             'factory_dir' => $this->guessRootModelDir($class) . $this->configs['factory_dir'],
             'resource_dir' => $this->guessRootModelDir($class) . $this->configs['config_dir'],
-            'namespace' => $this->getNamespaceFromClass($class, $this->configs['factory_dir'])
+            'namespace' => $this->getNamespaceFromClass($class, $this->configs['factory_dir']),
         ]);
 
         $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
