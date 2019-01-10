@@ -130,9 +130,12 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
             $translationClassNameSpace->addUse('Sylius\\Component\\Resource\\Model\\AbstractTranslation');
             $translationClass = $translationClassNameSpace->addClass($this->getTranslationClassName($classNameSpace, $classType));
             $translationClass->addExtend('Sylius\\Component\\Resource\\Model\\AbstractTranslation');
+            $translationClass->addImplement($this->getTranslationClassName($classNameSpace, $classType, true) . 'Interface');
+
             $propType = new IntegerType('id');
             $propType->addProperty($translationClass);
             $propType->addGetter($translationClass);
+
         } else {
             $translationClassNameSpace = $translationClass->getExtra()['namespace'];
             Assert::isInstanceOf($translationClassNameSpace, PhpNamespace::class);
