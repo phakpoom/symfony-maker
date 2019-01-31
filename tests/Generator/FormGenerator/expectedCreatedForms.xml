@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="test.form_type.entity_type" class="Test\Generator\FormGenerator\Entity">
+            <argument>%test.model.entity.class%</argument>
+            <argument type="collection">
+                <argument>test</argument>
+            </argument>
+            <tag name="form.type"/>
+        </service>
+    </services>
+</container>
