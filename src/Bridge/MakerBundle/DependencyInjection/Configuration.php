@@ -24,6 +24,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('project_source_dir')->defaultNull()->end()
                 ->scalarNode('config_dir')->defaultValue('Resources/config')->end()
                 ->scalarNode('factory_dir')->defaultValue('Factory')->end()
+                ->scalarNode('form_type_dir')->defaultValue('Form/Type')->end()
                 ->scalarNode('repository_dir')->defaultValue('Doctrine/ORM')->end()
                 ->scalarNode('doctrine_mapping_dir_name')->defaultValue('Resources/config/doctrine/model')->end()
                 ->scalarNode('model_dir_name')->defaultValue('Model')->end()

@@ -7,6 +7,7 @@ namespace Bonn\Maker\ModelPropType;
 use Bonn\Maker\Generator\DoctrineXmlMappingGenerator;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
+use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\ClassType;
@@ -103,7 +104,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
         $propType = new StringType($this->name);
         $propType->addDoctrineMapping($fullClassName, $mappedSuper, $codeManager, $options);
 
-        $dom = DoctrineXmlMappingGenerator::createDomWithRoot($xml);
+        $dom = new DOMIndent($xml->asXML());
         $codeManager->persist(new Code($dom->saveXML(), $translationMappingLocaled, [
             'doctrine_mapping_xml' => $xml,
         ]));

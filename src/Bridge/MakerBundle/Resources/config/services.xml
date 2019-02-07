@@ -24,6 +24,9 @@
         <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
             <argument id="bonn_maker.manager.code_manager" type="service" />
         </service>
+        <service class="Bonn\Maker\Generator\FormGenerator" id="bonn_maker.generator.form">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+        </service>
         <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
             <argument id="bonn_maker.manager.code_manager" type="service" />
         </service>
@@ -57,6 +60,10 @@
         </service>
         <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateRepositoryCommand" id="bonn_maker.command.generate_repository">
             <argument type="service" id="bonn_maker.generator.repository" />
+            <tag name="console.command" />
+        </service>
+        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateFormCommand" id="bonn_maker.command.generate_form">
+            <argument type="service" id="bonn_maker.generator.form" />
             <tag name="console.command" />
         </service>
     </services>

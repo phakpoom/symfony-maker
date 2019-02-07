@@ -6,17 +6,11 @@ namespace Bonn\Maker\Generator;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
-use Bonn\Maker\ModelPropType\PropTypeInterface;
+use Bonn\Maker\Model\SymfonyServiceXml;
+use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
-use FluidXml\FluidContext;
-use FluidXml\FluidXml;
 use Nette\PhpGenerator\PhpNamespace;
-use Symfony\Component\Config\Util\XmlUtils;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class FormGenerator implements GeneratorInterface
@@ -36,9 +30,9 @@ final class FormGenerator implements GeneratorInterface
     {
         $resolver
             ->setDefaults([
-                'resource_name' => null,
                 'form_service_file_path' => null,
                 'all_service_file_path' => null,
+                'config_dir' => null,
             ])
             ->setRequired('class')
             ->setRequired('namespace')
@@ -76,24 +70,47 @@ final class FormGenerator implements GeneratorInterface
 
         $this->codeManager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 
-        if (null === $options['form_service_file_path'] || null === $options['all_service_file_path']) {
+        if (null === $options['form_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
             return;
         }
 
-
+        $allServicePath = $options['config_dir'] . $options['all_service_file_path'];
+        $formServicePath = $options['config_dir'] . $options['form_service_file_path'];
 
         // import service form
-        if (!file_exists($options['all_service_file_path'])) {
-            throw new \InvalidArgumentException($options['all_service_file_path'] . ' not a directory');
+        if (!file_exists($allServicePath)) {
+            throw new \InvalidArgumentException($allServicePath . ' not a file');
         }
 
-        $serviceXml = FluidXml::load($options['all_service_file_path']);
-        $serviceXml->namespace('container', XmlFileLoader::NS);
-        $alreadyImported = false;
-        $serviceXml->query('//container:imports/container:import')->each(function($index, \DOMElement $dom) {
-            var_dump($dom->getAttribute('resource'));
-        });
+        $serviceXml = new SymfonyServiceXml($allServicePath);
+        if (!$serviceXml->hasImport(ltrim($options['form_service_file_path'], '/'))) {
+            $serviceXml->addImport(ltrim($options['form_service_file_path'], '/'));
+            $this->codeManager->persist(new Code((new DOMIndent($serviceXml->__toString()))->saveXML(), $allServicePath));
+        }
 
-        echo ($serviceXml);exit;
+        // register form service
+        if (file_exists($formServicePath)) {
+            $formXml = new SymfonyServiceXml($formServicePath);
+        } else {
+            $formXml = new SymfonyServiceXml();
+        }
+
+        $resourcePrefix =  NameResolver::camelToUnderScore(explode('\\', $options['class'])[0]);
+        $resourceName =  NameResolver::camelToUnderScore($className);
+        $serviceContext = $formXml->addService(sprintf('%s.form_type.%s_type', $resourcePrefix, $resourceName), $options['class']);
+
+        $serviceContext->addChild('argument', sprintf('%%%s.model.%s.class%%', $resourcePrefix, $resourceName));
+
+        $serviceContext
+            ->addChild('argument', true, [
+                'type' => 'collection'
+            ])
+            ->addChild('argument', $resourcePrefix);
+
+        $serviceContext->addChild('tag', null, [
+            'name' => 'form.type'
+        ]);
+
+        $this->codeManager->persist(new Code((new DOMIndent($formXml->__toString()))->saveXML(), $formServicePath));
     }
 }

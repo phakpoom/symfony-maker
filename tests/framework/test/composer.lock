@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e07117453871c37994bd7f934e9146b4",
+    "content-hash": "a744480bf6f880135df6d9d84da10699",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1184,6 +1184,57 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "servo/fluidxml",
+            "version": "1.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/servo-php/fluidxml.git",
+                "reference": "b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/servo-php/fluidxml/zipball/b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b",
+                "reference": "b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "apigen/apigen": "4.*",
+                "peridot-php/peridot": "1.*",
+                "peridot-php/peridot-code-coverage-reporters": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./source/FluidXml/fluid.php"
+                ],
+                "psr-4": {
+                    "FluidXml\\": "./source/FluidXml/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Orlando",
+                    "email": "fluidxml@danieleorlando.com",
+                    "homepage": "https://github.com/servo-php/fluidxml",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Concise and fluent XML manipulation library",
+            "homepage": "https://github.com/servo-php/fluidxml",
+            "keywords": [
+                "templating",
+                "xml"
+            ],
+            "time": "2017-01-31T00:37:33+00:00"
         },
         {
             "name": "sylius/resource",

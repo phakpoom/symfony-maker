@@ -102,21 +102,17 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
             $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->codeManager, $options);
         }
 
-        $dom = self::createDomWithRoot($root);
+        $dom = new DOMIndent($root->asXML());
 
         $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
     }
 
+    /**
+     * @deprecated
+     */
     public static function createDomWithRoot(\SimpleXMLElement $root)
     {
-        $dom = new DOMIndent('1.0');
-        $dom->setWhiteSpaceForIndentation('    ');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($root->asXML());
-        $dom->xmlIndent();
-
-        return $dom;
+        return new DOMIndent($root->asXML());
     }
 
     public static function createDoctrineMappingXml(): \SimpleXMLElement
