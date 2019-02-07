@@ -97,11 +97,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         [$modelDir, $info] = $returnFromOp;
 
         // resolve full class name with namespace
-        $className = str_replace($this->configs['project_source_dir'], '', $modelDir . '/' . $this->configs['model_dir_name'] . '/' . $classNameInput);
-        $className = $this->configs['namespace_prefix'] . '\\' . $className;
-        $className = str_replace('/', '\\', $className);
-        $className = preg_replace('/\\\+/', '\\', $className);
-        $className = ltrim($className, '\\');
+        $className = $this->getFullClassNameFromDir($modelDir . '/' . $this->configs['model_dir_name'], $classNameInput);
 
         $this->generator->generate([
             'class' => $className,
@@ -154,26 +150,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         }
         if ('make' === $op) {
             // Ask Bundle
-            $choices = [];
-
-            $finder = new Finder();
-            $dirs = [];
-
-            $iterator = $finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0')->getIterator();
-            foreach ($iterator as $dir) {
-                $dirs[] = $dir->getRealPath();
-            }
-            asort($dirs);
-            foreach ($dirs as $dir) {
-                $choices[] = $dir;
-            }
-
-            if (1 < count($choices)) {
-                $question = new ChoiceQuestion('Please select your folder', $choices);
-                $modelDir = $helper->ask($input, $output, $question);
-            } else {
-                $modelDir = $choices[0];
-            }
+            $modelDir = $this->askForBundle($helper, $input, $output);
 
             while (true !== $this->askForProperty($input, $output)) {
             }

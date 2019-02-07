@@ -16,10 +16,8 @@ class FactoryGenerator extends AbstractSyliusGenerator
     /** @var SyliusResourceGeneratorInterface */
     private $syliusConfigGenerator;
 
-    public function __construct(CodeManagerInterface $manager, SyliusResourceGeneratorInterface $syliusConfigGenerator)
+    public function __construct(SyliusResourceGeneratorInterface $syliusConfigGenerator)
     {
-        parent::__construct($manager);
-
         $this->syliusConfigGenerator = $syliusConfigGenerator;
     }
 
@@ -31,6 +29,7 @@ class FactoryGenerator extends AbstractSyliusGenerator
         parent::configurationOptions($resolver);
 
         $resolver
+            ->setRequired('class')
             ->setRequired('namespace')
             ->setRequired('factory_dir')
             ->setRequired('resource_dir')
@@ -40,8 +39,10 @@ class FactoryGenerator extends AbstractSyliusGenerator
     /**
      * {@inheritdoc}
      */
-    protected function _generateWithResolvedOptions(array $options)
+    protected function generateWithResolvedOptions(array $options)
     {
+        $this->ensureClassExists($options['class']);
+
         $className = NameResolver::resolveOnlyClassName($options['class']);
 
         $factoryFileLocate = NameResolver::replaceDoubleSlash($options['factory_dir'] . '/' . $className . 'Factory.php');

@@ -16,10 +16,8 @@ class RepositoryGenerator extends AbstractSyliusGenerator
     /** @var SyliusResourceGeneratorInterface */
     private $syliusConfigGenerator;
 
-    public function __construct(CodeManagerInterface $manager, SyliusResourceGeneratorInterface $syliusConfigGenerator)
+    public function __construct(SyliusResourceGeneratorInterface $syliusConfigGenerator)
     {
-        parent::__construct($manager);
-
         $this->syliusConfigGenerator = $syliusConfigGenerator;
     }
 
@@ -31,6 +29,7 @@ class RepositoryGenerator extends AbstractSyliusGenerator
         parent::configurationOptions($resolver);
 
         $resolver
+            ->setRequired('class')
             ->setRequired('namespace')
             ->setRequired('repository_dir')
             ->setRequired('resource_dir')
@@ -40,8 +39,10 @@ class RepositoryGenerator extends AbstractSyliusGenerator
     /**
      * {@inheritdoc}
      */
-    protected function _generateWithResolvedOptions(array $options)
+    protected function generateWithResolvedOptions(array $options)
     {
+        $this->ensureClassExists($options['class']);
+
         $className = NameResolver::resolveOnlyClassName($options['class']);
         $repositoryFileLocate = NameResolver::replaceDoubleSlash($options['repository_dir'] . '/' . $className . 'Repository.php');
         $repositoryInterfaceFileLocate = NameResolver::replaceDoubleSlash($options['repository_dir'] . '/' . $className . 'RepositoryInterface.php');

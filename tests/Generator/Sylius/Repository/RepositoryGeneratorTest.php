@@ -19,7 +19,10 @@ class RepositoryGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new RepositoryGenerator($this->manager, new SyliusResourceYamlConfigGenerator($this->manager));
+        $syliusResourceService = new SyliusResourceYamlConfigGenerator();
+        $syliusResourceService->setManager($this->manager);
+        $this->generator = new RepositoryGenerator($syliusResourceService);
+        $this->generator->setManager($this->manager);
     }
 
     /**

@@ -20,16 +20,8 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class ModelGenerator implements ModelGeneratorInterface
+final class ModelGenerator extends AbstractGenerator implements ModelGeneratorInterface
 {
-    /** @var CodeManagerInterface */
-    private $codeManager;
-
-    public function __construct(CodeManagerInterface $codeManager)
-    {
-        $this->codeManager = $codeManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -59,12 +51,8 @@ final class ModelGenerator implements ModelGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($options = [])
+    public function generateWithResolvedOptions($options = [])
     {
-        $optionResolver = new OptionsResolver();
-        $this->configurationOptions($optionResolver);
-        $options = $optionResolver->resolve($options);
-
         $fullClassName = $options['class'];
         $fullInterfaceClassName = $options['class'] . 'Interface';
         $props = $options['props'];
@@ -115,7 +103,7 @@ final class ModelGenerator implements ModelGeneratorInterface
             foreach ($props as $prop) {
                 // use for advance props eg. translation
                 if ($prop instanceof ManagerAwareInterface) {
-                    $prop->setManager($this->codeManager);
+                    $prop->setManager($this->manager);
                     $prop->setOption($options);
                 }
 
@@ -145,18 +133,11 @@ final class ModelGenerator implements ModelGeneratorInterface
 
         $modelClass->addImplement($fullInterfaceClassName);
 
-        $this->codeManager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $options['model_dir'] . "/$onlyClassName.php"));
-        $this->codeManager->persist(new Code(PhpDoctypeCode::render($interfaceNamespace->__toString()), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
+        $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $options['model_dir'] . "/$onlyClassName.php"));
+        $this->manager->persist(new Code(PhpDoctypeCode::render($interfaceNamespace->__toString()), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
     }
 
     private function createConstructor(ClassType $modelClass)
-    {
-        return $modelClass
-            ->addMethod('__construct')
-            ->setVisibility('public');
-    }
-
-    private function createIdProp(ClassType $modelClass, ClassType $interfaceClass)
     {
         return $modelClass
             ->addMethod('__construct')

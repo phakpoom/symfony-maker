@@ -13,16 +13,8 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
+final class DoctrineXmlMappingGenerator extends AbstractGenerator implements DoctrineGeneratorInterface
 {
-    /** @var CodeManagerInterface */
-    private $codeManager;
-
-    public function __construct(CodeManagerInterface $codeManager)
-    {
-        $this->codeManager = $codeManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -52,12 +44,8 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
     /**
      * @param array $options
      */
-    public function generate($options = [])
+    public function generateWithResolvedOptions($options = [])
     {
-        $optionResolver = new OptionsResolver();
-        $this->configurationOptions($optionResolver);
-        $options = $optionResolver->resolve($options);
-
         $fullClassName = $options['class'];
         $props = $options['props'];
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
@@ -99,12 +87,12 @@ final class DoctrineXmlMappingGenerator implements DoctrineGeneratorInterface
 
         /** @var PropTypeInterface $prop */
         foreach ($props as $prop) {
-            $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->codeManager, $options);
+            $prop->addDoctrineMapping($fullClassName, $mappedSuper, $this->manager, $options);
         }
 
         $dom = new DOMIndent($root->asXML());
 
-        $this->codeManager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
+        $this->manager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
     }
 
     /**

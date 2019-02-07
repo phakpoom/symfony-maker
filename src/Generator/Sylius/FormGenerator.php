@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Generator\GeneratorInterface;
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Model\SymfonyServiceXml;
 use Bonn\Maker\Utils\NameResolver;
@@ -20,13 +19,13 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
      */
     public function configurationOptions(OptionsResolver $resolver)
     {
-        parent::configurationOptions($resolver);
         $resolver
             ->setDefaults([
                 'form_service_file_path' => null,
                 'all_service_file_path' => null,
                 'config_dir' => null,
             ])
+            ->setRequired('class')
             ->setRequired('namespace')
             ->setRequired('form_dir')
         ;
@@ -35,11 +34,9 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
     /**
      * @param array $options
      */
-    public function _generateWithResolvedOptions($options = [])
+    public function generateWithResolvedOptions($options = [])
     {
-        $optionResolver = new OptionsResolver();
-        $this->configurationOptions($optionResolver);
-        $options = $optionResolver->resolve($options);
+        $this->ensureClassExists($options['class']);
 
         $className = NameResolver::resolveOnlyClassName($options['class']);
 

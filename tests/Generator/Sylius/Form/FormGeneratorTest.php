@@ -15,7 +15,8 @@ class FormGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new FormGenerator($this->manager);
+        $this->generator = new FormGenerator();
+        $this->generator->setManager($this->manager);
     }
 
     public function testGenerateBasic()

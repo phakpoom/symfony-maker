@@ -19,7 +19,10 @@ class FactoryGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new FactoryGenerator($this->manager, new SyliusResourceYamlConfigGenerator($this->manager));
+        $syliusResourceService = new SyliusResourceYamlConfigGenerator();
+        $syliusResourceService->setManager($this->manager);
+        $this->generator = new FactoryGenerator($syliusResourceService);
+        $this->generator->setManager($this->manager);
     }
 
     /**
