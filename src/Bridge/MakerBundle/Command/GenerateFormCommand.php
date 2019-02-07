@@ -39,7 +39,7 @@ class GenerateFormCommand extends AbstractGenerateCommand
             'class' => $class = $input->getArgument('class'),
             'form_dir' => $this->guessRootModelDir($class) . $this->configs['form_type_dir'],
             'namespace' => $this->getNamespaceFromClass($class, $this->configs['form_type_dir']),
-            'form_service_file_path' => '/services/forms.xml', // hardedcode ?
+            'form_service_file_path' => '/' . $this->configs['service_import_dir'] .'/forms.xml', // hardedcode ?
             'all_service_file_path' => '/services.xml',
             'config_dir' => $configDir,
         ]);
