@@ -79,7 +79,7 @@ final class FormGenerator implements GeneratorInterface
 
         // import service form
         if (!file_exists($allServicePath)) {
-            throw new \InvalidArgumentException($allServicePath . ' not a file');
+            throw new \InvalidArgumentException($allServicePath . 'is not a file');
         }
 
         $serviceXml = new SymfonyServiceXml($allServicePath);
