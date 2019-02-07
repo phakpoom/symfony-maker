@@ -61,9 +61,10 @@ class SymfonyServiceXml
             return;
         }
 
-        $importsContext = $this->xml->query('//container:imports');
+        $importsContext = $this->xml->query('//container:imports', '//container/imports');
+
         if (0 === $importsContext->size()) {
-            $importsContext = $this->xml->query('//container:services')->prepend('imports', true);
+            $importsContext = $this->xml->query('//container:services', '//container/services')->prepend('imports', true);
         }
 
         $importsContext->add('import', null, [
