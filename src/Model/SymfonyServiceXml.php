@@ -28,13 +28,13 @@ class SymfonyServiceXml
         } else {
             $xml = new FluidXml(null);
 
-            $xml->namespace('container', XmlFileLoader::NS);
-
             $xml->add('container', null, [
                 'xmlns' => 'http://symfony.com/schema/dic/services',
                 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                 'xsi:schemaLocation' => 'http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd',
             ]);
+
+            $xml->namespace('container', XmlFileLoader::NS);
 
             $xml->query('/container')->add('services');
         }
@@ -60,7 +60,12 @@ class SymfonyServiceXml
             return;
         }
 
-        $this->xml->query('//container:imports')->add('import', null, [
+        $importsContext = $this->xml->query('//container:imports');
+        if (0 === $importsContext->size()) {
+            $importsContext = $this->xml->query('//container:services')->prepend('imports', true);
+        }
+
+        $importsContext->add('import', null, [
             'resource' => $path
         ]);
     }
@@ -73,7 +78,7 @@ class SymfonyServiceXml
      */
     public function addService(string $id, string $class): FluidContext
     {
-        return $this->xml->query('//container/services')
+        return $this->xml->query('//container:services')
             ->addChild('service', true, [
                 'id' => $id,
                 'class' => $class,
