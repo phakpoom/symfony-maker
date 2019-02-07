@@ -18,7 +18,8 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new SyliusResourceYamlConfigGenerator($this->manager);
+        $this->generator = new SyliusResourceYamlConfigGenerator();
+        $this->generator->setManager($this->manager);
     }
 
     /**

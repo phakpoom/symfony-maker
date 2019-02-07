@@ -22,25 +22,28 @@
 
         <!--GENERATORS-->
         <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
+            <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
+            <tag name="bonn_maker.generator" />
+        </service>
+         <service class="Bonn\Maker\Generator\TwigExtensionGenerator" id="bonn_maker.generator.twig_extension">
+            <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator" id="bonn_maker.generator.sylius_resource_config_generator">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
+            <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\FactoryGenerator" id="bonn_maker.generator.factory">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
             <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
+            <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\RepositoryGenerator" id="bonn_maker.generator.repository">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
             <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
+            <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\FormGenerator" id="bonn_maker.generator.form">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
             <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
+            <tag name="bonn_maker.generator" />
         </service>
 
         <!--COMMANDS-->
@@ -65,6 +68,10 @@
         </service>
         <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateFormCommand" id="bonn_maker.command.generate_form">
             <argument type="service" id="bonn_maker.generator.form" />
+            <tag name="console.command" />
+        </service>
+        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateTwigExtensionCommand" id="bonn_maker.command.generate_twig_extension">
+            <argument type="service" id="bonn_maker.generator.twig_extension" />
             <tag name="console.command" />
         </service>
     </services>

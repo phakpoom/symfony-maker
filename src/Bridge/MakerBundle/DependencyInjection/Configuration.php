@@ -26,6 +26,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('service_import_dir')->defaultValue('services')->end()
                 ->scalarNode('factory_dir')->defaultValue('Factory')->end()
                 ->scalarNode('form_type_dir')->defaultValue('Form/Type')->end()
+                ->scalarNode('twig_extension_dir')->defaultValue('Twig/Extension')->end()
                 ->scalarNode('repository_dir')->defaultValue('Doctrine/ORM')->end()
                 ->scalarNode('doctrine_mapping_dir_name')->defaultValue('Resources/config/doctrine/model')->end()
                 ->scalarNode('model_dir_name')->defaultValue('Model')->end()

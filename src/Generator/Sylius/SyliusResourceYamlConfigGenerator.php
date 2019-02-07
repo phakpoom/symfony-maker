@@ -24,6 +24,7 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
         ]);
 
         $resolver
+            ->setRequired('class')
             ->setRequired('resource_prefix_name')
             ->setRequired('resource_dir')
         ;
@@ -32,8 +33,10 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
     /**
      * {@inheritdoc}
      */
-    protected function _generateWithResolvedOptions(array $options)
+    protected function generateWithResolvedOptions(array $options)
     {
+        $this->ensureClassExists($options['class']);
+
         $className = NameResolver::resolveOnlyClassName($options['class']);
         $reflection = new \ReflectionClass($options['class']);
         $resourceName = $options['resource_prefix_name'] . '.' . NameResolver::camelToUnderScore($className);
@@ -42,15 +45,6 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
         $resourceArr = &$arr['sylius_resource']['resources'][$resourceName];
         $resourceArr['classes']['model'] = $options['class'];
         $resourceArr['classes']['interface'] = $options['class'] . 'Interface';
-//        if ($options['with_factory']) {
-//            $resourceArr['classes']['factory'] = FactoryGenerator::getFactoryNameSpace($options['class']) . '\\' . $className . 'Factory';
-//        }
-//        if ($options['with_form']) {
-//            $resourceArr['classes']['form'] = FormGenerator::getFormTypeNameSpace($options['class']) . '\\' . $className . 'Type';
-//        }
-//        if ($options['with_repo']) {
-//            $resourceArr['classes']['repository'] = RepositoryGenerator::getRepositoryNameSpace($options['class']) . '\\' . $className . 'Repository';
-//        }
 
         if (in_array('Sylius\\Component\\Resource\\Model\\TranslatableInterface', $reflection->getInterfaceNames())) {
             $resourceArr['translation']['classes']['model'] = $options['class'] . 'Translation';

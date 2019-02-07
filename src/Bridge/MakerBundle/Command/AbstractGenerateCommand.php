@@ -8,7 +8,13 @@ use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperInterface;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\StyleInterface;
+use Symfony\Component\Finder\Finder;
 
 abstract class AbstractGenerateCommand extends Command
 {
@@ -76,5 +82,39 @@ abstract class AbstractGenerateCommand extends Command
         $namespace = NameResolver::resolveNamespace($className);
 
         return str_replace(str_replace('/', '\\', $this->configs['model_dir_name']), str_replace('/', '\\', $postFix), $namespace);
+    }
+
+    protected function askForBundle(HelperInterface $helper, InputInterface $input, OutputInterface $output): string
+    {
+        $choices = [];
+
+        $finder = new Finder();
+        $dirs = [];
+
+        $iterator = $finder->directories()->in($this->configs['bundle_root_dir'])->depth('== 0')->getIterator();
+        foreach ($iterator as $dir) {
+            $dirs[] = $dir->getRealPath();
+        }
+        asort($dirs);
+        foreach ($dirs as $dir) {
+            $choices[] = $dir;
+        }
+
+        if (1 < count($choices)) {
+            $question = new ChoiceQuestion('Please select your folder', $choices);
+            return $helper->ask($input, $output, $question);
+        }
+
+        return $choices[0];
+    }
+
+    protected function getFullClassNameFromDir(string $rootDir, string $className)
+    {
+        // resolve full class name with namespace
+        $className = str_replace($this->configs['project_source_dir'], '', $rootDir . '/' . $className);
+        $className = $this->configs['namespace_prefix'] . '\\' . $className;
+        $className = str_replace('/', '\\', $className);
+        $className = preg_replace('/\\\+/', '\\', $className);
+        return ltrim($className, '\\');
     }
 }

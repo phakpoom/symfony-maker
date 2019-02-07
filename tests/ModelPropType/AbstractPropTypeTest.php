@@ -22,8 +22,11 @@ abstract class AbstractPropTypeTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new ModelGenerator($this->manager);
-        $this->doctrineGenerator = new DoctrineXmlMappingGenerator($this->manager);
+        $this->generator = new ModelGenerator();
+        $this->generator->setManager($this->manager);
+
+        $this->doctrineGenerator = new DoctrineXmlMappingGenerator();
+        $this->doctrineGenerator->setManager($this->manager);
     }
 
     protected function generate(/* array|PropTypeInterface */ $propType)
