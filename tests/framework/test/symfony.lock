@@ -68,6 +68,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "servo/fluidxml": {
+        "version": "1.21"
+    },
     "sylius/resource": {
         "version": "v1.2.9"
     },

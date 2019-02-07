@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Utils;
 
+use Bonn\Maker\Model\SymfonyServiceXml;
+use FluidXml\FluidXml;
+use Webmozart\Assert\Assert;
+
 /**
  * Class IndentDomDocument
  *
@@ -11,7 +15,18 @@ namespace Bonn\Maker\Utils;
  */
 class DOMIndent extends \DomDocument
 {
-    protected $whiteSpace = "\t";
+    public function __construct(string $xmlString, $version = '1.0', $encoding = '')
+    {
+        parent::__construct($version, $encoding);
+
+        $this->preserveWhiteSpace = false;
+        $this->formatOutput = true;
+
+        $this->loadXML($xmlString);
+        $this->xmlIndent();
+    }
+
+    protected $whiteSpace = '    ';
 
     public function getWhiteSpaceForIndentation()
     {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a049bc86d07917aee97c99e69d88a1cc",
+    "content-hash": "d7af40296b1080d0ed74c2e14a01ad15",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -811,12 +811,12 @@
             "version": "v2.5.14",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
                 "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754",
                 "shasum": ""
             },
@@ -1873,6 +1873,57 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2018-10-16T10:30:44+00:00"
+        },
+        {
+            "name": "servo/fluidxml",
+            "version": "1.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/servo-php/fluidxml.git",
+                "reference": "b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/servo-php/fluidxml/zipball/b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b",
+                "reference": "b6fb8de6ff781479c9e4fb6e9f27b5af1e87dc4b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "apigen/apigen": "4.*",
+                "peridot-php/peridot": "1.*",
+                "peridot-php/peridot-code-coverage-reporters": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./source/FluidXml/fluid.php"
+                ],
+                "psr-4": {
+                    "FluidXml\\": "./source/FluidXml/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Orlando",
+                    "email": "fluidxml@danieleorlando.com",
+                    "homepage": "https://github.com/servo-php/fluidxml",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Concise and fluent XML manipulation library",
+            "homepage": "https://github.com/servo-php/fluidxml",
+            "keywords": [
+                "templating",
+                "xml"
+            ],
+            "time": "2017-01-31T00:37:33+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

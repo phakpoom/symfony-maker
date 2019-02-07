@@ -14,7 +14,7 @@ class FileWriter implements WriterInterface
         // create folder
         $explodedPath = explode('/', $locate);
         array_pop($explodedPath);
-        @mkdir(implode('/', $explodedPath));
+        @mkdir(implode('/', $explodedPath), 0755, true);
 
         // create file
         file_put_contents($locate, $content);
