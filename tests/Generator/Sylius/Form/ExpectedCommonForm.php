@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Generator\FormGenerator;
+namespace Test\Generator\Sylius\Form;
 
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 use Symfony\Component\Form\FormBuilderInterface;

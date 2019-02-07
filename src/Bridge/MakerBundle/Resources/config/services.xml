@@ -24,9 +24,6 @@
         <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
             <argument id="bonn_maker.manager.code_manager" type="service" />
         </service>
-        <service class="Bonn\Maker\Generator\FormGenerator" id="bonn_maker.generator.form">
-            <argument id="bonn_maker.manager.code_manager" type="service" />
-        </service>
         <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
             <argument id="bonn_maker.manager.code_manager" type="service" />
         </service>
@@ -38,6 +35,10 @@
             <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\RepositoryGenerator" id="bonn_maker.generator.repository">
+            <argument id="bonn_maker.manager.code_manager" type="service" />
+            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
+        </service>
+        <service class="Bonn\Maker\Generator\Sylius\FormGenerator" id="bonn_maker.generator.form">
             <argument id="bonn_maker.manager.code_manager" type="service" />
             <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
         </service>

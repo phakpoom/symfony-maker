@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Test\Generator\FormGenerator;
+namespace Test\Generator\Sylius\Form;
 
-use Bonn\Maker\Generator\FormGenerator;
+use Bonn\Maker\Generator\Sylius\FormGenerator;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
 class FormGeneratorTest extends AbstractMakerTestCase

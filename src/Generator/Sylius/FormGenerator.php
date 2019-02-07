@@ -2,39 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Bonn\Maker\Generator;
+namespace Bonn\Maker\Generator\Sylius;
 
+use Bonn\Maker\Generator\GeneratorInterface;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Model\SymfonyServiceXml;
-use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class FormGenerator implements GeneratorInterface
+final class FormGenerator extends AbstractSyliusGenerator implements GeneratorInterface
 {
-    /** @var CodeManagerInterface */
-    private $codeManager;
-
-    public function __construct(CodeManagerInterface $codeManager)
-    {
-        $this->codeManager = $codeManager;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function configurationOptions(OptionsResolver $resolver)
     {
+        parent::configurationOptions($resolver);
         $resolver
             ->setDefaults([
                 'form_service_file_path' => null,
                 'all_service_file_path' => null,
                 'config_dir' => null,
             ])
-            ->setRequired('class')
             ->setRequired('namespace')
             ->setRequired('form_dir')
         ;
@@ -43,7 +35,7 @@ final class FormGenerator implements GeneratorInterface
     /**
      * @param array $options
      */
-    public function generate($options = [])
+    public function _generateWithResolvedOptions($options = [])
     {
         $optionResolver = new OptionsResolver();
         $this->configurationOptions($optionResolver);
@@ -68,7 +60,7 @@ final class FormGenerator implements GeneratorInterface
         $buildFormMethod->addParameter('builder')->setTypeHint('Symfony\\Component\\Form\\FormBuilderInterface');
         $buildFormMethod->addParameter('options')->setTypeHint('array');
 
-        $this->codeManager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
+        $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 
         if (null === $options['form_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
             return;
@@ -85,7 +77,7 @@ final class FormGenerator implements GeneratorInterface
         $serviceXml = new SymfonyServiceXml($allServicePath);
         if (!$serviceXml->hasImport(ltrim($options['form_service_file_path'], '/'))) {
             $serviceXml->addImport(ltrim($options['form_service_file_path'], '/'));
-            $this->codeManager->persist(new Code($serviceXml->__toString(), $allServicePath));
+            $this->manager->persist(new Code($serviceXml->__toString(), $allServicePath));
         }
 
         // register form service
@@ -111,6 +103,6 @@ final class FormGenerator implements GeneratorInterface
             'name' => 'form.type'
         ]);
 
-        $this->codeManager->persist(new Code($formXml->__toString(), $formServicePath));
+        $this->manager->persist(new Code($formXml->__toString(), $formServicePath));
     }
 }
