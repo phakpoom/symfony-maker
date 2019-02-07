@@ -1,6 +1,6 @@
 # Symfony-maker
 [![Build Status](https://travis-ci.org/phakpoom/symfony-maker.svg?branch=master)](https://travis-ci.org/phakpoom/symfony-maker)
-
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phakpoom/symfony-maker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phakpoom/symfony-maker/?branch=master)
 
 ## Installation with composer
 
