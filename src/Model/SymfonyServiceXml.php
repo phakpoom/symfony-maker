@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Model;
 
+use Bonn\Maker\Utils\DOMIndent;
 use FluidXml\FluidContext;
 use FluidXml\FluidXml;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -78,7 +79,7 @@ class SymfonyServiceXml
      */
     public function addService(string $id, string $class): FluidContext
     {
-        return $this->xml->query('//container:services')
+        return $this->xml->query('//container/services', '//container:services')
             ->addChild('service', true, [
                 'id' => $id,
                 'class' => $class,
@@ -90,8 +91,8 @@ class SymfonyServiceXml
         return $this->xml;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->xml->__toString();
+        return (new DOMIndent($this->xml->__toString()))->saveXML();
     }
 }

@@ -85,7 +85,7 @@ final class FormGenerator implements GeneratorInterface
         $serviceXml = new SymfonyServiceXml($allServicePath);
         if (!$serviceXml->hasImport(ltrim($options['form_service_file_path'], '/'))) {
             $serviceXml->addImport(ltrim($options['form_service_file_path'], '/'));
-            $this->codeManager->persist(new Code((new DOMIndent($serviceXml->__toString()))->saveXML(), $allServicePath));
+            $this->codeManager->persist(new Code($serviceXml->__toString(), $allServicePath));
         }
 
         // register form service
@@ -111,6 +111,6 @@ final class FormGenerator implements GeneratorInterface
             'name' => 'form.type'
         ]);
 
-        $this->codeManager->persist(new Code((new DOMIndent($formXml->__toString()))->saveXML(), $formServicePath));
+        $this->codeManager->persist(new Code($formXml->__toString(), $formServicePath));
     }
 }
