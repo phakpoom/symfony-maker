@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
@@ -177,7 +178,9 @@ class GenerateModelCommand extends AbstractGenerateCommand
         $propertyName = $helper->ask($input, $output, $question);
 
         if (empty($propertyName)) {
-            return true;
+            $question = new ConfirmationQuestion('Are you sure to finish ? (Y/n): ');
+
+            return $helper->ask($input, $output, $question);
         }
 
         $this->props[] = $propertyName;
