@@ -34,7 +34,7 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
     /**
      * @param array $options
      */
-    public function generateWithResolvedOptions($options = [])
+    protected function generateWithResolvedOptions(array $options)
     {
         $this->ensureClassExists($options['class']);
 
