@@ -51,7 +51,7 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
     /**
      * {@inheritdoc}
      */
-    public function generateWithResolvedOptions($options = [])
+    protected function generateWithResolvedOptions(array $options)
     {
         $fullClassName = $options['class'];
         $fullInterfaceClassName = $options['class'] . 'Interface';

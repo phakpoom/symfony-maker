@@ -44,7 +44,7 @@ final class DoctrineXmlMappingGenerator extends AbstractGenerator implements Doc
     /**
      * @param array $options
      */
-    public function generateWithResolvedOptions($options = [])
+    protected function generateWithResolvedOptions(array $options)
     {
         $fullClassName = $options['class'];
         $props = $options['props'];
