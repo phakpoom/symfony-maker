@@ -86,7 +86,8 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
 
         $resourcePrefix =  NameResolver::camelToUnderScore(explode('\\', $options['class'])[0]);
         $resourceName =  NameResolver::camelToUnderScore($className);
-        $serviceContext = $formXml->addService(sprintf('%s.form_type.%s_type', $resourcePrefix, $resourceName), $options['class']);
+        $serviceContext = $formXml->addService(sprintf('%s.form_type.%s_type', $resourcePrefix, $resourceName),
+            $classNamespace->getName() . '\\' . $formClass->getName());
 
         $serviceContext->addChild('argument', sprintf('%%%s.model.%s.class%%', $resourcePrefix, $resourceName));
 
