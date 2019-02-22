@@ -6,7 +6,7 @@
         </id>
         <many-to-many field="comments" target-entity="App\Model\CommentInterface" fetch="EXTRA_LAZY" inversed-by="mocks">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
             </cascade>
             <join-table name="app_mock_comments">
                 <join-columns>
@@ -19,7 +19,7 @@
         </many-to-many>
         <many-to-many field="posts" target-entity="App\Model\PostInterface" fetch="EXTRA_LAZY" inversed-by="mocks">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
             </cascade>
             <join-table name="app_mock_posts">
                 <join-columns>

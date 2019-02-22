@@ -148,7 +148,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
         $field->addAttribute('fetch', 'EXTRA_LAZY');
         $field->addAttribute('orphan-removal', 'true');
         $cascade = $field->addChild('cascade');
-        $cascade->addChild('cascade-all');
+        $cascade->addChild('cascade-persist');
     }
 
     /**

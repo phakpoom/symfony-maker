@@ -6,7 +6,7 @@
         </id>
         <one-to-many field="comments" target-entity="App\Model\CommentInterface" mapped-by="mock" fetch="EXTRA_LAZY" orphan-removal="true">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
             </cascade>
         </one-to-many>
     </mapped-superclass>

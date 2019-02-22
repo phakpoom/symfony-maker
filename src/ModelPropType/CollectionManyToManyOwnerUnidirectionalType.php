@@ -32,7 +32,7 @@ class CollectionManyToManyOwnerUnidirectionalType extends CollectionType impleme
         $field->addAttribute('target-entity', $this->fullInterfaceName);
         $field->addAttribute('fetch', 'EXTRA_LAZY');
         $cascade = $field->addChild('cascade');
-        $cascade->addChild('cascade-all');
+        $cascade->addChild('cascade-persist');
         $joinTable = $field->addChild('join-table');
         $joinTable->addAttribute('name', strtolower(explode('\\', $this->fullInterfaceName)[0]) . '_'
             . NameResolver::camelToUnderScore($onlyClassName) . '_' . NameResolver::camelToUnderScore($this->name));
