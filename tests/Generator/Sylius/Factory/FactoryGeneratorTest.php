@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Generator\Sylius\Factory;
 
 use Bonn\Maker\Generator\Sylius\FactoryGenerator;
+use Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver;
 use Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
@@ -19,7 +20,7 @@ class FactoryGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $syliusResourceService = new SyliusResourceYamlConfigGenerator();
+        $syliusResourceService = new SyliusResourceYamlConfigGenerator(new SyliusResourceServiceNameResolver());
         $syliusResourceService->setManager($this->manager);
         $this->generator = new FactoryGenerator($syliusResourceService);
         $this->generator->setManager($this->manager);

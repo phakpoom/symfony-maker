@@ -3,7 +3,7 @@
 RUNNING_DIR=`pwd`;
 
 if [ "$1" == "-i" ]; then
-    cd $RUNNING_DIR  && c install
+    cd $RUNNING_DIR  && composer install
     cd $RUNNING_DIR && cd tests/framework/test && composer install
     cd $RUNNING_DIR && cd tests/framework/test@3.4 && composer install
 fi

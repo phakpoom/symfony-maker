@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('namespace_prefix')->defaultNull()->end()
+                ->scalarNode('sylius_resource_name_prefix')->defaultNull()->end()
                 ->scalarNode('bundle_root_dir')->defaultNull()->end()
                 ->scalarNode('project_source_dir')->defaultNull()->end()
                 ->scalarNode('config_dir')->defaultValue('Resources/config')->end()

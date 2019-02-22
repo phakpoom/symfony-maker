@@ -11,6 +11,14 @@ use Symfony\Component\Yaml\Yaml;
 
 class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implements SyliusResourceGeneratorInterface
 {
+    /** @var SyliusResourceServiceNameResolverInterface */
+    protected $syliusResourceServiceNameResolver;
+
+    public function __construct(SyliusResourceServiceNameResolverInterface $syliusResourceServiceNameResolver)
+    {
+        $this->syliusResourceServiceNameResolver = $syliusResourceServiceNameResolver;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -19,13 +27,11 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
         parent::configurationOptions($resolver);
 
         $resolver->setDefaults([
-            'resource_prefix_name' => null,
             'resource_dir' => null,
         ]);
 
         $resolver
             ->setRequired('class')
-            ->setRequired('resource_prefix_name')
             ->setRequired('resource_dir')
         ;
     }
@@ -39,7 +45,7 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
 
         $className = NameResolver::resolveOnlyClassName($options['class']);
         $reflection = new \ReflectionClass($options['class']);
-        $resourceName = $options['resource_prefix_name'] . '.' . NameResolver::camelToUnderScore($className);
+        $resourceName = $this->syliusResourceServiceNameResolver->getPrefix($options['class']) . '.' . NameResolver::camelToUnderScore($className);
         $arr = [];
         $arr['sylius_resource']['resources'][$resourceName] = [];
         $resourceArr = &$arr['sylius_resource']['resources'][$resourceName];
@@ -62,5 +68,13 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
         $className = NameResolver::resolveOnlyClassName($className);
 
         return NameResolver::replaceDoubleSlash($dir . '/app/sylius_resource/' . NameResolver::camelToUnderScore($className) . '.yml');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterResolver(): SyliusResourceServiceNameResolverInterface
+    {
+        return $this->syliusResourceServiceNameResolver;
     }
 }

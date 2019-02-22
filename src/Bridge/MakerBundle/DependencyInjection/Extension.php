@@ -63,5 +63,11 @@ class Extension extends BaseExtension
             $cacheDef->replaceArgument(0, new Reference('bonn_maker.writer.echo'));
             $container->setDefinition('bonn_maker.manager.code_manager', $cacheDef);
         }
+
+        if (!empty($config['sylius_resource_name_prefix'])) {
+            $resolverDef = $container->getDefinition('bonn_maker.resolver.sylius_resource_parameter_resolver');
+            $resolverDef->replaceArgument(0, $config['sylius_resource_name_prefix']);
+            $container->setDefinition('bonn_maker.resolver.sylius_resource_parameter_resolver', $resolverDef);
+        }
     }
 }

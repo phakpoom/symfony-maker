@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Generator\Sylius;
 
+use Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver;
 use Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
@@ -18,7 +19,7 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new SyliusResourceYamlConfigGenerator();
+        $this->generator = new SyliusResourceYamlConfigGenerator(new SyliusResourceServiceNameResolver('app'));
         $this->generator->setManager($this->manager);
     }
 
@@ -29,7 +30,6 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         $this->generator->generate([
             'class' => 'App\\Test',
-            'resource_prefix_name' => 'app',
             'resource_dir' => __DIR__
         ]);
     }
@@ -38,7 +38,6 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
     {
         $this->generator->generate([
             'class' => __CLASS__,
-            'resource_prefix_name' => 'app',
             'resource_dir' => __DIR__
         ]);
 
