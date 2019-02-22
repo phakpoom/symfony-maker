@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test\Generator\Sylius\Form;
 
 use Bonn\Maker\Generator\Sylius\FormGenerator;
+use Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver;
+use Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
 class FormGeneratorTest extends AbstractMakerTestCase
@@ -15,7 +17,10 @@ class FormGeneratorTest extends AbstractMakerTestCase
     {
         parent::setUp();
 
-        $this->generator = new FormGenerator();
+        $syliusResourceService = new SyliusResourceYamlConfigGenerator(new SyliusResourceServiceNameResolver());
+        $syliusResourceService->setManager($this->manager);
+
+        $this->generator = new FormGenerator($syliusResourceService);
         $this->generator->setManager($this->manager);
     }
 

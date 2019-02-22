@@ -9,4 +9,6 @@ use Bonn\Maker\Generator\GeneratorInterface;
 interface SyliusResourceGeneratorInterface extends GeneratorInterface
 {
     public function resolveConfigFileName(string $className, string $dir): string;
+
+    public function getParameterResolver(): SyliusResourceServiceNameResolverInterface;
 }

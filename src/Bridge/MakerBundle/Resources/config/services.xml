@@ -16,6 +16,10 @@
            <!-- inject by extension -->
         </service>
 
+        <service class="Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver" id="bonn_maker.resolver.sylius_resource_parameter_resolver">
+           <argument /> <!-- inject by extension -->
+        </service>
+
         <service class="Bonn\Maker\Manager\CodeManager" id="bonn_maker.manager.code_manager">
             <argument type="service" id="bonn_maker.writer.file" />
         </service>
@@ -31,6 +35,7 @@
             <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator" id="bonn_maker.generator.sylius_resource_config_generator">
+            <argument id="bonn_maker.resolver.sylius_resource_parameter_resolver" type="service" />
             <tag name="bonn_maker.generator" />
         </service>
         <service class="Bonn\Maker\Generator\Sylius\ControllerGenerator" id="bonn_maker.generator.controller">

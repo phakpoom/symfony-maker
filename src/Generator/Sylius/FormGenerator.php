@@ -14,6 +14,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class FormGenerator extends AbstractSyliusGenerator implements GeneratorInterface
 {
+    /** @var SyliusResourceGeneratorInterface */
+    private $syliusConfigGenerator;
+
+    public function __construct(SyliusResourceGeneratorInterface $syliusConfigGenerator)
+    {
+        $this->syliusConfigGenerator = $syliusConfigGenerator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -84,12 +92,13 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
             $formXml = new SymfonyServiceXml();
         }
 
-        $resourcePrefix =  NameResolver::camelToUnderScore(explode('\\', $options['class'])[0]);
-        $resourceName =  NameResolver::camelToUnderScore($className);
+        $resourcePrefix = $this->syliusConfigGenerator->getParameterResolver()->getPrefix($options['class']);
+        $resourceName = $this->syliusConfigGenerator->getParameterResolver()->getResourceName($options['class']);
+
         $serviceContext = $formXml->addService(sprintf('%s.form_type.%s_type', $resourcePrefix, $resourceName),
             $classNamespace->getName() . '\\' . $formClass->getName());
 
-        $serviceContext->addChild('argument', sprintf('%%%s.model.%s.class%%', $resourcePrefix, $resourceName));
+        $serviceContext->addChild('argument', '%' . $this->syliusConfigGenerator->getParameterResolver()->getModelParameter($options['class']) . '%');
 
         $serviceContext
             ->addChild('argument', true, [

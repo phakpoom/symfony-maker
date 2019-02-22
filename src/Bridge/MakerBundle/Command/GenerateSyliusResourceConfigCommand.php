@@ -29,7 +29,6 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
             ->setName('bonn:sylius:maker')
             ->setDescription('Generate sylius resource config')
             ->addArgument('class', InputArgument::REQUIRED, 'name of class')
-            ->addArgument('resource_prefix_name', InputArgument::REQUIRED, 'resource prefix name')
         ;
     }
 
@@ -39,7 +38,6 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
 
         $this->generator->generate([
             'class' => $input->getArgument('class'),
-            'resource_prefix_name' => $input->getArgument('resource_prefix_name'),
             'resource_dir' => $resourceDir,
         ]);
 
