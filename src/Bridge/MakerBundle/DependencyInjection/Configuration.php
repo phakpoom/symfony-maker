@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('form_type_dir')->defaultValue('Form/Type')->end()
                 ->scalarNode('twig_extension_dir')->defaultValue('Twig/Extension')->end()
                 ->scalarNode('repository_dir')->defaultValue('Doctrine/ORM')->end()
+                ->scalarNode('controller_dir')->defaultValue('Controller')->end()
                 ->scalarNode('doctrine_mapping_dir_name')->defaultValue('Resources/config/doctrine/model')->end()
                 ->scalarNode('model_dir_name')->defaultValue('Model')->end()
                 ->scalarNode('cache_dir')->defaultNull()->end()

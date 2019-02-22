@@ -1,0 +1,7 @@
+sylius_resource:
+    resources:
+        app.test:
+            classes:
+                model: Test\Generator\Sylius\Controller
+                interface: Test\Generator\Sylius\Controller
+                controller: Test\Generator\Sylius\Controller\ControllerGeneratorTestController
