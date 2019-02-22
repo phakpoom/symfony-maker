@@ -12,11 +12,11 @@ use Symfony\Component\Yaml\Yaml;
 class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implements SyliusResourceGeneratorInterface
 {
     /** @var SyliusResourceServiceNameResolverInterface */
-    protected $SyliusResourceServiceNameResolver;
+    protected $syliusResourceServiceNameResolver;
 
-    public function __construct(SyliusResourceServiceNameResolverInterface $SyliusResourceServiceNameResolver)
+    public function __construct(SyliusResourceServiceNameResolverInterface $syliusResourceServiceNameResolver)
     {
-        $this->SyliusResourceServiceNameResolver = $SyliusResourceServiceNameResolver;
+        $this->syliusResourceServiceNameResolver = $syliusResourceServiceNameResolver;
     }
 
     /**
@@ -45,7 +45,7 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
 
         $className = NameResolver::resolveOnlyClassName($options['class']);
         $reflection = new \ReflectionClass($options['class']);
-        $resourceName = $this->SyliusResourceServiceNameResolver->getPrefix($options['class']) . '.' . NameResolver::camelToUnderScore($className);
+        $resourceName = $this->syliusResourceServiceNameResolver->getPrefix($options['class']) . '.' . NameResolver::camelToUnderScore($className);
         $arr = [];
         $arr['sylius_resource']['resources'][$resourceName] = [];
         $resourceArr = &$arr['sylius_resource']['resources'][$resourceName];
