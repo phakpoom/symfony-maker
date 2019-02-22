@@ -75,6 +75,6 @@ class SyliusResourceYamlConfigGenerator extends AbstractSyliusGenerator implemen
      */
     public function getParameterResolver(): SyliusResourceServiceNameResolverInterface
     {
-        return $this->SyliusResourceServiceNameResolver;
+        return $this->syliusResourceServiceNameResolver;
     }
 }
