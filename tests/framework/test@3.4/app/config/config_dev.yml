@@ -42,3 +42,4 @@ monolog:
 
 bonn_maker:
     writer_dev: true
+    sylius_resource_name_prefix: 'fixed_prefix'
