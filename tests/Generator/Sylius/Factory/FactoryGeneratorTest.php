@@ -16,7 +16,7 @@ class FactoryGeneratorTest extends AbstractMakerTestCase
      */
     protected $generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,11 +26,10 @@ class FactoryGeneratorTest extends AbstractMakerTestCase
         $this->generator->setManager($this->manager);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGenerateNoExistsClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->generator->generate([
             'class' => 'App\\Test',
             'factory_dir' => __DIR__,

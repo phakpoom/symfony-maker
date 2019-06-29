@@ -11,7 +11,7 @@ class TwigExtensionGeneratorTest extends AbstractMakerTestCase
 {
     /** @var TwigExtensionGenerator */
     private $generator;
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

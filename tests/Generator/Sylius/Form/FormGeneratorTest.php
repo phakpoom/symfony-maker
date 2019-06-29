@@ -13,7 +13,7 @@ class FormGeneratorTest extends AbstractMakerTestCase
 {
     /** @var FormGenerator */
     private $generator;
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

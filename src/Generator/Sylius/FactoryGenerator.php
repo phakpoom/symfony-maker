@@ -58,9 +58,21 @@ class FactoryGenerator extends AbstractSyliusGenerator
         $factoryClass->addMethod('__construct')
             ->setVisibility('public')->setBody('$this->className = $className;')
             ->addParameter('className')->setTypeHint('string');
+
+        $interfaceName =  NameResolver::resolveOnlyClassName($options['class']) . "Interface";
         $factoryClass->addMethod('createNew')
             ->setVisibility('public')->setBody('return new $this->className();')
-            ->setComment("\n @var " . NameResolver::resolveOnlyClassName($options['class']) . "Interface \n");
+            ->setComment("\n @return " . $interfaceName . " \n");
+
+        $factoryClass->addMethod('createWithSomething')
+            ->setVisibility('public')->setBody(
+                '$object = new $this->className(); ' . "\n\n" .
+                '// do stuff'. "\n\n" .
+                'return $object;'
+            )
+            ->setReturnType($options['class'] . "Interface")
+            ->setComment("\n @return " . $interfaceName . " \n");
+
         $factoryInterfaceClass = $interfaceNamespace->addInterface($className . 'FactoryInterface');
         $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Factory\\FactoryInterface');
         $factoryInterfaceClass->addExtend('Sylius\\Component\\Resource\\Factory\\FactoryInterface');

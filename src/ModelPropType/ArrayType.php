@@ -41,7 +41,7 @@ class ArrayType implements PropTypeInterface
             ->addProperty($this->name)
             ->setVisibility('protected');
         $prop->setValue($this->defaultValue);
-        $prop->setComment("\n@var array\n");
+        $prop->setComment("@var array");
     }
 
     /**

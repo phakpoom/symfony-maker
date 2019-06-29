@@ -63,12 +63,11 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/AppBundle/') . '/mapping/Test.orm.xml', $output);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage  Operation must be one of
-     */
     public function testWithInvalidOp()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Operation must be one of');
+
         $command = $this->getCommand();
         $command->setConfigs(array_replace($command->getConfigs(), [
             'writer_dev' => false,

@@ -6,14 +6,10 @@ namespace App\Model;
 
 class Mock implements MockInterface
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
-    /**
-     * @var float|null
-     */
+    /** @var float|null */
     protected $price;
 
     /**

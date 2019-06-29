@@ -18,7 +18,7 @@ abstract class AbstractPropTypeTest extends AbstractMakerTestCase
     /** @var DoctrineGeneratorInterface */
     protected $doctrineGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

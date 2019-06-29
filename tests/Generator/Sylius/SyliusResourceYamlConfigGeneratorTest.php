@@ -15,7 +15,7 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
      */
     protected $generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -23,11 +23,10 @@ class SyliusResourceYamlConfigGeneratorTest extends AbstractMakerTestCase
         $this->generator->setManager($this->manager);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGenerateNoExistsClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->generator->generate([
             'class' => 'App\\Test',
             'resource_dir' => __DIR__

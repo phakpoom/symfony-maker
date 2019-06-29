@@ -28,7 +28,7 @@ final class PropTypeConverterTest extends TestCase
         $converter = new PropTypeConverter([
             PropTypeInterface::class
         ]);
-        $this->assertContains(PropTypeInterface::class, $converter->getSupportedType());
+        $this->assertTrue(in_array(PropTypeInterface::class, $converter->getSupportedType(), true));
         $this->assertCount(count(PropTypeConverter::TYPES)+ 1, $converter->getSupportedType());
     }
 
@@ -50,9 +50,6 @@ final class PropTypeConverterTest extends TestCase
         $this->assertEquals('PropTypeInterface', $this->getPrivateProperty(CollectionType::class, 'interfaceName')->getValue($propType));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConvertInvalidString()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -60,9 +57,6 @@ final class PropTypeConverterTest extends TestCase
         $converter->convert(":'");
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConvertNotFound()
     {
         $this->expectException(\InvalidArgumentException::class);

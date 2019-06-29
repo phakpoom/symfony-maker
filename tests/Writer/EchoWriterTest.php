@@ -18,7 +18,7 @@ final class EchoWriterTest extends TestCase
         \ob_end_clean();
 
 
-        $this->assertContains('write me', $output);
-        $this->assertContains(__DIR__, $output);
+        $this->assertStringContainsString('write me', $output);
+        $this->assertStringContainsString(__DIR__, $output);
     }
 }

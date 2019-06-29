@@ -36,7 +36,7 @@ class DateTimeType implements PropTypeInterface
         $prop = $classType
             ->addProperty($this->name)
             ->setVisibility('protected');
-        $prop->setComment("\n@var \\DateTime|null\n");
+        $prop->setComment("@var \\DateTime|null");
     }
 
     /**

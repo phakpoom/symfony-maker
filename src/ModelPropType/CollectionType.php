@@ -59,7 +59,7 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
         $prop = $classType
             ->addProperty($this->name)
             ->setVisibility('protected');
-        $prop->setComment("\n@var Collection|$this->interfaceName[]\n");
+        $prop->setComment("@var Collection|$this->interfaceName[]");
     }
 
     /**

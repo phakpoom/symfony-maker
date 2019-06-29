@@ -9,14 +9,10 @@ use Doctrine\Common\Collections\Collection;
 
 class Mock implements MockInterface
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
-    /**
-     * @var Collection|CommentInterface[]
-     */
+    /** @var Collection|CommentInterface[] */
     protected $comments;
 
     /**

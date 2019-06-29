@@ -50,7 +50,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
         $prop = $classType
             ->addProperty($this->name)
             ->setVisibility('protected');
-        $prop->setComment("\n@var $this->interfaceName|null\n");
+        $prop->setComment("@var $this->interfaceName|null");
     }
 
     /**

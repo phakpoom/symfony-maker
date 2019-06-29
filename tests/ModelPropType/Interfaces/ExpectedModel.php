@@ -8,14 +8,10 @@ use MyApp\Model\CategoryInterface;
 
 class Mock implements MockInterface
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
-    /**
-     * @var CategoryInterface|null
-     */
+    /** @var CategoryInterface|null */
     protected $category;
 
     /**

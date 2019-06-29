@@ -14,30 +14,27 @@ final class ModelGeneratedCacheTest extends TestCase
         array_map('unlink', glob(self::CACHE_DIR . '/*'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateClassWithoutCacheDir()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new ModelGeneratedCache([]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateClassWithInvalidLimit0()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new ModelGeneratedCache([
             'cache_dir' => self::CACHE_DIR,
             'max_keep_versions' => 0
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateClassWithInvalidLimitMinus()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new ModelGeneratedCache([
             'cache_dir' => self::CACHE_DIR,
             'max_keep_versions' => -2
@@ -59,7 +56,7 @@ final class ModelGeneratedCacheTest extends TestCase
         $cache->appendVersion('Test', 'ok:string:' . $randomValue, __DIR__);
         $this->assertTrue(\file_exists($cacheFile));
         $content = file_get_contents($cacheFile);
-        $this->assertContains('ok:string:' . $randomValue, $content);
+        $this->assertStringContainsString('ok:string:' . $randomValue, $content);
         $this->assertCount(1, $cache->listVersions('Test'));
 
         $randomValue1 = uniqid();

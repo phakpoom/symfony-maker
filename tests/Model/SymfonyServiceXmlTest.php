@@ -9,12 +9,11 @@ use PHPUnit\Framework\TestCase;
 
 class SymfonyServiceXmlTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage file
-     */
     public function testCreateWithNoExistsFile()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('file');
+
         new SymfonyServiceXml('no_exist');
     }
 

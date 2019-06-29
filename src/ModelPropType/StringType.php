@@ -43,11 +43,11 @@ class StringType implements PropTypeInterface
             ->setVisibility('protected');
         $prop->setValue($this->defaultValue);
         if (!$this->nullable) {
-            $prop->setComment("\n@var string\n");
+            $prop->setComment("@var string");
 
             return;
         }
-        $prop->setComment("\n@var string|null\n");
+        $prop->setComment("@var string|null");
     }
 
     /**

@@ -14,7 +14,7 @@ abstract class AbstractMakerTestCase extends TestCase
     /** @var CodeManagerInterface */
     protected $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

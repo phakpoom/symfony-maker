@@ -19,10 +19,22 @@ class FactoryGeneratorTestFactory implements FactoryGeneratorTestFactoryInterfac
     }
 
     /**
-     * @var FactoryGeneratorTestInterface
+     * @return FactoryGeneratorTestInterface
      */
     public function createNew()
     {
         return new $this->className();
+    }
+
+    /**
+     * @return FactoryGeneratorTestInterface
+     */
+    public function createWithSomething(): FactoryGeneratorTestInterface
+    {
+        $object = new $this->className();
+
+        // do stuff
+
+        return $object;
     }
 }

@@ -16,9 +16,7 @@ class Mock implements MockInterface
         __construct as protected initializeTranslationsCollection;
     }
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
     /**

@@ -8,19 +8,13 @@ use Sylius\Component\Resource\Model\AbstractTranslation;
 
 class MockTranslation extends AbstractTranslation implements MockTranslationInterface
 {
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     protected $id;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $name;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $description;
 
     /**

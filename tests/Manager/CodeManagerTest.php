@@ -15,7 +15,7 @@ final class CodeManagerTest extends TestCase
     /** @var CodeManagerInterface */
     private $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -76,7 +76,7 @@ final class CodeManagerTest extends TestCase
         \ob_end_clean();
 
         $this->assertCount(0, $this->manager->getCodes());
-        $this->assertContains('test code', $output);
+        $this->assertStringContainsString('test code', $output);
     }
 
     public function testFlushDumpOnly()
@@ -90,6 +90,6 @@ final class CodeManagerTest extends TestCase
         \ob_end_clean();
 
         $this->assertCount(0, $this->manager->getCodes());
-        $this->assertContains('test code', $output);
+        $this->assertStringContainsString('test code', $output);
     }
 }
