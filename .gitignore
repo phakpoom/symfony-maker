@@ -2,4 +2,4 @@
 /.idea/
 /tests/Cache/_cache/*
 /tests/Cache/_cache/!.gitkeep
-/.phpunit.result.cache
+.phpunit.result.cache
