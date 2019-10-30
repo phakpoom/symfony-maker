@@ -11,6 +11,9 @@ use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInterface
 {
@@ -39,6 +42,9 @@ class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInter
         $fileLocate = NameResolver::replaceDoubleSlash($options['twig_extension_dir'] . '/' . $options['name'] . 'Extension.php');
 
         $classNamespace = new PhpNamespace($options['namespace']);
+        $classNamespace->addUse(AbstractExtension::class);
+        $classNamespace->addUse(TwigFunction::class);
+        $classNamespace->addUse(TwigFilter::class);
 
         $class = $classNamespace->addClass($options['name'] . 'Extension');
 
@@ -47,7 +53,7 @@ class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInter
         $method->setComment("\n{@inheritdoc}\n");
         $method->setBody(<<<PHP
 return [
-    //new \Twig_Filter('name', [\$this, 'method']),
+    //new TwigFilter('name', [\$this, 'method']),
 ];
 PHP
         );
@@ -57,12 +63,12 @@ PHP
         $method->setComment("\n{@inheritdoc}\n");
         $method->setBody(<<<PHP
 return [
-    //new \Twig_Function('name', [\$this, 'method']),
+    //new TwigFunction('name', [\$this, 'method']),
 ];
 PHP
         );
 
-        $class->addExtend('Twig_Extension');
+        $class->addExtend(AbstractExtension::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

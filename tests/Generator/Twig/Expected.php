@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Generator\Twig;
 
-class DummyExtension extends \Twig_Extension
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
+class DummyExtension extends AbstractExtension
 {
     /**
      * {@inheritdoc}
@@ -12,7 +16,7 @@ class DummyExtension extends \Twig_Extension
     public function getFilters(): array
     {
         return [
-            //new \Twig_Filter('name', [$this, 'method']),
+            //new TwigFilter('name', [$this, 'method']),
         ];
     }
 
@@ -22,7 +26,7 @@ class DummyExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            //new \Twig_Function('name', [$this, 'method']),
+            //new TwigFunction('name', [$this, 'method']),
         ];
     }
 }
