@@ -25,6 +25,6 @@ class GenerateControllerCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateControllerCommand
     {
         self::bootKernel();
-        return self::$kernel->getContainer()->get('bonn_maker.command.generate_controller');
+        return self::$kernel->getContainer()->get(GenerateControllerCommand::class);
     }
 }

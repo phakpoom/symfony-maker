@@ -145,6 +145,6 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateModelCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_model');
+        return self::$container->get(GenerateModelCommand::class);
     }
 }

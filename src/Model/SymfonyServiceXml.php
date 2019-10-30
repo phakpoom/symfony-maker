@@ -75,16 +75,17 @@ class SymfonyServiceXml
     /**
      * @param string $id
      * @param string $class
+     * @param array $attrs
      *
      * @return FluidContext
      */
-    public function addService(string $id, string $class): FluidContext
+    public function addService(string $id, string $class, array $attrs = []): FluidContext
     {
         return $this->xml->query('//container/services', '//container:services')
             ->addChild('service', true, [
                 'id' => $id,
                 'class' => $class,
-            ]);
+            ] + $attrs);
     }
 
     public function getXml()

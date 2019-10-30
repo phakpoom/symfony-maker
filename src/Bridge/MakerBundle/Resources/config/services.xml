@@ -5,87 +5,41 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults autowire="false" autoconfigure="false" public="true">
+            <bind key="$doctrineGenerator" type="service" id="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" />
+        </defaults>
+
         <service class="Bonn\Maker\Writer\FileWriter" id="bonn_maker.writer.file" />
         <service class="Bonn\Maker\Writer\EchoWriter" id="bonn_maker.writer.echo" />
 
         <service class="Bonn\Maker\Cache\ModelGeneratedCache" id="bonn_maker.cache.generated_model">
             <argument /> <!-- inject by extension -->
         </service>
+        <service alias="bonn_maker.cache.generated_model" id="Bonn\Maker\Cache\ModelGeneratedCacheInterface" />
 
         <service class="Bonn\Maker\Converter\PropTypeConverter" id="bonn_maker.converter.prop_type">
            <!-- inject by extension -->
         </service>
+        <service alias="bonn_maker.converter.prop_type" id="Bonn\Maker\Converter\PropTypeConverterInterface" />
 
         <service class="Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver" id="bonn_maker.resolver.sylius_resource_parameter_resolver">
            <argument /> <!-- inject by extension -->
         </service>
+        <service alias="bonn_maker.resolver.sylius_resource_parameter_resolver" id="Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolverInterface" />
 
         <service class="Bonn\Maker\Manager\CodeManager" id="bonn_maker.manager.code_manager">
             <argument type="service" id="bonn_maker.writer.file" />
         </service>
 
         <!--GENERATORS-->
-        <service class="Bonn\Maker\Generator\ModelGenerator" id="bonn_maker.generator.model">
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" id="bonn_maker.generator.doctrine_mapping">
-            <tag name="bonn_maker.generator" />
-        </service>
-         <service class="Bonn\Maker\Generator\TwigExtensionGenerator" id="bonn_maker.generator.twig_extension">
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\Sylius\SyliusResourceYamlConfigGenerator" id="bonn_maker.generator.sylius_resource_config_generator">
-            <argument id="bonn_maker.resolver.sylius_resource_parameter_resolver" type="service" />
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\Sylius\ControllerGenerator" id="bonn_maker.generator.controller">
-            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\Sylius\FactoryGenerator" id="bonn_maker.generator.factory">
-            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\Sylius\RepositoryGenerator" id="bonn_maker.generator.repository">
-            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
-            <tag name="bonn_maker.generator" />
-        </service>
-        <service class="Bonn\Maker\Generator\Sylius\FormGenerator" id="bonn_maker.generator.form">
-            <argument id="bonn_maker.generator.sylius_resource_config_generator" type="service" />
-            <tag name="bonn_maker.generator" />
-        </service>
+        <prototype namespace="Bonn\Maker\Generator\" resource="../../../../Generator/*" autowire="true">
+            <tag name="bonn_maker.generator"/>
+        </prototype>
+        <!---->
 
         <!--COMMANDS-->
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateModelCommand" id="bonn_maker.command.generate_model">
-            <argument type="service" id="bonn_maker.generator.model" />
-            <argument type="service" id="bonn_maker.generator.doctrine_mapping" />
-            <argument type="service" id="bonn_maker.converter.prop_type" />
-            <argument type="service" id="bonn_maker.cache.generated_model" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateSyliusResourceConfigCommand" id="bonn_maker.command.generate_sylius_resource_config">
-            <argument type="service" id="bonn_maker.generator.sylius_resource_config_generator" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateFactoryCommand" id="bonn_maker.command.generate_factory">
-            <argument type="service" id="bonn_maker.generator.factory" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateControllerCommand" id="bonn_maker.command.generate_controller">
-            <argument type="service" id="bonn_maker.generator.controller" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateRepositoryCommand" id="bonn_maker.command.generate_repository">
-            <argument type="service" id="bonn_maker.generator.repository" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateFormCommand" id="bonn_maker.command.generate_form">
-            <argument type="service" id="bonn_maker.generator.form" />
-            <tag name="console.command" />
-        </service>
-        <service class="Bonn\Maker\Bridge\MakerBundle\Command\GenerateTwigExtensionCommand" id="bonn_maker.command.generate_twig_extension">
-            <argument type="service" id="bonn_maker.generator.twig_extension" />
-            <tag name="console.command" />
-        </service>
+        <prototype namespace="Bonn\Maker\Bridge\MakerBundle\Command\" resource="../../Command/*" autowire="true">
+            <tag name="console.command"/>
+        </prototype>
     </services>
 </container>

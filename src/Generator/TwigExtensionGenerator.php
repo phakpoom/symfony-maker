@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
-use Bonn\Maker\Model\SymfonyServiceXml;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
@@ -40,6 +38,7 @@ class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInter
     protected function generateWithResolvedOptions(array $options)
     {
         $fileLocate = NameResolver::replaceDoubleSlash($options['twig_extension_dir'] . '/' . $options['name'] . 'Extension.php');
+        $resourcePrefix = NameResolver::resolveResourcePrefix($options['namespace']);
 
         $classNamespace = new PhpNamespace($options['namespace']);
         $classNamespace->addUse(AbstractExtension::class);
@@ -76,37 +75,22 @@ PHP
             return;
         }
 
-        $allServicePath = $options['config_dir'] . $options['all_service_file_path'];
-        $twigServicePath = $options['config_dir'] . $options['twig_service_file_path'];
-
         // import service form
-        if (!file_exists($allServicePath)) {
-            throw new \InvalidArgumentException($allServicePath . 'is not a file');
-        }
+        $this->addImportEntryToServiceFile($options['config_dir'], $options['twig_service_file_path'], $options['all_service_file_path']);
 
-        $serviceXml = new SymfonyServiceXml($allServicePath);
-        if (!$serviceXml->hasImport(ltrim($options['twig_service_file_path'], '/'))) {
-            $serviceXml->addImport(ltrim($options['twig_service_file_path'], '/'));
-            $this->manager->persist(new Code($serviceXml->__toString(), $allServicePath));
-        }
+        $xml = $this->getConfigXmlFile($options['config_dir'], $options['twig_service_file_path']);
 
-        // register form service
-        if (file_exists($twigServicePath)) {
-            $twigXml = new SymfonyServiceXml($twigServicePath);
-        } else {
-            $twigXml = new SymfonyServiceXml();
-        }
-
-        $resourcePrefix =  NameResolver::camelToUnderScore(explode('\\', $options['namespace'])[0]);
         $resourceName =  NameResolver::camelToUnderScore($options['name']);
-        $serviceContext = $twigXml->addService(sprintf('%s.twig.%s_extension', $resourcePrefix, $resourceName),
-            $classNamespace->getName() . '\\' . $class->getName()
+        $serviceContext = $xml->addService(
+            sprintf('%s.twig.%s_extension', $resourcePrefix, $resourceName),
+            $classNamespace->getName() . '\\' . $class->getName(),
+            ['autowire' => 'true']
         );
 
         $serviceContext->addChild('tag', null, [
             'name' => 'twig.extension'
         ]);
 
-        $this->manager->persist(new Code($twigXml->__toString(), $twigServicePath));
+        $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['twig_service_file_path']));
     }
 }

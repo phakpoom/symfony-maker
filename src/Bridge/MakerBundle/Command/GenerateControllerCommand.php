@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bonn\Maker\Bridge\MakerBundle\Command;
 
 use Bonn\Maker\Generator\Sylius\AbstractSyliusGenerator;
+use Bonn\Maker\Generator\Sylius\ControllerGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,10 +13,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateControllerCommand extends AbstractGenerateCommand
 {
-    /** @var AbstractSyliusGenerator */
+    /** @var ControllerGenerator */
     private $generator;
 
-    public function __construct(AbstractSyliusGenerator $generator)
+    public function __construct(ControllerGenerator $generator)
     {
         $this->generator = $generator;
 

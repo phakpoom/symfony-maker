@@ -26,6 +26,6 @@ class GenerateFactoryCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateFactoryCommand
     {
         self::bootKernel();
-        return self::$kernel->getContainer()->get('bonn_maker.command.generate_factory');
+        return self::$kernel->getContainer()->get(GenerateFactoryCommand::class);
     }
 }

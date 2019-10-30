@@ -27,6 +27,6 @@ class GenerateRepositoryCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateRepositoryCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_repository');
+        return self::$container->get(GenerateRepositoryCommand::class);
     }
 }

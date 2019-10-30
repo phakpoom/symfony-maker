@@ -100,12 +100,13 @@ abstract class AbstractGenerateCommand extends Command
             $choices[] = $dir;
         }
 
+        $ans = $choices[0];
         if (1 < count($choices)) {
             $question = new ChoiceQuestion('Please select your folder', $choices);
-            return $helper->ask($input, $output, $question);
+            $ans = $helper->ask($input, $output, $question);
         }
 
-        return $choices[0];
+        return rtrim(NameResolver::replaceDoubleSlash($ans), '/');
     }
 
     protected function getFullClassNameFromDir(string $rootDir, string $className)

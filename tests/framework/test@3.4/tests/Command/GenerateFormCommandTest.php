@@ -29,6 +29,6 @@ class GenerateFormCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateFormCommand
     {
         self::bootKernel();
-        return self::$kernel->getContainer()->get('bonn_maker.command.generate_form');
+        return self::$kernel->getContainer()->get(GenerateFormCommand::class);
     }
 }

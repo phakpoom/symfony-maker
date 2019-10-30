@@ -49,4 +49,14 @@ class NameResolver
 
         return implode('_', $ret);
     }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function resolveResourcePrefix(string $string): string
+    {
+        return self::camelToUnderScore(explode('\\', $string)[0]);
+    }
 }

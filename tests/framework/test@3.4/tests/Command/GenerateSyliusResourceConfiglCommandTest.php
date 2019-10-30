@@ -25,6 +25,6 @@ class GenerateSyliusResourceConfiglCommandTest extends AbstractGenerateCommandWe
     protected function getCommand(): GenerateSyliusResourceConfigCommand
     {
         self::bootKernel();
-        return self::$kernel->getContainer()->get('bonn_maker.command.generate_sylius_resource_config');
+        return self::$kernel->getContainer()->get(GenerateSyliusResourceConfigCommand::class);
     }
 }

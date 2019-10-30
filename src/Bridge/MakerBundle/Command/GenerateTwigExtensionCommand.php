@@ -39,8 +39,6 @@ class GenerateTwigExtensionCommand extends AbstractGenerateCommand
 
         $dir = $this->askForBundle($helper, $input, $output) . '/';
 
-        $dir = NameResolver::replaceDoubleSlash($dir);
-
         $configDir = $dir . $this->configs['config_dir'];
 
         $fullClassName = $this->getFullClassNameFromDir($dir . $this->configs['twig_extension_dir'], $input->getArgument('name'));
@@ -49,7 +47,7 @@ class GenerateTwigExtensionCommand extends AbstractGenerateCommand
             'name' => $input->getArgument('name'),
             'twig_extension_dir' => $dir . $this->configs['twig_extension_dir'],
             'namespace' => NameResolver::resolveNamespace($fullClassName),
-            'twig_service_file_path' => '/' . $this->configs['service_import_dir'] .'/twigs.xml', // hardedcode ?
+            'twig_service_file_path' => '/' . $this->configs['service_import_dir'] .'/twigs.xml',
             'all_service_file_path' => '/services.xml',
             'config_dir' => $configDir,
         ]);

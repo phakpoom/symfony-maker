@@ -19,14 +19,14 @@ class GenerateFactoryCommandTest extends AbstractGenerateCommandWebTestCase
 
         $output = $this->runWithInput($command, [], ['class' => Dummy::class]);
 
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/app/sylius_resource/dummy.yml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Factory/DummyFactory.php' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Factory/DummyFactoryInterface.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Resources/config/app/sylius_resource/dummy.yml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Factory/DummyFactory.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Factory/DummyFactoryInterface.php' , $output);
     }
 
     protected function getCommand(): GenerateFactoryCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_factory');
+        return self::$container->get(GenerateFactoryCommand::class);
     }
 }

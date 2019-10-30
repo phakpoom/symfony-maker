@@ -19,13 +19,13 @@ class GenerateControllerCommandTest extends AbstractGenerateCommandWebTestCase
 
         $output = $this->runWithInput($command, [], ['class' => Dummy::class]);
 
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/app/sylius_resource/dummy.yml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Controller/DummyController.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Resources/config/app/sylius_resource/dummy.yml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Controller/DummyController.php' , $output);
     }
 
     protected function getCommand(): GenerateControllerCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_controller');
+        return self::$container->get(GenerateControllerCommand::class);
     }
 }

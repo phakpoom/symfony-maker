@@ -49,6 +49,6 @@ class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCas
     protected function getCommand(): GenerateTwigExtensionCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_twig_extension');
+        return self::$container->get(GenerateTwigExtensionCommand::class);
     }
 }

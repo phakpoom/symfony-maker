@@ -21,14 +21,14 @@ class GenerateFormCommandTest extends AbstractGenerateCommandWebTestCase
             'class' => Dummy::class
         ]);
 
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Form/Type/DummyType.php' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/forms.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Form/Type/DummyType.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Resources/config/services.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App') . '/Resources/config/services/forms.xml' , $output);
     }
 
     protected function getCommand(): GenerateFormCommand
     {
         self::bootKernel();
-        return self::$container->get('bonn_maker.command.generate_form');
+        return self::$container->get(GenerateFormCommand::class);
     }
 }
