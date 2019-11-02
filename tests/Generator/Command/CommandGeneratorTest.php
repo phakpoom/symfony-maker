@@ -48,6 +48,7 @@ class CommandGeneratorTest extends AbstractMakerTestCase
         $this
             ->assertCountFilesWillBeCreated(3)
             ->assertFileWillBeCreated(__DIR__ . '/DummyWhatIsThisCommand.php', file_get_contents(__DIR__ . '/Expected.php'))
-            ->assertFileWillBeCreated($configDir . '/services/commands.xml', file_get_contents(__DIR__ . '/expectedService.xml'));
+            ->assertFileWillBeCreated($configDir . '/services/commands.xml', file_get_contents(__DIR__ . '/expectedService.xml'))
+            ->assertFileWillBeCreated($configDir . '/services.xml', file_get_contents(__DIR__ . '/expectedServices.xml'));
     }
 }

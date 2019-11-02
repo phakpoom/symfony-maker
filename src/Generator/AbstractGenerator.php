@@ -60,7 +60,7 @@ abstract class AbstractGenerator implements GeneratorInterface
 
         $serviceXml = new SymfonyServiceXml($allServicePath);
 
-        $entryFile = $configDir . ltrim($entryName, '/');
+        $entryFile = ltrim($entryName, '/');
 
         if (!$serviceXml->hasImport($entryFile)) {
             $serviceXml->addImport($entryFile);
