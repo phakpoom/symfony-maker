@@ -22,7 +22,7 @@ class ValidatorConfigGeneratorTest extends AbstractMakerTestCase
     public function testGenerateBasic()
     {
         $this->generator->generate([
-            'className' => __CLASS__,
+            'full_class_name' => __CLASS__,
             'validator_config_dir' => __DIR__,
         ]);
 
