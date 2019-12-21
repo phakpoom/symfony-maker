@@ -45,6 +45,7 @@ class Extension extends BaseExtension
 
         $config['cache_dir'] = $config['cache_dir'] ?: $container->getParameter('kernel.cache_dir') . '/bonn-symfony-maker/';
         $config['project_source_dir'] = $config['project_source_dir'] ?: $container->getParameter('kernel.project_dir') . '/src/';
+        $config['root_config_dir'] = $container->getParameter('kernel.project_dir') . '/config/';
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
