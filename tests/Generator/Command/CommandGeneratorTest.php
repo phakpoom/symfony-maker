@@ -25,7 +25,7 @@ class CommandGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'DummyWhatIsThis',
             'namespace' => __NAMESPACE__,
-            'command_dir' => __DIR__,
+            'class_dir' => __DIR__,
         ]);
 
         $this
@@ -39,9 +39,9 @@ class CommandGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'DummyWhatIsThis',
             'namespace' => __NAMESPACE__,
-            'command_dir' => __DIR__,
+            'class_dir' => __DIR__,
             'config_dir' => $configDir = __DIR__ . '/config',
-            'command_service_file_path' => '/services/commands.xml',
+            'entry_service_file_path' => '/services/commands.xml',
             'all_service_file_path' => '/services.xml',
         ]);
 

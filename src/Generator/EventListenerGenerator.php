@@ -8,12 +8,10 @@ use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
-class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInterface
+class EventListenerGenerator extends AbstractGenerator implements GeneratorInterface
 {
     /**
      * {@inheritdoc}
@@ -22,14 +20,13 @@ class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInter
     {
         $resolver
             ->setDefaults([
-                'entry_service_file_path' => null,
                 'all_service_file_path' => null,
+                'entry_service_file_path' => null,
                 'config_dir' => null,
             ])
             ->setRequired('name')
             ->setRequired('namespace')
-            ->setRequired('class_dir')
-        ;
+            ->setRequired('class_dir');
     }
 
     /**
@@ -37,37 +34,18 @@ class TwigExtensionGenerator extends AbstractGenerator implements GeneratorInter
      */
     protected function generateWithResolvedOptions(array $options)
     {
-        $fileLocate = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . 'Extension.php');
+        $fileLocate = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . 'Listener.php');
         $resourcePrefix = NameResolver::resolveResourcePrefix($options['namespace']);
 
         $classNamespace = new PhpNamespace($options['namespace']);
-        $classNamespace->addUse(AbstractExtension::class);
-        $classNamespace->addUse(TwigFunction::class);
-        $classNamespace->addUse(TwigFilter::class);
+        $classNamespace->addUse(RequestEvent::class);
 
-        $class = $classNamespace->addClass($options['name'] . 'Extension');
+        $class = $classNamespace->addClass($options['name'] . 'Listener')->setFinal();
 
-        $method = $class->addMethod('getFilters');
-        $method->setReturnType('array');
-        $method->setComment("\n{@inheritdoc}\n");
-        $method->setBody(<<<PHP
-return [
-    //new TwigFilter('name', [\$this, 'method']),
-];
-PHP
-        );
+        $method = $class->addMethod('__construct');
 
-        $method = $class->addMethod('getFunctions');
-        $method->setReturnType('array');
-        $method->setComment("\n{@inheritdoc}\n");
-        $method->setBody(<<<PHP
-return [
-    //new TwigFunction('name', [\$this, 'method']),
-];
-PHP
-        );
-
-        $class->addExtend(AbstractExtension::class);
+        $method = $class->addMethod('onRequest');
+        $method->addParameter('event')->setTypeHint(RequestEvent::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 
@@ -80,15 +58,17 @@ PHP
 
         $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
-        $resourceName =  NameResolver::camelToUnderScore($options['name']);
+        $resourceName = NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
-            sprintf('%s.twig.%s_extension', $resourcePrefix, $resourceName),
+            sprintf('%s.event_listener.%s_listener', $resourcePrefix, $resourceName),
             $classNamespace->getName() . '\\' . $class->getName(),
             ['autowire' => 'true']
         );
 
         $serviceContext->addChild('tag', null, [
-            'name' => 'twig.extension'
+            'name' => 'kernel.event_listener',
+            'event' => 'kernel.request',
+            'method' => 'onRequest',
         ]);
 
         $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));

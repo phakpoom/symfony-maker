@@ -28,12 +28,12 @@ class CommandGenerator extends AbstractGenerator implements GeneratorInterface
         $resolver
             ->setDefaults([
                 'all_service_file_path' => null,
-                'command_service_file_path' => null,
+                'entry_service_file_path' => null,
                 'config_dir' => null,
             ])
             ->setRequired('name')
             ->setRequired('namespace')
-            ->setRequired('command_dir')
+            ->setRequired('class_dir')
         ;
     }
 
@@ -42,7 +42,7 @@ class CommandGenerator extends AbstractGenerator implements GeneratorInterface
      */
     protected function generateWithResolvedOptions(array $options)
     {
-        $fileLocate = NameResolver::replaceDoubleSlash($options['command_dir'] . '/' . $options['name'] . 'Command.php');
+        $fileLocate = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . 'Command.php');
         $resourcePrefix =  NameResolver::resolveResourcePrefix($options['namespace']);
 
         $classNamespace = new PhpNamespace($options['namespace']);
@@ -80,14 +80,14 @@ PHP
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 
-        if (null === $options['command_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
+        if (null === $options['entry_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
             return;
         }
 
         // import service form
-        $this->addImportEntryToServiceFile($options['config_dir'], $options['command_service_file_path'], $options['all_service_file_path']);
+        $this->addImportEntryToServiceFile($options['config_dir'], $options['entry_service_file_path'], $options['all_service_file_path']);
 
-        $xml = $this->getConfigXmlFile($options['config_dir'], $options['command_service_file_path']);
+        $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
         $resourceName =  NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
@@ -100,6 +100,6 @@ PHP
             'name' => 'console.command'
         ]);
 
-        $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['command_service_file_path']));
+        $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));
     }
 }

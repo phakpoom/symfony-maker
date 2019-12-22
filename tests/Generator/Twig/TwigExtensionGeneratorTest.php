@@ -24,7 +24,7 @@ class TwigExtensionGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'Dummy',
             'namespace' => __NAMESPACE__,
-            'twig_extension_dir' => __DIR__,
+            'class_dir' => __DIR__,
         ]);
 
         $this
@@ -38,9 +38,9 @@ class TwigExtensionGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'Dummy',
             'namespace' => __NAMESPACE__,
-            'twig_extension_dir' => __DIR__,
+            'class_dir' => __DIR__,
             'config_dir' => $configDir = __DIR__ . '/config',
-            'twig_service_file_path' => '/services/twigs.xml',
+            'entry_service_file_path' => '/services/twigs.xml',
             'all_service_file_path' => '/services.xml',
         ]);
 

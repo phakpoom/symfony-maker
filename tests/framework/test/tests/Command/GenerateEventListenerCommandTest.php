@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use Bonn\Maker\Bridge\MakerBundle\Command\GenerateEventListenerCommand;
 use Bonn\Maker\Bridge\MakerBundle\Command\GenerateTwigExtensionCommand;
 use Bonn\Maker\Bridge\MakerBundle\Tests\AbstractGenerateCommandWebTestCase;
 
-class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCase
+class GenerateEventListenerCommandTest extends AbstractGenerateCommandWebTestCase
 {
     public function testWithDummy()
     {
@@ -20,9 +21,9 @@ class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCas
             'name' => 'Dummy'
         ]);
 
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Twig/Extension/DummyExtension.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/EventListener/DummyListener.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/twig_extensions.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/event_listeners.xml' , $output);
     }
 
     public function testWithSubModule()
@@ -41,14 +42,14 @@ class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCas
         $output = $this->runWithInput($command, ['2'], [
             'name' => 'Dummy'
         ]);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Twig/Extension/DummyExtension.php' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/EventListener/DummyListener.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/twig_extensions.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/event_listeners.xml' , $output);
     }
 
-    protected function getCommand(): GenerateTwigExtensionCommand
+    protected function getCommand(): GenerateEventListenerCommand
     {
         self::bootKernel();
-        return self::$container->get(GenerateTwigExtensionCommand::class);
+        return self::$container->get(GenerateEventListenerCommand::class);
     }
 }

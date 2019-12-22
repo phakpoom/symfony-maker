@@ -18,19 +18,12 @@
 ```
 
 ## Enabled Bundle
-For symfony 3.4.x
-```php
-if ('dev' === $this->getEnvironment()) {
-    new Bonn\Maker\Bridge\MakerBundle\BonnMakerBundle();
-}
-```
-For symfony 4
 ```php
 Bonn\Maker\Bridge\MakerBundle\BonnMakerBundle::class => ['dev' => true]
 ```
 
 ## Config
-> Beware! make sure that config only dev `config_dev.yml`
+> Beware! make sure that config only dev
 ```yaml
 bonn_maker:
     namespace_prefix: "App" # prefix namespace

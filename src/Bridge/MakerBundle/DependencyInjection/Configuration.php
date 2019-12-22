@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('service_import_dir')->defaultValue('services')->end()
                 ->scalarNode('factory_dir')->defaultValue('Factory')->end()
                 ->scalarNode('form_type_dir')->defaultValue('Form/Type')->end()
+                ->scalarNode('event_listener_dir')->defaultValue('EventListener')->end()
                 ->scalarNode('twig_extension_dir')->defaultValue('Twig/Extension')->end()
                 ->scalarNode('validator_config_dir')->defaultValue('validators')->end()
                 ->scalarNode('command_dir')->defaultValue('Command')->end()
