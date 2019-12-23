@@ -15,6 +15,7 @@ abstract class CommonServiceCommand extends AbstractGenerateCommand
 {
     abstract function getGenerator(): GeneratorInterface;
     abstract function getServiceTypeName(): string;
+    abstract function getServiceEntryXmlFileName(): string;
 
     protected function configure()
     {
@@ -38,7 +39,7 @@ abstract class CommonServiceCommand extends AbstractGenerateCommand
             'name' => $input->getArgument('name'),
             'class_dir' => $dir . $this->configs[$this->getServiceTypeName() . '_dir'],
             'namespace' => NameResolver::resolveNamespace($fullClassName),
-            'entry_service_file_path' => sprintf('/%s/%s.xml', $this->configs['service_import_dir'], $this->getServiceTypeName() . 's'),
+            'entry_service_file_path' => sprintf('/%s/%s.xml', $this->configs['service_import_dir'], $this->getServiceEntryXmlFileName() ?: ($this->getServiceTypeName() . 's')),
             'all_service_file_path' => '/services.xml',
             'config_dir' => $configDir,
         ]);

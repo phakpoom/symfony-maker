@@ -28,4 +28,9 @@ class GenerateEventListenerCommand extends CommonServiceCommand
     {
         return 'event_listener';
     }
+
+    public function getServiceEntryXmlFileName(): string
+    {
+        return 'events';
+    }
 }

@@ -24,13 +24,13 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
     {
         $resolver
             ->setDefaults([
-                'validator_service_file_path' => null,
+                'entry_service_file_path' => null,
                 'all_service_file_path' => null,
                 'config_dir' => null,
             ])
             ->setRequired('name')
             ->setRequired('namespace')
-            ->setRequired('validator_dir')
+            ->setRequired('class_dir')
         ;
     }
 
@@ -41,8 +41,8 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
     {
         $resourcePrefix = NameResolver::resolveResourcePrefix($options['namespace']);
 
-        $fileLocateConstraint = NameResolver::replaceDoubleSlash($options['validator_dir'] . '/' . $options['name'] . '.php');
-        $fileLocateConstraintValidator = NameResolver::replaceDoubleSlash($options['validator_dir'] . '/' . $options['name'] . 'Validator.php');
+        $fileLocateConstraint = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . '.php');
+        $fileLocateConstraintValidator = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . 'Validator.php');
 
         $classNamespace = $this->generateConstraint(new PhpNamespace($options['namespace']), $options);
         $classNamespaceConstraintValidator = $this->generateConstraintValidator(new PhpNamespace($options['namespace']), $options);
@@ -50,18 +50,18 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocateConstraint));
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespaceConstraintValidator->__toString()), $fileLocateConstraintValidator));
 
-        if (null === $options['validator_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
+        if (null === $options['entry_service_file_path'] || null === $options['all_service_file_path'] || null === $options['config_dir']) {
             return;
         }
 
         // import service form
         $this->addImportEntryToServiceFile(
             $options['config_dir'],
-            $options['validator_service_file_path'],
+            $options['entry_service_file_path'],
             $options['all_service_file_path']
         );
 
-        $xml = $this->getConfigXmlFile($options['config_dir'], $options['validator_service_file_path']);
+        $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
         $resourceName =  NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
@@ -75,7 +75,7 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
             'alias' => $resourceName . '_validator'
         ]);
 
-        $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['validator_service_file_path']));
+        $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));
     }
 
     private function generateConstraint(PhpNamespace $classNamespace, array $options): PhpNamespace

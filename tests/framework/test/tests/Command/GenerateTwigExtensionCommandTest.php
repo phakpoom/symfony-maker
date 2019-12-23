@@ -22,7 +22,7 @@ class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCas
 
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Twig/Extension/DummyExtension.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/twig_extensions.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/twigs.xml' , $output);
     }
 
     public function testWithSubModule()
@@ -43,7 +43,7 @@ class GenerateTwigExtensionCommandTest extends AbstractGenerateCommandWebTestCas
         ]);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Twig/Extension/DummyExtension.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/twig_extensions.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/twigs.xml' , $output);
     }
 
     protected function getCommand(): GenerateTwigExtensionCommand

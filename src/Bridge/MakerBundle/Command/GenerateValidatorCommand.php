@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Bridge\MakerBundle\Command;
 
+use Bonn\Maker\Generator\GeneratorInterface;
 use Bonn\Maker\Generator\ValidatorGenerator;
-use Bonn\Maker\Utils\NameResolver;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
-class GenerateValidatorCommand extends AbstractGenerateCommand
+class GenerateValidatorCommand extends CommonServiceCommand
 {
     /** @var ValidatorGenerator */
     private $generator;
@@ -23,35 +19,18 @@ class GenerateValidatorCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    public function getGenerator(): GeneratorInterface
     {
-        $this
-            ->setName('bonn:validator:maker')
-            ->setDescription('Generate validator')
-            ->addArgument('name', InputArgument::REQUIRED, 'validator name');
+        return $this->generator;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function getServiceTypeName(): string
     {
-        $helper = $this->getHelper('question');
+        return 'validator';
+    }
 
-        $dir = $this->askForBundle($helper, $input, $output) . '/';
-
-        $configDir = $dir . $this->configs['config_dir'];
-
-        $fullClassName = $this->getFullClassNameFromDir($dir . $this->configs['validator_dir'], $input->getArgument('name'));
-
-        $this->generator->generate([
-            'name' => $input->getArgument('name'),
-            'validator_dir' => $dir . $this->configs['validator_dir'],
-            'namespace' => NameResolver::resolveNamespace($fullClassName),
-            'validator_service_file_path' => '/' . $this->configs['service_import_dir'] . '/validators.xml',
-            'all_service_file_path' => '/services.xml',
-            'config_dir' => $configDir,
-        ]);
-
-        $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
-
-        $this->manager->flush();
+    public function getServiceEntryXmlFileName(): string
+    {
+        return 'validators';
     }
 }

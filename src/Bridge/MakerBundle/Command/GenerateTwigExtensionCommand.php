@@ -34,4 +34,9 @@ class GenerateTwigExtensionCommand extends CommonServiceCommand
     {
         return 'twig_extension';
     }
+
+    public function getServiceEntryXmlFileName(): string
+    {
+        return 'twigs';
+    }
 }

@@ -25,7 +25,7 @@ class ValidatorGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'Dummy',
             'namespace' => __NAMESPACE__,
-            'validator_dir' => __DIR__,
+            'class_dir' => __DIR__,
         ]);
 
         $this
@@ -40,9 +40,9 @@ class ValidatorGeneratorTest extends AbstractMakerTestCase
         $this->generator->generate([
             'name' => 'Dummy',
             'namespace' => __NAMESPACE__,
-            'validator_dir' => __DIR__,
+            'class_dir' => __DIR__,
             'config_dir' => $configDir = __DIR__ . '/config',
-            'validator_service_file_path' => '/services/validators.xml',
+            'entry_service_file_path' => '/services/validators.xml',
             'all_service_file_path' => '/services.xml',
         ]);
 

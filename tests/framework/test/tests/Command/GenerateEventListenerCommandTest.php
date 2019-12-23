@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use Bonn\Maker\Bridge\MakerBundle\Command\GenerateEventListenerCommand;
-use Bonn\Maker\Bridge\MakerBundle\Command\GenerateTwigExtensionCommand;
 use Bonn\Maker\Bridge\MakerBundle\Tests\AbstractGenerateCommandWebTestCase;
 
 class GenerateEventListenerCommandTest extends AbstractGenerateCommandWebTestCase
@@ -23,7 +22,7 @@ class GenerateEventListenerCommandTest extends AbstractGenerateCommandWebTestCas
 
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/EventListener/DummyListener.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/event_listeners.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Resources/config/services/events.xml' , $output);
     }
 
     public function testWithSubModule()
@@ -44,7 +43,7 @@ class GenerateEventListenerCommandTest extends AbstractGenerateCommandWebTestCas
         ]);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/EventListener/DummyListener.php' , $output);
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services.xml' , $output);
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/event_listeners.xml' , $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/SubModule/SomeFeature2') . '/Resources/config/services/events.xml' , $output);
     }
 
     protected function getCommand(): GenerateEventListenerCommand

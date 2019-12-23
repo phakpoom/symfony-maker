@@ -33,4 +33,9 @@ class GenerateCommandCommand extends CommonServiceCommand
     {
         return 'command';
     }
+
+    public function getServiceEntryXmlFileName(): string
+    {
+        return 'commands';
+    }
 }
