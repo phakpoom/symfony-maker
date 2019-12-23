@@ -26,7 +26,7 @@ class GenerateDoctrineEventListenerCommand extends CommonServiceCommand
 
     public function getServiceTypeName(): string
     {
-        return 'event_listener';
+        return 'doctrine_event_listener';
     }
 
     public function getServiceEntryXmlFileName(): string

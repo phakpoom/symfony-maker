@@ -28,6 +28,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('factory_dir')->defaultValue('Factory')->end()
                 ->scalarNode('form_type_dir')->defaultValue('Form/Type')->end()
                 ->scalarNode('event_listener_dir')->defaultValue('EventListener')->end()
+                ->scalarNode('resource_event_listener_dir')->defaultValue('EventListener')->end()
+                ->scalarNode('doctrine_event_listener_dir')->defaultValue('EventListener')->end()
                 ->scalarNode('twig_extension_dir')->defaultValue('Twig/Extension')->end()
                 ->scalarNode('validator_dir')->defaultValue('Validator/Constraints')->end()
                 ->scalarNode('validator_config_dir')->defaultValue('validators')->end()

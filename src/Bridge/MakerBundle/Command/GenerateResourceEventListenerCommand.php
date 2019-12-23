@@ -26,7 +26,7 @@ class GenerateResourceEventListenerCommand extends CommonServiceCommand
 
     public function getServiceTypeName(): string
     {
-        return 'event_listener';
+        return 'resource_event_listener';
     }
 
     public function getServiceEntryXmlFileName(): string
