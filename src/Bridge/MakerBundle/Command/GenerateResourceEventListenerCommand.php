@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Bridge\MakerBundle\Command;
 
-use Bonn\Maker\Generator\CommandGenerator;
 use Bonn\Maker\Generator\GeneratorInterface;
+use Bonn\Maker\Generator\ResourceEventListenerGenerator;
 
-class GenerateCommandCommand extends CommonServiceCommand
+class GenerateResourceEventListenerCommand extends CommonServiceCommand
 {
-    /** @var CommandGenerator */
+    /** @var ResourceEventListenerGenerator */
     private $generator;
 
-    public function __construct(CommandGenerator $generator)
+    public function __construct(ResourceEventListenerGenerator $generator)
     {
         $this->generator = $generator;
 
@@ -26,11 +26,11 @@ class GenerateCommandCommand extends CommonServiceCommand
 
     public function getServiceTypeName(): string
     {
-        return 'command';
+        return 'event_listener';
     }
 
     public function getServiceEntryXmlFileName(): string
     {
-        return 'commands';
+        return 'events';
     }
 }
