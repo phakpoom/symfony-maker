@@ -12,7 +12,7 @@ before_script:
 - composer install --prefer-source --no-interaction --dev
 - cd $TRAVIS_BUILD_DIR && cd tests/framework/test && composer install --prefer-source --no-interaction --dev
 
-script: cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit && cd $TRAVIS_BUILD_DIR && cd tests/framework/test@3.4 && ./bin/phpunit
+script: cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit
 
 notifications:
     email: false
