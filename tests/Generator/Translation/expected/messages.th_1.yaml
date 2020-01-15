@@ -1,0 +1,9 @@
+test:
+    dummy_ok:
+        ui:
+            name: ok
+            enabled: ''
+            links: ''
+        grid: {  }
+        form: {  }
+        other: {  }

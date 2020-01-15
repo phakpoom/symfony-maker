@@ -38,3 +38,6 @@ bonn_maker:
 
 #### Generate model and doctrine mapping
 `./bin/console bonn:model:maker --help`
+
+#### Many Commands
+`./bin/console bonn`
