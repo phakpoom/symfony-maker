@@ -38,7 +38,7 @@ class GenerateTranslationCommand extends AbstractGenerateCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $translationDir = $this->container->getParameter('kernel.project_dir') . '/' . $this->configs['translation_dir'];
+        $translationDir = $this->container->getParameter('kernel.project_dir') . '/' . $this->configs['translations_dir'];
         if ($input->getArgument('bundle')) {
             $translationDir = $this->container->get('kernel')->locateResource($input->getArgument('bundle') . '/translations');
         }

@@ -50,6 +50,8 @@ class TranslationGeneratorTest extends AbstractMakerTestCase
 
 class DummyOk
 {
+    protected $id;
+
     protected $name;
 
     protected $enabled;

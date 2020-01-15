@@ -12,6 +12,10 @@ use Symfony\Component\Yaml\Yaml;
 
 class TranslationGenerator extends AbstractGenerator implements GeneratorInterface
 {
+    CONST EXCLUDES = [
+        'id'
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +46,10 @@ class TranslationGenerator extends AbstractGenerator implements GeneratorInterfa
             $props = [];
             foreach ($reflectionClass->getProperties() as $property) {
                 $name = NameResolver::camelToUnderScore($property->getName());
+                if (in_array($name, self::EXCLUDES)) {
+                    continue;
+                }
+
                 $props[$name] = $arr[$resourcePrefix][$resourceName]['ui'][$name] ?? '';
             }
 
