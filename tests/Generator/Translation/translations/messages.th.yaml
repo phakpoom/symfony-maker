@@ -1,0 +1,7 @@
+test:
+    dummy_ok:
+        ui:
+            name: 'ok'
+        grid: {  }
+        form: {  }
+        other: {  }
