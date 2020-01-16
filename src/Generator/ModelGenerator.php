@@ -58,23 +58,98 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         $props = $options['props'];
         $namespace = NameResolver::resolveNamespace($fullClassName);
 
-        $classNamespace = new PhpNamespace($namespace);
-        $interfaceNamespace = new PhpNamespace($namespace);
-
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
         $onlyInterfaceClassName = $onlyClassName . 'Interface';
 
-        $modelClass = $classNamespace->addClass($onlyClassName);
-        $interfaceClass = $interfaceNamespace->addInterface($onlyInterfaceClassName);
+        // generate new
+        $classNamespace = new PhpNamespace($namespace);
+        $interfaceNamespace = new PhpNamespace($namespace);
 
-        $constructor = $this->createConstructor($modelClass);
+        // generate exists
+        if (class_exists($fullClassName)) {
+            $modelClass = ClassType::from($fullClassName);
+            $interfaceClass = ClassType::from($fullClassName . 'Interface');
 
-        // Create Id
-        $idPropType = new IntegerType('id');
-        $idPropType->addProperty($modelClass);
-        $idPropType->addGetter($modelClass);
-        $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ResourceInterface');
-        $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ResourceInterface');
+            $classNamespace->add($modelClass);
+            $interfaceNamespace->add($interfaceClass);
+
+            if (!$modelClass->hasMethod('__construct')) {
+                $this->createConstructor($modelClass);
+            }
+
+            $constructor = $modelClass->getMethod('__construct');
+
+            // get old method body
+            $reflectionClass = new \ReflectionClass($fullClassName);
+            $classLines = file($reflectionClass->getFileName());
+
+            foreach ($modelClass->getMethods() as $method) {
+                $reflectionMethod = $reflectionClass->getMethod($method->getName());
+
+                $body = '';
+                for ($i = $reflectionMethod->getStartLine() + 1 ;$i < $reflectionMethod->getEndLine() - 1; $i++) {
+                    $body .= $classLines[$i];
+                }
+
+                if (empty(trim($body))) {
+                    $modelClass->removeMethod($method->getName());
+                }
+
+                $method->setBody($body);
+            }
+
+            // implement to extends
+            $interfaceClass->setExtends($interfaceClass->getImplements());
+            $interfaceClass->setImplements([]);
+
+            // visibility public
+            foreach ($interfaceClass->getMethods() as $method) {
+               $method->setVisibility(ClassType::VISIBILITY_PUBLIC);
+            }
+
+            // remove method from traits
+            /** @var ClassType $trait */
+            $traitMethodNames = [];
+            $traitPropNames = [];
+            foreach ($modelClass->getTraits() as $trait) {
+                foreach ($trait->getMethods() as $method) {
+                    $traitMethodNames[] = $method->getName();
+                }
+
+                foreach ($trait->getProperties() as $property) {
+                    $traitPropNames[] = $property->getName();
+                }
+            }
+
+            foreach ($modelClass->getMethods() as $method) {
+                if (!in_array($method->getName(), $traitMethodNames)) {
+                    continue;
+                }
+
+                $modelClass->removeMethod($method->getName());
+            }
+            foreach ($modelClass->getProperties() as $property) {
+                if (!in_array($property->getName(), $traitPropNames)) {
+                    continue;
+                }
+
+                $modelClass->removeProperty($property->getName());
+            }
+
+        } else {
+            $modelClass = $classNamespace->addClass($onlyClassName);
+            $modelClass->addImplement($fullInterfaceClassName);
+            $interfaceClass = $interfaceNamespace->addInterface($onlyInterfaceClassName);
+
+            $constructor = $this->createConstructor($modelClass);
+
+            // Create Id
+            $idPropType = new IntegerType('id');
+            $idPropType->addProperty($modelClass);
+            $idPropType->addGetter($modelClass);
+            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ResourceInterface');
+            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ResourceInterface');
+        }
 
         // Extension
         if ($options['with_timestamp_able']) {
@@ -90,12 +165,6 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
             $codePropType->addSetter($modelClass);
             $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
             $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
-        }
-        if ($options['with_toggle']) {
-            $classNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
-            $modelClass->addTrait('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
-            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
-            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
         }
 
         if (!empty($props)) {
@@ -130,8 +199,6 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
                 $method->setBody(null);
             }
         }
-
-        $modelClass->addImplement($fullInterfaceClassName);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $options['model_dir'] . "/$onlyClassName.php"));
         $this->manager->persist(new Code(PhpDoctypeCode::render($interfaceNamespace->__toString()), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
