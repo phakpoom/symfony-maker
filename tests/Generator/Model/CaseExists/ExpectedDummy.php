@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Test\Generator\Model\CaseExists;
 
+use Sylius\Component\Resource\Model\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 class Dummy implements DummyInterface
 {
+    use TimestampableTrait;
+
     /** @var int|null */
     protected $id;
 
@@ -27,6 +30,7 @@ class Dummy implements DummyInterface
      */
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->groups = new ArrayCollection();
     }
 

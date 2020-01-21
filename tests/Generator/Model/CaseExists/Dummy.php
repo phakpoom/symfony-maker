@@ -21,6 +21,7 @@ class Dummy implements DummyInterface
      */
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
     }
 
     /**
