@@ -127,6 +127,10 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
                 $missingTrans[] = $tran;
             }
 
+            if (empty($missingTrans)) {
+                return;
+            }
+
             $propAccessor = PropertyAccess::createPropertyAccessor();
             $messageFiles = (new Finder())->in($translationDir)->name('messages.*');
 
