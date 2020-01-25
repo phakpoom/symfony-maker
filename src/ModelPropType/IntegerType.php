@@ -45,12 +45,12 @@ class IntegerType implements PropTypeInterface
         $prop->setValue($this->defaultValue);
 
         if (!$this->nullable) {
-            $prop->setComment("@var int");
+            $prop->setComment('@var int');
 
             return;
         }
 
-        $prop->setComment("@var int|null");
+        $prop->setComment('@var int|null');
     }
 
     /**

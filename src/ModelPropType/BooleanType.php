@@ -41,7 +41,7 @@ class BooleanType implements PropTypeInterface
             ->addProperty($this->name)
             ->setVisibility('protected');
         $prop->setValue($this->defaultValue);
-        $prop->setComment("@var bool");
+        $prop->setComment('@var bool');
     }
 
     /**

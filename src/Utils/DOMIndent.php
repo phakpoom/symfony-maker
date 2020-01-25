@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Utils;
 
-use Bonn\Maker\Model\SymfonyServiceXml;
-use FluidXml\FluidXml;
-use Webmozart\Assert\Assert;
-
 /**
  * Class IndentDomDocument
  *

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Compiler;
 
-use Bonn\Maker\Bridge\MakerBundle\Command\AbstractGenerateCommand;
 use Bonn\Maker\Generator\AbstractGenerator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

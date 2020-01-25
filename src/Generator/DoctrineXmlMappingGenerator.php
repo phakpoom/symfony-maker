@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Utils\DOMIndent;
@@ -41,9 +40,6 @@ final class DoctrineXmlMappingGenerator extends AbstractGenerator implements Doc
         ;
     }
 
-    /**
-     * @param array $options
-     */
     protected function generateWithResolvedOptions(array $options)
     {
         $fullClassName = $options['class'];

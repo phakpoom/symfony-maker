@@ -6,7 +6,6 @@ namespace Bonn\Maker\Model;
 
 use Bonn\Maker\Utils\DOMIndent;
 use FluidXml\FluidXml;
-use Symfony\Component\Validator\Mapping\Loader\XmlFileLoader;
 
 class SymfonyValidatorXml
 {

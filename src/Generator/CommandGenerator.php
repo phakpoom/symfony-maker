@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
-use Bonn\Maker\Model\SymfonyServiceXml;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
@@ -14,9 +12,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class CommandGenerator extends AbstractGenerator implements GeneratorInterface
 {
@@ -43,7 +38,7 @@ class CommandGenerator extends AbstractGenerator implements GeneratorInterface
     protected function generateWithResolvedOptions(array $options)
     {
         $fileLocate = NameResolver::replaceDoubleSlash($options['class_dir'] . '/' . $options['name'] . 'Command.php');
-        $resourcePrefix =  NameResolver::resolveResourcePrefix($options['namespace']);
+        $resourcePrefix = NameResolver::resolveResourcePrefix($options['namespace']);
 
         $classNamespace = new PhpNamespace($options['namespace']);
         $classNamespace->addUse(Command::class);
@@ -89,7 +84,7 @@ PHP
 
         $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
-        $resourceName =  NameResolver::camelToUnderScore($options['name']);
+        $resourceName = NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
             sprintf('%s.command.%s', $resourcePrefix, $resourceName),
             $classNamespace->getName() . '\\' . $class->getName(),
@@ -97,7 +92,7 @@ PHP
         );
 
         $serviceContext->addChild('tag', null, [
-            'name' => 'console.command'
+            'name' => 'console.command',
         ]);
 
         $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));

@@ -43,11 +43,11 @@ class FloatType implements PropTypeInterface
             ->setVisibility('protected');
         $prop->setValue($this->defaultValue);
         if (!$this->nullable) {
-            $prop->setComment("@var float");
+            $prop->setComment('@var float');
 
             return;
         }
-        $prop->setComment("@var float|null");
+        $prop->setComment('@var float|null');
     }
 
     /**

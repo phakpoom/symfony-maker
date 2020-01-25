@@ -39,9 +39,6 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
         ;
     }
 
-    /**
-     * @param array $options
-     */
     protected function generateWithResolvedOptions(array $options)
     {
         $this->ensureClassExists($options['class']);
@@ -53,7 +50,6 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
         $classNamespace = new PhpNamespace($options['namespace']);
 
         $formClass = $classNamespace->addClass($className . 'Type');
-
 
         $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Form\\Type\\AbstractResourceType');
         $classNamespace->addUse('Symfony\\Component\\Form\\FormBuilderInterface');
@@ -102,12 +98,12 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
 
         $serviceContext
             ->addChild('argument', true, [
-                'type' => 'collection'
+                'type' => 'collection',
             ])
             ->addChild('argument', $resourcePrefix);
 
         $serviceContext->addChild('tag', null, [
-            'name' => 'form.type'
+            'name' => 'form.type',
         ]);
 
         $this->manager->persist(new Code($formXml->__toString(), $formServicePath));

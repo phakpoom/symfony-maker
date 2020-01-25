@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator\Sylius;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;

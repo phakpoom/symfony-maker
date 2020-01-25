@@ -12,8 +12,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class TranslationGenerator extends AbstractGenerator implements GeneratorInterface
 {
-    CONST EXCLUDES = [
-        'id'
+    public const EXCLUDES = [
+        'id',
     ];
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator\Sylius;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
@@ -59,7 +58,7 @@ class FactoryGenerator extends AbstractSyliusGenerator
             ->setVisibility('public')->setBody('$this->className = $className;')
             ->addParameter('className')->setTypeHint('string');
 
-        $interfaceName =  NameResolver::resolveOnlyClassName($options['class']) . "Interface";
+        $interfaceName = NameResolver::resolveOnlyClassName($options['class']) . 'Interface';
         $factoryClass->addMethod('createNew')
             ->setVisibility('public')->setBody('return new $this->className();')
             ->setComment("\n @return " . $interfaceName . " \n");
@@ -67,10 +66,10 @@ class FactoryGenerator extends AbstractSyliusGenerator
         $factoryClass->addMethod('createWithSomething')
             ->setVisibility('public')->setBody(
                 '$object = new $this->className(); ' . "\n\n" .
-                '// do stuff'. "\n\n" .
+                '// do stuff' . "\n\n" .
                 'return $object;'
             )
-            ->setReturnType($options['class'] . "Interface")
+            ->setReturnType($options['class'] . 'Interface')
             ->setComment("\n @return " . $interfaceName . " \n");
 
         $factoryInterfaceClass = $interfaceNamespace->addInterface($className . 'FactoryInterface');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator;
 
-use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class CommonServiceGenerator extends AbstractGenerator implements GeneratorInterface

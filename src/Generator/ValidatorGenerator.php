@@ -11,9 +11,6 @@ use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
 {
@@ -63,7 +60,7 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
 
         $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
-        $resourceName =  NameResolver::camelToUnderScore($options['name']);
+        $resourceName = NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
             sprintf('%s.validator.%s_validator', $resourcePrefix, $resourceName),
             $classNamespace->getName() . '\\' . $classNamespaceConstraintValidator->getClasses()['DummyValidator']->getName(),
@@ -72,7 +69,7 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
 
         $serviceContext->addChild('tag', null, [
             'name' => 'validator.constraint_validator',
-            'alias' => $resourceName . '_validator'
+            'alias' => $resourceName . '_validator',
         ]);
 
         $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));

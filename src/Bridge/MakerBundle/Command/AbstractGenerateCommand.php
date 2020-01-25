@@ -9,7 +9,6 @@ use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperInterface;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
@@ -116,6 +115,7 @@ abstract class AbstractGenerateCommand extends Command
         $className = $this->configs['namespace_prefix'] . '\\' . $className;
         $className = str_replace('/', '\\', $className);
         $className = preg_replace('/\\\+/', '\\', $className);
+
         return ltrim($className, '\\');
     }
 }

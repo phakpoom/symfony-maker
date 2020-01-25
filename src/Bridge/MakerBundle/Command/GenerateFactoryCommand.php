@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Bridge\MakerBundle\Command;
 
-use Bonn\Maker\Generator\Sylius\AbstractSyliusGenerator;
 use Bonn\Maker\Generator\Sylius\FactoryGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

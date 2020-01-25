@@ -21,6 +21,7 @@ use Bonn\Maker\ModelPropType\TranslationType;
 final class PropTypeConverter implements PropTypeConverterInterface
 {
     public const VALUE_SEPARATOR = ':';
+
     public const PROP_SEPARATOR = '|';
 
     public const TYPES = [

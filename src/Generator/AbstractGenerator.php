@@ -8,7 +8,6 @@ use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Model\SymfonyServiceXml;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Yaml\Yaml;
 
 abstract class AbstractGenerator implements GeneratorInterface
 {
@@ -21,7 +20,6 @@ abstract class AbstractGenerator implements GeneratorInterface
     }
 
     /**
-     * @param array $options
      * @return mixed
      */
     abstract protected function generateWithResolvedOptions(array $options);
@@ -43,12 +41,6 @@ abstract class AbstractGenerator implements GeneratorInterface
 
     /**
      * Add entry file `twigs.xml` to `services.xml`
-     *
-     * @param string $configDir
-     * @param string $entryName
-     * @param string $allServiceFile
-     *
-     * @return SymfonyServiceXml
      */
     protected function addImportEntryToServiceFile(string $configDir, string $entryName, string $allServiceFile): SymfonyServiceXml
     {
@@ -72,11 +64,6 @@ abstract class AbstractGenerator implements GeneratorInterface
 
     /**
      * Create Config Xml
-     *
-     * @param string $configDir
-     * @param string $configFile
-     *
-     * @return SymfonyServiceXml
      */
     protected function getConfigXmlFile(string $configDir, string $configFile): SymfonyServiceXml
     {

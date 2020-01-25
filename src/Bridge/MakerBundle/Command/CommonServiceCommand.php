@@ -13,9 +13,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class CommonServiceCommand extends AbstractGenerateCommand
 {
-    abstract function getGenerator(): GeneratorInterface;
-    abstract function getServiceTypeName(): string;
-    abstract function getServiceEntryXmlFileName(): string;
+    abstract public function getGenerator(): GeneratorInterface;
+
+    abstract public function getServiceTypeName(): string;
+
+    abstract public function getServiceEntryXmlFileName(): string;
 
     protected function configure()
     {

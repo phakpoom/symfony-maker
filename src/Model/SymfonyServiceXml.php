@@ -47,8 +47,9 @@ class SymfonyServiceXml
     {
         $alreadyImported = false;
         $this->xml->query('//container:imports/container:import')->each(function ($index, \DOMElement $dom) use ($path, &$alreadyImported) {
-            if (true === $alreadyImported) return;
-
+            if (true === $alreadyImported) {
+                return;
+            }
             $alreadyImported = $path === $dom->getAttribute('resource');
         });
 
@@ -68,17 +69,10 @@ class SymfonyServiceXml
         }
 
         $importsContext->add('import', null, [
-            'resource' => $path
+            'resource' => $path,
         ]);
     }
 
-    /**
-     * @param string $id
-     * @param string $class
-     * @param array $attrs
-     *
-     * @return FluidContext
-     */
     public function addService(string $id, string $class, array $attrs = []): FluidContext
     {
         return $this->xml->query('//container/services', '//container:services')

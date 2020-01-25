@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Generator\AbstractGenerator;
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Yaml\Yaml;

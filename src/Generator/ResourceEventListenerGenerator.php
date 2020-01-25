@@ -9,7 +9,6 @@ use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ResourceEventListenerGenerator extends AbstractGenerator implements GeneratorInterface
@@ -68,7 +67,7 @@ class ResourceEventListenerGenerator extends AbstractGenerator implements Genera
 
         $serviceContext->addChild('tag', null, [
             'name' => 'kernel.event_listener',
-            'event' =>  sprintf('%s.%s.%s', $resourcePrefix, '{{resource_name}}', '{{pre|post}}_{{create|update|delete}}'),
+            'event' => sprintf('%s.%s.%s', $resourcePrefix, '{{resource_name}}', '{{pre|post}}_{{create|update|delete}}'),
             'method' => '{{methodName}}',
         ]);
 

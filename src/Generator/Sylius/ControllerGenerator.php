@@ -6,7 +6,6 @@ namespace Bonn\Maker\Generator\Sylius;
 
 use Bonn\Maker\Generator\GeneratorInterface;
 use Bonn\Maker\Model\Code;
-use Bonn\Maker\Model\SymfonyServiceXml;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\PhpNamespace;
@@ -35,9 +34,6 @@ final class ControllerGenerator extends AbstractSyliusGenerator implements Gener
         ;
     }
 
-    /**
-     * @param array $options
-     */
     protected function generateWithResolvedOptions(array $options)
     {
         $this->ensureClassExists($options['class']);

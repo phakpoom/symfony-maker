@@ -63,7 +63,7 @@ class SyliusResourceServiceNameResolver implements SyliusResourceServiceNameReso
     {
         $prefix = $this->prefix;
         if (empty($this->prefix)) {
-            $prefix =  NameResolver::camelToUnderScore(explode('\\', $className)[0]);
+            $prefix = NameResolver::camelToUnderScore(explode('\\', $className)[0]);
         }
 
         return $prefix;
@@ -77,10 +77,6 @@ class SyliusResourceServiceNameResolver implements SyliusResourceServiceNameReso
         return NameResolver::camelToUnderScore(NameResolver::resolveOnlyClassName($className));
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
     private function resolve(string $className, string $key): string
     {
         return sprintf("{$this->getPrefix($className)}.%s.{$this->getResourceName($className)}", $key);

@@ -9,7 +9,6 @@ use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Nette\PhpGenerator\PhpNamespace;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DoctrineEventListenerGenerator extends AbstractGenerator implements GeneratorInterface
@@ -74,17 +73,17 @@ class DoctrineEventListenerGenerator extends AbstractGenerator implements Genera
 
         $serviceContext->addChild('tag', null, [
             'name' => 'doctrine.event_listener',
-            'event' => 'postPersist'
+            'event' => 'postPersist',
         ]);
 
         $serviceContext->addChild('tag', null, [
             'name' => 'doctrine.event_listener',
-            'event' => 'postUpdate'
+            'event' => 'postUpdate',
         ]);
 
         $serviceContext->addChild('tag', null, [
             'name' => 'doctrine.event_listener',
-            'event' => 'preRemove'
+            'event' => 'preRemove',
         ]);
 
         $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));

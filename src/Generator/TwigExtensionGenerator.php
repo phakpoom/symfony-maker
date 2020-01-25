@@ -80,7 +80,7 @@ PHP
 
         $xml = $this->getConfigXmlFile($options['config_dir'], $options['entry_service_file_path']);
 
-        $resourceName =  NameResolver::camelToUnderScore($options['name']);
+        $resourceName = NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
             sprintf('%s.twig.%s_extension', $resourcePrefix, $resourceName),
             $classNamespace->getName() . '\\' . $class->getName(),
@@ -88,7 +88,7 @@ PHP
         );
 
         $serviceContext->addChild('tag', null, [
-            'name' => 'twig.extension'
+            'name' => 'twig.extension',
         ]);
 
         $this->manager->persist(new Code($xml->__toString(), $options['config_dir'] . $options['entry_service_file_path']));

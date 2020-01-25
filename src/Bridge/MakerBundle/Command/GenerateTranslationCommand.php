@@ -48,7 +48,6 @@ class GenerateTranslationCommand extends AbstractGenerateCommand
             'translation_dir' => $translationDir,
         ]);
 
-
         $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
 
         $this->manager->flush();

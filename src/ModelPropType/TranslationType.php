@@ -86,11 +86,12 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
         $fullClassName = $className;
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
         $translationMappingLocaled = $options['doctrine_mapping_dir'] . '/' . $onlyClassName . 'Translation.orm.xml';
-        /** @var \SimpleXMLElement $xml */
         if (isset($codeManager->getCodes()[$translationMappingLocaled])) {
+            /** @var \SimpleXMLElement $xml */
             $xml = $codeManager->getCodes()[$translationMappingLocaled]->getExtra()['doctrine_mapping_xml'];
             $mappedSuper = $xml->{'mapped-superclass'};
         } else {
+            /** @var \SimpleXMLElement $xml */
             $xml = DoctrineXmlMappingGenerator::createDoctrineMappingXml();
             $mappedSuper = $xml->addChild('mapped-superclass');
             $id = $mappedSuper->addChild('id');
@@ -136,7 +137,6 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
             $propType = new IntegerType('id');
             $propType->addProperty($translationClass);
             $propType->addGetter($translationClass);
-
         } else {
             $translationClassNameSpace = $translationClass->getExtra()['namespace'];
             Assert::isInstanceOf($translationClassNameSpace, PhpNamespace::class);

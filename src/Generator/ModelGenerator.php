@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Generator;
 
-use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\ModelPropType\ConstructResolveInterface;
 use Bonn\Maker\ModelPropType\IntegerType;
