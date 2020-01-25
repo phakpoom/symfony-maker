@@ -7,6 +7,7 @@ namespace Bonn\Maker\Generator;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Model\SymfonyValidatorXml;
 use Bonn\Maker\Utils\NameResolver;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ValidatorConfigGenerator extends AbstractGenerator implements GeneratorInterface
@@ -36,16 +37,32 @@ class ValidatorConfigGenerator extends AbstractGenerator implements GeneratorInt
         }
 
         $xml = new SymfonyValidatorXml();
-        $xml->getXml()->query('/constraint-mapping')
+        $classXml = $xml->getXml()->query('/constraint-mapping')
             ->add('class', true, [
                 'name' => $options['full_class_name']
             ])
+        ;
+        //
+        $classXml
+            ->add('constraint', true, [
+                'name' => UniqueEntity::class
+            ])
+            ->addChild('option', 'code', [
+                'name' => 'fields'
+            ])
+            ->addChild('option', 'app', [
+                'name' => 'groups'
+            ])
+        ;
+
+        $classXml
             ->add('constraint', true, [
                 'name' => "{{VALIDATOR_CLASS_NAME}}"
             ])
             ->addChild('option', 'app', [
                 'name' => 'groups'
-            ]);
+            ])
+        ;
 
         $this->manager->persist(new Code($xml->__toString(), $fileLocate));
     }

@@ -20,7 +20,7 @@ class GenerateValidatorConfigCommandTest extends AbstractGenerateCommandWebTestC
             'full_class_name' => 'App\\App\\Model\\Dummy'
         ]);
 
-        $this->assertFileHasCreated(realpath(__DIR__ . '/../../') . '/config/validators/Dummy.xml', $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../') . '/config/validator/Dummy.xml', $output);
     }
 
     protected function getCommand(): GenerateValidatorConfigCommand
