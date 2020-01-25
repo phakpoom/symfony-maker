@@ -35,11 +35,14 @@
         <prototype namespace="Bonn\Maker\Generator\" resource="../../../../Generator/*" autowire="true">
             <tag name="bonn_maker.generator"/>
         </prototype>
-        <!---->
 
         <!--COMMANDS-->
         <prototype namespace="Bonn\Maker\Bridge\MakerBundle\Command\" resource="../../Command/*" autowire="true">
             <tag name="console.command"/>
         </prototype>
+
+
+        <!--SERVICE-->
+        <prototype namespace="Bonn\Maker\Bridge\MakerBundle\Service\" resource="../../Service/*" autowire="true" />
     </services>
 </container>

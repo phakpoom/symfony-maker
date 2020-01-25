@@ -13,9 +13,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BonnMakerBundle extends Bundle
 {
-    public function __construct()
+    public function getContainerExtension()
     {
-        $this->extension = new Extension();
+        return new Extension();
     }
 
     public function build(ContainerBuilder $container): void
