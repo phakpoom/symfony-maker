@@ -11,23 +11,23 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateAllFileSrouceFromSourceCommandTest extends AbstractGenerateCommandWebTestCase
 {
-//    public function testRouteBasic()
-//    {
-//        $command = $this->getCommand();
-//
-//        $this->setProp(self::$container->get('bonn_maker.manager.code_manager'), 'writer', $writer = new InMemoryWriter());
-//        $commandTester = new CommandTester($command);
-//
-//        $commandTester->setInputs([])->execute([
-//            'file' => __DIR__ . '/../fixtures/routing.yaml'
-//        ]);
-//
-//        $this->assertCount(4, $writer->files);
-//        $this->assertArrayHasKey(self::$container->getParameter('kernel.project_dir') . '/templates/Test/test.html.twig', $writer->files);
-//        $this->assertArrayHasKey(self::$container->getParameter('kernel.project_dir') . '/templates/_Admin/Crud/update.html.twig', $writer->files);
-//        $this->assertArrayHasKey(realpath(__DIR__ . '/../../../../../src') . '/Bridge/MakerBundle/Resources/views/AdminUser/_form.html.twig', $writer->files);
-//        $this->assertArrayHasKey(realpath(__DIR__ . '/../../../../../src') . '/Bridge/MakerBundle/Resources/views/_breadcrumb.html.twig', $writer->files);
-//    }
+    public function testRouteBasic()
+    {
+        $command = $this->getCommand();
+
+        $this->setProp(self::$container->get('bonn_maker.manager.code_manager'), 'writer', $writer = new InMemoryWriter());
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([])->execute([
+            'file' => __DIR__ . '/../fixtures/routing.yaml'
+        ]);
+
+        $this->assertCount(4, $writer->files);
+        $this->assertArrayHasKey(self::$container->getParameter('kernel.project_dir') . '/templates/Test/test.html.twig', $writer->files);
+        $this->assertArrayHasKey(self::$container->getParameter('kernel.project_dir') . '/templates/_Admin/Crud/update.html.twig', $writer->files);
+        $this->assertArrayHasKey(realpath(__DIR__ . '/../../../../../src') . '/Bridge/MakerBundle/Resources/views/AdminUser/_form.html.twig', $writer->files);
+        $this->assertArrayHasKey(realpath(__DIR__ . '/../../../../../src') . '/Bridge/MakerBundle/Resources/views/_breadcrumb.html.twig', $writer->files);
+    }
 
     public function testGridBasic()
     {
