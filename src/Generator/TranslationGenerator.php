@@ -63,7 +63,7 @@ class TranslationGenerator extends AbstractGenerator implements GeneratorInterfa
                 $arr[$resourcePrefix][$resourceName][$k] = [];
             }
 
-            $this->manager->persist(new Code(Yaml::dump($arr, 4), $file->getRealPath()));
+            $this->manager->persist(new Code(Yaml::dump($arr, 100), $file->getRealPath()));
         }
     }
 }
