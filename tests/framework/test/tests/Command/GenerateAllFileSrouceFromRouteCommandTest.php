@@ -67,6 +67,40 @@ YAML
 );
     }
 
+    public function testPhpBasic()
+    {
+        $command = $this->getCommand();
+
+        $this->setProp(self::$container->get('bonn_maker.manager.code_manager'), 'writer', $writer = new InMemoryWriter());
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([])->execute([
+            'file' => __DIR__ . '/../fixtures/SimpleFormType.php'
+        ]);
+
+        $this->assertCount(1, $writer->files);
+        $this->assertArrayHasKey($transFile = self::$container->getParameter('kernel.project_dir') . '/translations/messages.th.yaml', $writer->files);
+
+        $this->assertEquals(<<<YAML
+app:
+    bonn:
+        ui:
+            name: บอน
+bonn:
+    ui:
+        form:
+            name: ''
+            min: ''
+            max: ''
+sylius:
+    form:
+        color: ''
+
+YAML
+            , $writer->files[$transFile]
+        );
+    }
+
     protected function getCommand(): GenerateAllResourceFileFromSourceCommand
     {
         self::bootKernel();

@@ -58,6 +58,7 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
         $projectDir = $this->container->getParameter('kernel.project_dir');
 
         $file = realpath($input->getArgument('file'));
+        // routing or grid
         if ($this->endsWith($file, '.yaml') || $this->endsWith($file, '.yml')) {
             $data = Yaml::parseFile($file);
             array_walk_recursive($data, function (&$v, $k) {
@@ -69,6 +70,18 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
                     $v = Yaml::parse($v) ?: '';
                 }
             });
+        }
+
+        if ($this->endsWith($file, '.php')) {
+            $fileContent = file_get_contents($file);
+
+            // FormType
+            preg_match_all('/[\'|\"]label[\'|\"]\s+\=\>\s+[\'|\"](?<label>.+)[\'|\"]/', $fileContent, $matches);
+
+            $data = [];
+            foreach ($matches['label'] ?? [] as $v) {
+                $data[]['label'] = $v;
+            }
         }
 
         if (!isset($data)) {
