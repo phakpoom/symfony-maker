@@ -15,7 +15,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessorBuilder;
 use Symfony\Component\Yaml\Yaml;
 
 class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
@@ -37,8 +36,7 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
         TwigTemplateResolverInterface $twigTemplateResolver,
         TranslationResolverInterface $translationResolver,
         ContainerInterface $container
-    )
-    {
+    ) {
         $this->generator = $generator;
         $this->container = $container;
         $this->twigTemplateResolver = $twigTemplateResolver;
@@ -96,7 +94,7 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
                 $bundleName = $explodeFilePath[0] . 'Bundle';
 
                 $explodeFilePath[0] = $this->container->get('kernel')->locateResource($bundleName . '/Resources/views');
-                $fileLocated = implode("/", $explodeFilePath);
+                $fileLocated = implode('/', $explodeFilePath);
             }
 
             if (file_exists($fileLocated)) {
@@ -104,8 +102,8 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
             }
 
             $this->generator->generate([
-                'content' => "",
-                'path' => $fileLocated
+                'content' => '',
+                'path' => $fileLocated,
             ]);
         }
     }
@@ -157,6 +155,6 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
             return true;
         }
 
-        return (substr($haystack, -$length) === $needle);
+        return substr($haystack, -$length) === $needle;
     }
 }

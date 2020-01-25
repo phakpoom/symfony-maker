@@ -7,6 +7,7 @@ namespace Bonn\Maker\Writer;
 class InMemoryWriter implements WriterInterface
 {
     public $files = [];
+
     /**
      * {@inheritdoc}
      */

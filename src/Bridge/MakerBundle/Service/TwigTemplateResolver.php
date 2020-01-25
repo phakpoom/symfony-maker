@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Bonn\Maker\Bridge\MakerBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class TwigTemplateResolver implements TwigTemplateResolverInterface
 {
     public function resolve(array $data): array
@@ -17,7 +15,7 @@ class TwigTemplateResolver implements TwigTemplateResolverInterface
             $results = array_merge($results, $this->resolveRecursive($v));
         });
 
-        $onlyTwigs =  array_filter($results, function ($template) {
+        $onlyTwigs = array_filter($results, function ($template) {
             return false !== strpos((string) $template, '.html.twig');
         });
 

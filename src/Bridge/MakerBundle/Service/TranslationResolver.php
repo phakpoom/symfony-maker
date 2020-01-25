@@ -30,7 +30,7 @@ class TranslationResolver implements TranslationResolverInterface
         if (is_array($data)) {
             $results = array_merge($results, $this->resolveRecursive($data));
         } else {
-            $results = (array)$data;
+            $results = (array) $data;
         }
 
         return $results;
