@@ -130,7 +130,7 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         // class exists
         if (class_exists($fullClassName)) {
             $this->manager->persist(new Code($this->append($fullClassName, $modelClass, $classNamespace), $options['model_dir'] . "/$onlyClassName.php"));
-            $this->manager->persist(new Code($this->append($fullInterfaceClassName, $interfaceClass, $classNamespace), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
+            $this->manager->persist(new Code($this->append($fullInterfaceClassName, $interfaceClass, $interfaceNamespace), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
 
             return;
         }
@@ -143,13 +143,11 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
     {
         $isInterface = $prototype->getType() === ClassType::TYPE_INTERFACE;
         $constructBody = '';
-        $oldConstructBody = '';
 
         if (!$isInterface) {
             $prototype->removeProperty('id');
             $prototype->removeMethod('getId');
             $constructBody = $prototype->getMethod('__construct')->getBody();
-            $oldConstructBody = $this->getBodyMethod($fullClassName, '__construct');
             $prototype->getMethod('__construct')->setBody(null);
         }
 
@@ -195,7 +193,7 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         // add use
         $oldUses = [];
         $start = 0;
-        $lastUseFoundline = 0;
+        $lastUseFoundLine = 0;
         while ($start <= count($classLines)) {
             $found = $this->getLine($classLines, 'use', $start);
 
@@ -203,17 +201,26 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
                 break;
             }
 
-            $oldUses[] = trim($classLines[$found]);
+            // resolve only class name
+            $use = str_replace('use ', '', $classLines[$found]);
+            $use = str_replace(';', '', $use);
+            $oldUses[] = trim($use);
+
             $start = $found + 1;
 
-            $lastUseFoundline = $found;
+            $lastUseFoundLine = $found;
         }
 
-        $newUses = array_map(function ($v) {
-            return 'use ' . $v . ';';
-        }, $classNamespace->getUses());
+        // ignore itself class
+        $uses = array_filter($classNamespace->getUses(), function ($class) use ($reflectionClass, $oldUses) {
+            return $class !== $reflectionClass->getName() && !in_array($class, $oldUses);
+        });
 
-        $classLines[$lastUseFoundline] .= "\n" . implode("\n", array_unique(array_merge($oldUses, $newUses)));
+        // render use
+        $classLines[$lastUseFoundLine] .= implode("\n", array_map(function ($v) {
+            return 'use ' . $v . ';';
+        }, $uses));
+        $classLines[$lastUseFoundLine] .= "\n";
 
         $classString = implode('', $classLines);
 
@@ -223,11 +230,15 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
 
             // add props
             $propString = implode("\n", array_slice($prototypeLines, $startLineProp, $endLineProp - $startLineProp));
-            $classString = str_replace('{{END_PROP}}', $propString, $classString);
-        }
 
-        $startLineMethod = $this->getLine($prototypeLines, '    public function __construct') + 2;
-        $endLineMethod = count($prototypeLines) - 2;
+            $classString = str_replace('{{END_PROP}}', $propString, $classString);
+
+            $startLineMethod = $this->getLine($prototypeLines, '    public function __construct') + 2;
+            $endLineMethod = count($prototypeLines) - 2;
+        } else {
+            $startLineMethod = $this->getLine($prototypeLines, '{') + 1;
+            $endLineMethod = count($prototypeLines) - 2;
+        }
 
         // add method
         $methodString = implode("\n", array_slice($prototypeLines, $startLineMethod, $endLineMethod - $startLineMethod));

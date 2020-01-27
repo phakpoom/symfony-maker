@@ -43,6 +43,13 @@ abstract class AbstractGenerateCommandWebTestCase extends WebTestCase
         return $this;
     }
 
+    protected function assertFileHasDumped(string $path, string $output)
+    {
+        $this->assertContains('>>>>' . $path . '<<<<', $output, "$output hasn't dumped");
+
+        return $this;
+    }
+
     protected function assertFileHasNotCreated(string $path, string $output)
     {
         $this->assertNotContains('======' . $path . '======' . $path, $output, "$output has created");

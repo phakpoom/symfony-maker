@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Generator\Model;
 
+use App\App\Model\DummyInterface;
 use Bonn\Maker\Generator\ModelGenerator;
 use Bonn\Maker\ModelPropType\CollectionType;
 use Bonn\Maker\ModelPropType\IntegerType;
@@ -35,8 +36,8 @@ class ModelGeneratorTest extends AbstractMakerTestCase
 
         $this
             ->assertCountFilesWillBeCreated(2)
-            ->assertFileWillBeCreated(__DIR__ . '/CaseOne/Dummy.php', file_get_contents(__DIR__ . '/CaseOne/Customer.php'))
-            ->assertFileWillBeCreated(__DIR__ . '/CaseOne/DummyInterface.php', file_get_contents(__DIR__ . '/CaseOne/CustomerInterface.php'))
+            ->assertFileWillBeCreated(__DIR__ . '/CaseOne/Dummy.php', file_get_contents(__DIR__ . '/CaseOne/DummyNo.php'))
+            ->assertFileWillBeCreated(__DIR__ . '/CaseOne/DummyInterface.php', file_get_contents(__DIR__ . '/CaseOne/DummyNoInterface.php'))
         ;
     }
 
@@ -53,8 +54,26 @@ class ModelGeneratorTest extends AbstractMakerTestCase
 
         $this
             ->assertCountFilesWillBeCreated(2)
-            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/Dummy.php', file_get_contents(__DIR__ . '/CaseExists/ExpectedDummy.php'))
-            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/DummyInterface.php', file_get_contents(__DIR__ . '/CaseExists/ExpectedDummyInterface.php'))
+            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/Dummy.php', file_get_contents(__DIR__ . '/CaseExists/Expect/Dummy.php'))
+            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/DummyInterface.php', file_get_contents(__DIR__ . '/CaseExists/Expect/DummyInterface.php'))
+        ;
+    }
+
+    public function testGenerateExistsClass1()
+    {
+        $this->generator->generate([
+            'class' => 'Test\\Generator\\Model\\CaseExists\\Customer',
+            'props' => [
+                new StringType('mainName'),
+                new CollectionType('names', DummyInterface::class),
+            ],
+            'model_dir' => __DIR__ . '/CaseExists',
+        ]);
+
+        $this
+            ->assertCountFilesWillBeCreated(2)
+            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/Customer.php', file_get_contents(__DIR__ . '/CaseExists/Expect/Customer.php'))
+            ->assertFileWillBeCreated(__DIR__ . '/CaseExists/CustomerInterface.php', file_get_contents(__DIR__ . '/CaseExists/Expect/CustomerInterface.php'))
         ;
     }
 }

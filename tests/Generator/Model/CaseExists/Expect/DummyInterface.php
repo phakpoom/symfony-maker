@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Generator\Model\CaseExists;
 
-use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableInterface;
+use Doctrine\Common\Collections\Collection;
 
 interface DummyInterface extends ResourceInterface, TimestampableInterface
 {
