@@ -63,6 +63,26 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/mapping/Test.orm.xml', $output);
     }
 
+    public function testWithClassExists()
+    {
+        // Class, prop name, type, defaultValue, end, end
+        $inputs = ['Dummy', 'name', '0', null, '', 'Y'];
+        $command = $this->getCommand();
+
+        // [model_dir_name] / [doctrine_mapping_dir_name]
+        $command->setConfigs(array_replace($command->getConfigs(), [
+            'doctrine_mapping_dir_name' => 'mapping',
+            'model_dir_name' => 'Model',
+            'bundle_root_dir' => realpath(__DIR__ . '/../../src/'),
+        ]));
+
+        $output = $this->runWithInput($command, $inputs);
+
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Dummy.php', $output);
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/DummyInterface.php', $output);
+        $this->assertFileHasDumped(realpath(__DIR__ . '/../../src/App/') . '/mapping/Dummy.orm.xml', $output);
+    }
+
     public function testWithInvalidOp()
     {
         $this->expectException(InvalidArgumentException::class);

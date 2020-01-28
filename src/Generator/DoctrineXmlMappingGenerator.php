@@ -88,7 +88,13 @@ final class DoctrineXmlMappingGenerator extends AbstractGenerator implements Doc
 
         $dom = new DOMIndent($root->asXML());
 
-        $this->manager->persist(new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml'));
+        $code = new Code($dom->saveXML(), $options['doctrine_mapping_dir'] . '/' . $onlyClassName . '.orm.xml');
+
+        if (class_exists($fullClassName)) {
+            $code->setExtra('dump_only', true);
+        }
+
+        $this->manager->persist($code);
     }
 
     /**

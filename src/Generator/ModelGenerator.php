@@ -14,6 +14,7 @@ use Bonn\Maker\ModelPropType\StringType;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Helpers;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
@@ -57,13 +58,15 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         $props = $options['props'];
         $namespace = NameResolver::resolveNamespace($fullClassName);
 
-        $classNamespace = new PhpNamespace($namespace);
-        $interfaceNamespace = new PhpNamespace($namespace);
-
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
         $onlyInterfaceClassName = $onlyClassName . 'Interface';
 
+        // generate new
+        $classNamespace = new PhpNamespace($namespace);
+        $interfaceNamespace = new PhpNamespace($namespace);
+
         $modelClass = $classNamespace->addClass($onlyClassName);
+        $modelClass->addImplement($fullInterfaceClassName);
         $interfaceClass = $interfaceNamespace->addInterface($onlyInterfaceClassName);
 
         $constructor = $this->createConstructor($modelClass);
@@ -89,12 +92,6 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
             $codePropType->addSetter($modelClass);
             $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
             $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\CodeAwareInterface');
-        }
-        if ($options['with_toggle']) {
-            $classNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
-            $modelClass->addTrait('Sylius\\Component\\Resource\\Model\\ToggleableTrait');
-            $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
-            $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\ToggleableInterface');
         }
 
         if (!empty($props)) {
@@ -130,10 +127,153 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
             }
         }
 
-        $modelClass->addImplement($fullInterfaceClassName);
+        // class exists
+        if (class_exists($fullClassName)) {
+            $this->manager->persist(new Code($this->append($fullClassName, $modelClass, $classNamespace), $options['model_dir'] . "/$onlyClassName.php"));
+            $this->manager->persist(new Code($this->append($fullInterfaceClassName, $interfaceClass, $interfaceNamespace), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
+
+            return;
+        }
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $options['model_dir'] . "/$onlyClassName.php"));
         $this->manager->persist(new Code(PhpDoctypeCode::render($interfaceNamespace->__toString()), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
+    }
+
+    protected function append(string $fullClassName, ClassType $prototype, PhpNamespace $classNamespace): string
+    {
+        $isInterface = $prototype->getType() === ClassType::TYPE_INTERFACE;
+        $constructBody = '';
+
+        if (!$isInterface) {
+            $prototype->removeProperty('id');
+            $prototype->removeMethod('getId');
+            $constructBody = $prototype->getMethod('__construct')->getBody();
+            $prototype->getMethod('__construct')->setBody(null);
+        }
+
+        $reflectionClass = new \ReflectionClass($fullClassName);
+
+        $prototypeString = PhpDoctypeCode::render($prototype->__toString());
+
+        $classLines = file($reflectionClass->getFileName());
+        $prototypeLines = explode("\n", $prototypeString);
+
+        $foundedLastMethod = null;
+        $l = 1;
+        while (!$foundedLastMethod) {
+            $currentLine = $reflectionClass->getEndLine() - $l;
+            if (!isset($classLines[$currentLine])) {
+                throw new \LogicException("Class has no method.");
+            }
+
+            if ('}' === trim($classLines[$currentLine])) {
+                $foundedLastMethod = $reflectionClass->getEndLine() - $l;
+            }
+
+            $l++;
+        }
+
+        $classLines[$foundedLastMethod - 1] .= "\n{{END_METHOD}}\n";
+
+        if (!$isInterface) {
+            $construct = $reflectionClass->getMethod('__construct');
+            $line = $construct->getStartLine() - 1;
+            if ($construct->getDocComment()) {
+                $line = $line - count(explode("\n", $construct->getDocComment())) - 2;
+            }
+            $classLines[$line] .= "\n{{END_PROP}}\n";
+
+            $constructBody = array_map(function ($v) {
+                return Helpers::tabsToSpaces("\t\t" . $v);
+            }, explode("\n", trim($constructBody)));
+            // add __construct
+            $classLines[$construct->getEndLine() - 2] .= implode("\n", $constructBody) . "\n";
+        }
+
+        // add use
+        $oldUses = [];
+        $start = 0;
+        $lastUseFoundLine = 0;
+        while ($start <= count($classLines)) {
+            $found = $this->getLine($classLines, 'use', $start);
+
+            if (-1 === $found) {
+                break;
+            }
+
+            // resolve only class name
+            $use = str_replace('use ', '', $classLines[$found]);
+            $use = str_replace(';', '', $use);
+            $oldUses[] = trim($use);
+
+            $start = $found + 1;
+
+            $lastUseFoundLine = $found;
+        }
+
+        // ignore itself class
+        $uses = array_filter($classNamespace->getUses(), function ($class) use ($reflectionClass, $oldUses) {
+            return $class !== $reflectionClass->getName() && !in_array($class, $oldUses);
+        });
+
+        // render use
+        $classLines[$lastUseFoundLine] .= implode("\n", array_map(function ($v) {
+            return 'use ' . $v . ';';
+        }, $uses));
+        $classLines[$lastUseFoundLine] .= "\n";
+
+        $classString = implode('', $classLines);
+
+        if (!$isInterface) {
+            $startLineProp = $this->getLine($prototypeLines, 'class') + 2;
+            $endLineProp = $this->getLine($prototypeLines, '    public function __construct') - 4;
+
+            // add props
+            $propString = implode("\n", array_slice($prototypeLines, $startLineProp, $endLineProp - $startLineProp));
+
+            $classString = str_replace('{{END_PROP}}', $propString, $classString);
+
+            $startLineMethod = $this->getLine($prototypeLines, '    public function __construct') + 2;
+            $endLineMethod = count($prototypeLines) - 2;
+        } else {
+            $startLineMethod = $this->getLine($prototypeLines, '{') + 1;
+            $endLineMethod = count($prototypeLines) - 2;
+        }
+
+        // add method
+        $methodString = implode("\n", array_slice($prototypeLines, $startLineMethod, $endLineMethod - $startLineMethod));
+        $classString = str_replace('{{END_METHOD}}', $methodString, $classString);
+
+        return $classString;
+    }
+
+    protected function getLine(array $lines, string $str, int $start = 0 ): int
+    {
+        foreach ($lines as $lineNumber => $line) {
+            if ($lineNumber < $start) {
+                continue;
+            }
+
+            if (strpos($line, $str) === 0) {
+                return $lineNumber;
+            }
+        }
+
+        return -1;
+    }
+    protected function getBodyMethod(string $fullClassName, string $method): string
+    {
+        $reflectionClass = new \ReflectionClass($fullClassName);
+        $classLines = file($reflectionClass->getFileName());
+
+        $reflectionMethod = $reflectionClass->getMethod($method);
+
+        $body = '';
+        for ($i = $reflectionMethod->getStartLine() + 1; $i < $reflectionMethod->getEndLine() - 1; $i++) {
+            $body .= $classLines[$i];
+        }
+
+        return $body;
     }
 
     private function createConstructor(ClassType $modelClass)
