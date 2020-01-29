@@ -216,11 +216,13 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
             return $class !== $reflectionClass->getName() && !in_array($class, $oldUses);
         });
 
-        // render use
-        $classLines[$lastUseFoundLine] .= implode("\n", array_map(function ($v) {
-            return 'use ' . $v . ';';
-        }, $uses));
-        $classLines[$lastUseFoundLine] .= "\n";
+        if (!empty($uses)) {
+            // render use
+            $classLines[$lastUseFoundLine] .= implode("\n", array_map(function ($v) {
+                return 'use ' . $v . ';';
+            }, $uses));
+            $classLines[$lastUseFoundLine] .= "\n";
+        }
 
         $classString = implode('', $classLines);
 
