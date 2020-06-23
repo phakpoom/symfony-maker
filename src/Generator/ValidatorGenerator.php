@@ -63,7 +63,7 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
         $resourceName = NameResolver::camelToUnderScore($options['name']);
         $serviceContext = $xml->addService(
             sprintf('%s.validator.%s_validator', $resourcePrefix, $resourceName),
-            $classNamespace->getName() . '\\' . $classNamespaceConstraintValidator->getClasses()['DummyValidator']->getName(),
+            $classNamespace->getName() . '\\' . current($classNamespaceConstraintValidator->getClasses())->getName(),
             ['autowire' => 'true', 'public' => 'true']
         );
 
