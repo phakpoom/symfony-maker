@@ -1,18 +1,22 @@
 language: php
 
 php:
-- 7.2
+  - 7.4
 
 cache:
-    directories:
+  directories:
     - $HOME/.composer/cache
 
 before_script:
-- composer self-update
-- composer install --prefer-source --no-interaction --dev
-- cd $TRAVIS_BUILD_DIR && cd tests/framework/test && composer install --prefer-source --no-interaction --dev
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
+  - cd $TRAVIS_BUILD_DIR && cd tests/framework/test && composer install --prefer-source --no-interaction --dev
+  - cd $TRAVIS_BUILD_DIR && cd tests/framework/test5 && composer install --prefer-source --no-interaction --dev
 
-script: cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit && cd tests/framework/test && ./bin/phpunit
+script:
+  - "cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit"
+  - "cd $TRAVIS_BUILD_DIR && cd tests/framework/test && ./bin/phpunit"
+  - "cd $TRAVIS_BUILD_DIR && cd tests/framework/test5 && ./bin/phpunit"
 
 notifications:
-    email: false
+  email: false

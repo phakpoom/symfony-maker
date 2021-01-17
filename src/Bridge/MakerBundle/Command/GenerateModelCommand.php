@@ -91,7 +91,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         }
 
         if ([] === $returnFromOp = $this->handleOp($op, $classNameInput, $input, $output, $helper)) {
-            return;
+            return 0;
         }
 
         [$modelDir, $info] = $returnFromOp;
@@ -126,6 +126,8 @@ class GenerateModelCommand extends AbstractGenerateCommand
 
         // reset
         $this->infos = [];
+
+        return 0;
     }
 
     protected function handleOp(string $op, string $classNameInput, InputInterface $input, OutputInterface $output, HelperInterface $helper): array
