@@ -40,5 +40,7 @@ class GenerateValidatorConfigCommand extends AbstractGenerateCommand
         $this->writeCreatedFiles($this->manager, new SymfonyStyle($input, $output));
 
         $this->manager->flush();
+
+        return 0;
     }
 }
