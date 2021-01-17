@@ -14,11 +14,9 @@ before_script:
   - cd $TRAVIS_BUILD_DIR && cd tests/framework/test5 && composer install --prefer-source --no-interaction --dev
 
 script:
-  - "cd $TRAVIS_BUILD_DIR
-  && ./vendor/bin/phpunit &&
-  && cd tests/framework/test && ./bin/phpunit"
-  - "cd $TRAVIS_BUILD_DIR
-  && cd tests/framework/test5 && ./bin/phpunit"
+  - "cd $TRAVIS_BUILD_DIR && ./vendor/bin/phpunit"
+  - "cd $TRAVIS_BUILD_DIR && cd tests/framework/test && ./bin/phpunit"
+  - "cd $TRAVIS_BUILD_DIR && cd tests/framework/test5 && ./bin/phpunit"
 
 notifications:
   email: false
