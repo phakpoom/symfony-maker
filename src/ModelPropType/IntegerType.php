@@ -42,7 +42,9 @@ class IntegerType implements PropTypeInterface
             ->addProperty($this->name)
             ->setVisibility('protected');
 
-        $prop->setValue($this->defaultValue);
+        if (null !== $this->defaultValue) {
+            $prop->setValue($this->defaultValue);
+        }
 
         if (!$this->nullable) {
             $prop->setComment('@var int');
