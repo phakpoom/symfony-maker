@@ -15,6 +15,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -67,6 +68,10 @@ class GenerateModelCommand extends AbstractGenerateCommand
             ->setName('bonn:model:maker')
             ->setDescription('Generate model')
             ->addArgument('op', InputArgument::OPTIONAL, 'mode can be ' . implode('|', self::SUPPORT_OPS), 'make')
+            ->addOption('time', 'time', InputOption::VALUE_NONE)
+            ->addOption('toggle', 'toggle', InputOption::VALUE_NONE)
+            ->addOption('code', 'code', InputOption::VALUE_NONE)
+            ->addOption('meta', 'meta', InputOption::VALUE_NONE)
         ;
     }
 
@@ -103,11 +108,19 @@ class GenerateModelCommand extends AbstractGenerateCommand
             'class' => $className,
             'props' => $this->converter->convertMultiple($info),
             'model_dir' => $modelDir . '/' . $this->configs['model_dir_name'],
+            'with_timestamp_able' => $input->getOption('time'),
+            'with_toggle' => $input->getOption('toggle'),
+            'with_code' => $input->getOption('code'),
+            'with_metadata' => $input->getOption('meta'),
         ]);
         $this->doctrineGenerator->generate([
             'class' => $className,
             'props' => $this->converter->convertMultiple($info),
             'doctrine_mapping_dir' => $modelDir . '/' . $this->configs['doctrine_mapping_dir_name'],
+            'with_timestamp_able' => $input->getOption('time'),
+            'with_toggle' => $input->getOption('toggle'),
+            'with_code' => $input->getOption('code'),
+            'with_metadata' => $input->getOption('meta'),
         ]);
 
         if ('dump' === $op) {

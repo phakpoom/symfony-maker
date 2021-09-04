@@ -65,7 +65,7 @@ class FactoryGenerator extends AbstractSyliusGenerator
 
         $factoryClass->addMethod('createWithSomething')
             ->setVisibility('public')->setBody(
-                '$object = new $this->className(); ' . "\n\n" .
+                '$object = $this->createNew(); ' . "\n\n" .
                 '// do stuff' . "\n\n" .
                 'return $object;'
             )

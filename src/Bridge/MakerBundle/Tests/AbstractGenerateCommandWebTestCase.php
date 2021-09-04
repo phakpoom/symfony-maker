@@ -22,7 +22,6 @@ abstract class AbstractGenerateCommandWebTestCase extends WebTestCase
         $commandTester = new CommandTester($command = $application->find($commandClass->getName()));
 
         $commandTester->setInputs($inputs);
-
         if ($commandClass->getConfigs()['writer_dev']) {
             \ob_start();
             $commandTester->execute(array_replace($args, ['command' => $command->getName()]));

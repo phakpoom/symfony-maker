@@ -32,6 +32,7 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
                 'with_timestamp_able' => false,
                 'with_code' => false,
                 'with_toggle' => false,
+                'with_metadata' => false,
             ])
             ->setRequired('class')
             ->setRequired('props')
@@ -84,6 +85,12 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
             $modelClass->addTrait('Sylius\\Component\\Resource\\Model\\TimestampableTrait');
             $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Model\\TimestampableInterface');
             $interfaceClass->addExtend('Sylius\\Component\\Resource\\Model\\TimestampableInterface');
+        }
+        if ($options['with_metadata']) {
+            $classNamespace->addUse('Bonn\\Bundle\\CoreBundle\\Model\\Traits\MetadataAwareTrait');
+            $modelClass->addTrait('Bonn\\Bundle\\CoreBundle\\Model\\Traits\MetadataAwareTrait');
+            $interfaceNamespace->addUse('Bonn\\Bundle\\CoreBundle\\Model\\Traits\MetadataAwareInterface');
+            $interfaceClass->addExtend('Bonn\\Bundle\\CoreBundle\\Model\\Traits\MetadataAwareInterface');
         }
         if ($options['with_code']) {
             $codePropType = new StringType('code');

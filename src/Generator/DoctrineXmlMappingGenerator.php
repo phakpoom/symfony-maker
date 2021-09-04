@@ -24,6 +24,7 @@ final class DoctrineXmlMappingGenerator extends AbstractGenerator implements Doc
                 'with_timestamp_able' => false,
                 'with_code' => false,
                 'with_toggle' => false,
+                'with_metadata' => false,
             ])
             ->setRequired('class')
             ->setRequired('props')
@@ -79,6 +80,11 @@ final class DoctrineXmlMappingGenerator extends AbstractGenerator implements Doc
             $field = $mappedSuper->addChild('field');
             $field->addAttribute('name', 'enabled');
             $field->addAttribute('type', 'boolean');
+        }
+        if ($options['with_metadata']) {
+            $field = $mappedSuper->addChild('field');
+            $field->addAttribute('name', 'metadata');
+            $field->addAttribute('type', 'array');
         }
 
         /** @var PropTypeInterface $prop */

@@ -107,6 +107,24 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         $this->assertFileHasNotCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Dummy.php', $output);
     }
 
+    public function testRunWithOption()
+    {
+        $command = $this->getCommand();
+
+        $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', 'Y'], [
+            '--time' => true,
+            '--toggle' => true,
+            '--meta' => true,
+            '--code' => true,
+        ]);
+
+        $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Test.php', $output);
+        $this->assertStringContainsString('TimestampableInterface', $output);
+        $this->assertStringContainsString('CodeAwareInterface', $output);
+        $this->assertStringContainsString('MetadataAwareTrait', $output);
+        $this->assertStringContainsString('MetadataAwareInterface', $output);
+    }
+
     public function testRollbackOp()
     {
         $command = $this->getCommand();
@@ -165,6 +183,7 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
     protected function getCommand(): GenerateModelCommand
     {
         self::bootKernel();
+
         return self::$container->get(GenerateModelCommand::class);
     }
 }

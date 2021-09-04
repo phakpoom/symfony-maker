@@ -31,7 +31,7 @@ class FactoryGeneratorTestFactory implements FactoryGeneratorTestFactoryInterfac
      */
     public function createWithSomething(): FactoryGeneratorTestInterface
     {
-        $object = new $this->className();
+        $object = $this->createNew();
 
         // do stuff
 
