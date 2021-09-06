@@ -1,0 +1,36 @@
+bonn_ui:
+    state_machine:
+        graphs:
+            state_machine_generator_test:
+                states:
+                    new:
+                        color: secondary
+                        translation:
+                            key: app.state.new
+                transitions:
+                    create:
+                        color: secondary
+                        translation:
+                            key: app.transition.create
+winzou_state_machine:
+    state_machine_generator_test:
+        class: Test\Generator\Sylius\StateMachine\StateMachineGeneratorTest
+        property_path: state
+        graph: state_machine_generator_test
+        states:
+            - new
+        transitions:
+            create:
+                from:
+                    - new
+                to: created
+        callbacks:
+            after:
+                create:
+                    'on':
+                        - create
+                    do:
+                        - '@Test\\Generator\\Sylius\\StateMachine\\StateMachineGeneratorTestCallback'
+                        - onCreate
+                    args:
+                        - object

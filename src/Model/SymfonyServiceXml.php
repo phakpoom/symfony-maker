@@ -82,6 +82,33 @@ class SymfonyServiceXml
             ] + $attrs);
     }
 
+    public function addPrototype(string $namespace, string $resource, array $attrs = []): void
+    {
+        if ($this->hasPrototype($namespace, $resource)) {
+            return;
+        }
+
+        $this->xml->query('//container/services', '//container:services')
+            ->addChild('prototype', true, [
+                'namespace' => $namespace,
+                'resource' => $resource,
+            ] + $attrs);
+    }
+
+    public function hasPrototype(string $namespace, string $resource): bool
+    {
+        $already = false;
+        $this->xml->query('//container:services/container:prototype')->each(function ($index, \DOMElement $dom) use ($namespace, $resource, &$already) {
+            if (true === $already) {
+                return;
+            }
+
+            $already = $namespace === $dom->getAttribute('namespace') && $resource === $dom->getAttribute('resource');
+        });
+
+        return $already;
+    }
+
     public function getXml()
     {
         return $this->xml;

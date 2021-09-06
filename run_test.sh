@@ -10,4 +10,5 @@ fi
 
 cd $RUNNING_DIR && ./vendor/bin/phpunit
 cd tests/framework/test && ./bin/phpunit
+cd $RUNNING_DIR && cd tests/framework/test5 && ./bin/phpunit
 cd $RUNNING_DIR
