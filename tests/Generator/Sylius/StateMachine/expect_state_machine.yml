@@ -30,7 +30,7 @@ winzou_state_machine:
                     'on':
                         - create
                     do:
-                        - '@Test\\Generator\\Sylius\\StateMachine\\StateMachineGeneratorTestCallback'
+                        - '@Test\Generator\Sylius\StateMachine\StateMachineGeneratorTestCallback'
                         - onCreate
                     args:
                         - object

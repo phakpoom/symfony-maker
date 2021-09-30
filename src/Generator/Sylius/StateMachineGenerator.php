@@ -109,7 +109,7 @@ STRING
                             'create' => [
                                 'on' => ['create'],
                                 'do' => [
-                                    '@' . \str_replace('\\', '\\\\', $options['namespace'] . '\\' . $callbackClass->getName()), 'onCreate'
+                                    '@' . \str_replace('\\', '\\', $options['namespace'] . '\\' . $callbackClass->getName()), 'onCreate'
                                 ],
                                 'args' => ['object']
                             ]
