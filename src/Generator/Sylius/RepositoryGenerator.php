@@ -7,7 +7,6 @@ namespace Bonn\Maker\Generator\Sylius;
 use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,7 +52,7 @@ class RepositoryGenerator extends AbstractSyliusGenerator
         $repositoryClass = $classNamespace->addClass($className . 'Repository');
 
         $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
-        $classNamespace->addUse('Doctrine\\DBAL\\Query\\QueryBuilder');
+        $classNamespace->addUse('Doctrine\\ORM\\QueryBuilder');
         $repositoryClass->addExtend('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
         $repositoryInterfaceClass = $interfaceNamespace->addInterface($className . 'RepositoryInterface');
         $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Repository\\RepositoryInterface');
@@ -63,7 +62,7 @@ class RepositoryGenerator extends AbstractSyliusGenerator
 
         // add method
         $method = $repositoryClass->addMethod('createAdminListQueryBuilder');
-        $method->setReturnType('Doctrine\\DBAL\\Query\\QueryBuilder');
+        $method->setReturnType('Doctrine\\ORM\\QueryBuilder');
         $method->setBody(<<<STRING
     \$queryBuilder = \$this->createQueryBuilder('o');
         
