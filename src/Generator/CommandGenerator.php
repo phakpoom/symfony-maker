@@ -67,9 +67,11 @@ PHP
         );
 
         $method = $class->addMethod('execute')
-            ->setVisibility('protected');
+            ->setVisibility('protected')->setReturnType('int');
         $method->addParameter('input')->setTypeHint(InputInterface::class);
         $method->addParameter('output')->setTypeHint(OutputInterface::class);
+
+        $method->addBody("// do stuff\nreturn 0;");
 
         $class->addExtend(Command::class);
 

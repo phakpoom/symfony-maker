@@ -22,7 +22,9 @@ class DummyWhatIsThisCommand extends Command
         // addArgument, addOption
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // do stuff
+        return 0;
     }
 }
