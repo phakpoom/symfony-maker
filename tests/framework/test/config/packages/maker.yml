@@ -1,8 +1,0 @@
-bonn_maker:
-    namespace_prefix: "App"
-    bundle_root_dir: "%kernel.project_dir%/src/"
-    #model_dir_name: ~
-    #doctrine_mapping_dir: ~
-    cache_dir: ~
-    cache_max_keep_versions: ~
-    writer_dev: true

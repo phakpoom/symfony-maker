@@ -14,14 +14,14 @@
     }
   },
   "require": {
-    "php": ">=7.2",
-    "nette/php-generator": "^3.1",
-    "phpdocumentor/reflection-docblock": "^4.3",
+    "php": ">=8.0",
+    "nette/php-generator": "^4.0",
+    "phpdocumentor/reflection-docblock": "^5.3",
     "servo/fluidxml": "^1.21",
-    "symfony/filesystem": "^4.4 || ^5.0",
-    "symfony/finder": "^4.4 || ^5.0",
-    "symfony/framework-bundle": "^4.4 || ^5.0",
-    "symfony/options-resolver": "^4.4 || ^5.0"
+    "symfony/filesystem": "^5.4",
+    "symfony/finder": "^5.4",
+    "symfony/framework-bundle": "^5.4",
+    "symfony/options-resolver": "^5.4"
   },
   "config": {
     "sort-packages": true
@@ -30,8 +30,8 @@
     "branch-alias": null
   },
   "require-dev": {
-    "phpunit/phpunit": "^8",
-    "sylius-labs/coding-standard": "^3.0",
-    "sylius/resource-bundle": "^1.7"
+    "phpunit/phpunit": "^9.5",
+    "sylius-labs/coding-standard": "^4.2",
+    "sylius/resource-bundle": "^1.9"
   }
 }
