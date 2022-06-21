@@ -24,7 +24,7 @@ class CollectionManyToManyOwnerUnidirectionalType extends CollectionType impleme
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);
         $field = $XMLElement->addChild('many-to-many');

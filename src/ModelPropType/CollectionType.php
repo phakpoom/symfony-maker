@@ -7,6 +7,7 @@ namespace Bonn\Maker\ModelPropType;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Utils\NameResolver;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
 
@@ -16,6 +17,8 @@ use Nette\PhpGenerator\PhpNamespace;
  */
 class CollectionType implements PropTypeInterface, NamespaceModifyableInterface, ConstructResolveInterface
 {
+    use PropTypeTrait;
+
     /** @var string */
     protected $name;
 
@@ -54,34 +57,36 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
     /**
      * {@inheritdoc}
      */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('protected');
-        $prop->setComment("@var Collection|$this->interfaceName[]");
+            ->setVisibility('protected')
+            ->setType($this->doctrineCollectionClass)
+        ;
+        $prop->setComment("@var Collection<int, $this->interfaceName>");
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public')
         ;
+
         $method->setReturnNullable(false);
-        $method->setComment("\n@return Collection|$this->interfaceName[]\n");
+        $classType->isInterface() && $method->setComment("\n@return Collection<int, $this->interfaceName>\n");
         $method->setReturnType('Doctrine\\Common\\Collections\\Collection');
-        $method
-            ->setBody('return $this->' . $this->name . ';');
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         if ('s' !== substr($this->name, -1, 1)) {
             $this->name = $this->name . 's';
@@ -89,56 +94,33 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
 
         // has
         $singleName = substr($this->name, 0, strlen($this->name) - 1);
-        $method = $classType
-            ->addMethod('has' . ucfirst($singleName));
-        $method
-            ->setVisibility('public')
-            ->setBody('return $this->' . $this->name . '->contains($' . $singleName . ');');
-        $parameter = $method
-            ->setReturnType('bool')
-            ->addParameter($singleName);
-        $method->setComment("\n @param " . $this->interfaceName . " $$singleName");
-        $method->addComment("\n@return bool");
-        $parameter->setTypeHint($this->fullInterfaceName);
+        $method = $classType->addMethod('has' . ucfirst($singleName))->setVisibility('public');
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . '->contains($' . $singleName . ');');
+        $method->setReturnType('bool')->addParameter($singleName)->setType($this->fullInterfaceName);
 
         // add
-        $method = $classType
-            ->addMethod('add' . ucfirst($singleName));
-        $method
-            ->setReturnType('void')
-            ->setVisibility('public')
+        $method = $classType->addMethod('add' . ucfirst($singleName))->setReturnType('void')->setVisibility('public');
+        $classType->isClass() && $method
             ->addBody('if (!$this->has' . ucfirst($singleName) . '($' . $singleName . ')) {')
             ->addBody("\t" . '$this->' . $this->name . '->add($' . $singleName . ');')
             ->addBody("\t" . '//$' . $singleName . '->setXXX($this);')
             ->addBody('}');
-        $parameter = $method
-            ->addParameter($singleName);
-        $method
-            ->setComment("\n @param " . $this->interfaceName . " $$singleName" . "\n");
-        $method->addComment("@return void\n");
-        $parameter->setTypeHint($this->fullInterfaceName);
+        $method->addParameter($singleName)->setType($this->fullInterfaceName);
 
         // remove
-        $method = $classType
-            ->addMethod('remove' . ucfirst($singleName));
-        $method
-            ->setReturnType('void')
-            ->setVisibility('public')
+        $method = $classType->addMethod('remove' . ucfirst($singleName))->setReturnType('void')->setVisibility('public');
+        $classType->isClass() &&$method
             ->addBody('if ($this->has' . ucfirst($singleName) . '($' . $singleName . ')) {')
             ->addBody("\t" . '$this->' . $this->name . '->removeElement($' . $singleName . ');')
             ->addBody("\t" . '//$' . $singleName . '->setXXX(null);')
             ->addBody('}');
-        $parameter = $method
-            ->addParameter($singleName);
-        $method->setComment("\n @param " . $this->interfaceName . " $$singleName" . "\n");
-        $method->addComment("@return void\n");
-        $parameter->setTypeHint($this->fullInterfaceName);
+        $method->addParameter($singleName)->setType($this->fullInterfaceName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);
         $field = $XMLElement->addChild('one-to-many');

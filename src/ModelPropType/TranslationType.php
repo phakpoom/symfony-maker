@@ -11,6 +11,7 @@ use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\PhpNamespace;
 use Webmozart\Assert\Assert;
 
@@ -40,7 +41,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         // nothing
     }
@@ -48,7 +49,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
@@ -63,7 +64,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
@@ -81,7 +82,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $fullClassName = $className;
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
@@ -116,7 +117,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
      */
     public function modify(PhpNamespace $classNameSpace, PhpNamespace $interfaceNameSpace): void
     {
-        /** @var ClassType $classType */
+        /** @var ClassType | InterfaceType $classType */
         $classType = current($classNameSpace->getClasses());
 
         // ClassTranslation.php
@@ -206,7 +207,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
      *
      * @return string
      */
-    private function getTranslationInterfaceName(PhpNamespace $namespace, ClassType $classType, $isFull = false)
+    private function getTranslationInterfaceName(PhpNamespace $namespace, ClassType | InterfaceType $classType, $isFull = false)
     {
         $className = str_replace('Interface', '', $classType->getName());
         $className = $className . 'TranslationInterface';
@@ -219,7 +220,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
      *
      * @return string
      */
-    private function getTranslationClassName(PhpNamespace $namespace, ClassType $classType, $isFull = false)
+    private function getTranslationClassName(PhpNamespace $namespace, ClassType | InterfaceType $classType, $isFull = false)
     {
         $className = $classType->getName() . 'Translation';
 

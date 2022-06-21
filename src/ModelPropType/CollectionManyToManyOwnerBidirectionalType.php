@@ -24,7 +24,7 @@ class CollectionManyToManyOwnerBidirectionalType extends CollectionManyToManyOwn
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);
         parent::addDoctrineMapping($className, $XMLElement, $codeManager, $options);

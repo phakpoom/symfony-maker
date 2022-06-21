@@ -7,6 +7,7 @@ namespace Bonn\Maker\ModelPropType;
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Bonn\Maker\Utils\NameResolver;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType as NetteInterfaceType;
 use Nette\PhpGenerator\PhpNamespace;
 
 /**
@@ -45,7 +46,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
@@ -56,7 +57,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | NetteInterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
@@ -72,7 +73,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | NetteInterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
@@ -91,7 +92,7 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('many-to-one');
         $field->addAttribute('field', $this->name);

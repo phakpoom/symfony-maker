@@ -125,13 +125,6 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
                     $prop->modify($classNamespace, $interfaceNamespace);
                 }
             }
-
-            foreach ($modelClass->getMethods() as $method) {
-                $method->setComment("\n{@inheritdoc}\n");
-            }
-            foreach ($interfaceClass->getMethods() as $method) {
-                $method->setBody(null);
-            }
         }
 
         // class exists

@@ -6,12 +6,15 @@ namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 
 /**
  * @commandValueDescription Enter true|false (default false)
  */
 class BooleanType implements PropTypeInterface
 {
+    use PropTypeTrait;
+
     /** @var string */
     private $name;
 
@@ -35,7 +38,7 @@ class BooleanType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
@@ -44,48 +47,47 @@ class BooleanType implements PropTypeInterface
             $prop->setValue($this->defaultValue);
         }
 
-        $prop->setComment('@var bool');
+        $prop->setType('bool');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('is' . ucfirst($this->name))
             ->setVisibility('public')
         ;
         $method->setReturnNullable(false);
-        $method->setComment("\n@return bool\n");
         $method->setReturnType('bool');
-        $method
-            ->setBody('return $this->' . $this->name . ';');
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
             ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+        ;
+
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $parameter = $method
             ->addParameter($this->name)
             ->setNullable(false)
         ;
-        $method->setComment("\n@param bool $$this->name \n");
-        $method->addComment("@return void\n");
-        $parameter->setTypeHint('bool');
+
+        $parameter->setType('bool');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);

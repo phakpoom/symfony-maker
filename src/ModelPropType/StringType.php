@@ -6,6 +6,7 @@ namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 
 class StringType implements PropTypeInterface
 {
@@ -36,7 +37,7 @@ class StringType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
@@ -56,7 +57,7 @@ class StringType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
@@ -78,7 +79,7 @@ class StringType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
@@ -103,7 +104,7 @@ class StringType implements PropTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);
