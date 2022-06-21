@@ -14,9 +14,9 @@ use Nette\PhpGenerator\InterfaceType;
 class DateTimeType implements PropTypeInterface
 {
     /** @var string */
-    private $name;
+    private string $name;
 
-    public function __construct(string $name, ?string $defaultValue = null)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -34,10 +34,12 @@ class DateTimeType implements PropTypeInterface
      */
     public function addProperty(ClassType $classType): void
     {
-        $prop = $classType
+        $classType
             ->addProperty($this->name)
-            ->setVisibility('protected');
-        $prop->setComment('@var \\DateTime|null');
+            ->setVisibility('protected')
+            ->setNullable(true)
+            ->setType('DateTime')
+        ;
     }
 
     /**
@@ -50,10 +52,8 @@ class DateTimeType implements PropTypeInterface
             ->setVisibility('public')
         ;
         $method->setReturnNullable(true);
-        $method->setComment("\n@return \\DateTime|null\n");
         $method->setReturnType('DateTime');
-        $method
-            ->setBody('return $this->' . $this->name . ';');
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
     /**
@@ -64,15 +64,9 @@ class DateTimeType implements PropTypeInterface
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
-        $parameter = $method
-            ->addParameter($this->name)
-            ->setNullable(true)
-        ;
-        $method->setComment("\n@param \\DateTime|null $$this->name \n");
-        $method->addComment("@return void \n");
-        $parameter->setTypeHint('DateTime');
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+        $method->addParameter($this->name)->setNullable(true)->setType('DateTime');
     }
 
     /**

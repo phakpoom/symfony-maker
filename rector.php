@@ -11,9 +11,10 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src/ModelPropType/BooleanType.php'
     ]);
 
-    // register a single rule
-    //$rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
+    $rectorConfig->rules([
+        \Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector::class,
+        \Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class,
+    ]);
 
-     // define sets of rules
     $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_81);
 };

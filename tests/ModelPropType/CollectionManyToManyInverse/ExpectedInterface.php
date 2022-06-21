@@ -10,28 +10,13 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 interface MockInterface extends ResourceInterface
 {
     /**
-     * @return Collection|CommentInterface[]
+     * @return Collection<int, CommentInterface>
      */
     public function getComments(): Collection;
 
-    /**
-     * @param CommentInterface $comment
-     *
-     * @return bool
-     */
     public function hasComment(CommentInterface $comment): bool;
 
-    /**
-     * @param CommentInterface $comment
-     *
-     * @return void
-     */
     public function addComment(CommentInterface $comment): void;
 
-    /**
-     * @param CommentInterface $comment
-     *
-     * @return void
-     */
     public function removeComment(CommentInterface $comment): void;
 }

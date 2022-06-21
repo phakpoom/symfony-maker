@@ -9,47 +9,31 @@ use Doctrine\Common\Collections\Collection;
 
 class Mock implements MockInterface
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id;
 
-    /** @var Collection|CommentInterface[] */
-    protected $comments;
+    /** @var Collection<int, CommentInterface> */
+    protected Collection $comments;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasComment(CommentInterface $comment): bool
     {
         return $this->comments->contains($comment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addComment(CommentInterface $comment): void
     {
         if (!$this->hasComment($comment)) {
@@ -58,9 +42,6 @@ class Mock implements MockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function removeComment(CommentInterface $comment): void
     {
         if ($this->hasComment($comment)) {

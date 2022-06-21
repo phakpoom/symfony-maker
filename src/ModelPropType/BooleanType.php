@@ -15,11 +15,8 @@ class BooleanType implements PropTypeInterface
 {
     use PropTypeTrait;
 
-    /** @var string */
-    private $name;
-
-    /** @var bool|null */
-    private $defaultValue;
+    private string $name;
+    private ?bool $defaultValue;
 
     public function __construct(string $name, ?string $defaultValue = null)
     {
@@ -27,17 +24,11 @@ class BooleanType implements PropTypeInterface
         $this->defaultValue = 'true' === $defaultValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'boolean';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProperty(ClassType $classType): void
     {
         $prop = $classType
@@ -50,9 +41,6 @@ class BooleanType implements PropTypeInterface
         $prop->setType('bool');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -64,9 +52,6 @@ class BooleanType implements PropTypeInterface
         $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -84,9 +69,6 @@ class BooleanType implements PropTypeInterface
         $parameter->setType('bool');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');

@@ -13,17 +13,11 @@ use Bonn\Maker\Utils\NameResolver;
  */
 class CollectionManyToManyInverseType extends CollectionType implements PropTypeInterface, NamespaceModifyableInterface, ConstructResolveInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'collection (m-m) (inverse-side)';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);

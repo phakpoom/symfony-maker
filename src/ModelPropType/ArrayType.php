@@ -25,17 +25,11 @@ class ArrayType implements PropTypeInterface
         $this->defaultValue = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'array';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProperty(ClassType $classType): void
     {
         $prop = $classType
@@ -48,9 +42,6 @@ class ArrayType implements PropTypeInterface
         $prop->setComment('@var array');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -63,9 +54,6 @@ class ArrayType implements PropTypeInterface
             ->setComment("\n@return array\n");
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -81,9 +69,6 @@ class ArrayType implements PropTypeInterface
         $method->addComment("@return void \n");
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');
