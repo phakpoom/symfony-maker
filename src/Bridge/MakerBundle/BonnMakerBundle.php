@@ -9,11 +9,12 @@ use Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Compiler\GeneratorServiceP
 use Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Compiler\PropTypePass;
 use Bonn\Maker\Bridge\MakerBundle\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BonnMakerBundle extends Bundle
 {
-    public function getContainerExtension()
+    public function getContainerExtension(): ExtensionInterface
     {
         return new Extension();
     }

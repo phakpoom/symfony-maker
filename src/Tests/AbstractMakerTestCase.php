@@ -29,15 +29,14 @@ abstract class AbstractMakerTestCase extends TestCase
 
     protected function assertFileWillBeCreated(string $path, string $withContent): self
     {
-        $this->assertEquals($withContent,
-            $this->manager->getCodes()[$path]->getContent());
+        $this->assertEquals($this->manager->getCodes()[$path]->getContent(), $withContent);
 
         return $this;
     }
 
     protected function assertFileHasCreated(string $path, string $output): self
     {
-        $this->assertContains('======' . $path . '======', $output, "$output hasn't created");
+        $this->assertStringContainsString('======' . $path . '======', $output, "$output hasn't created");
 
         return $this;
     }

@@ -30,7 +30,6 @@ interface CustomerInterface extends ResourceInterface
      */
     public function getNames(): Collection;
 
-
     public function hasName(DummyInterface $name): bool;
 
     public function addName(DummyInterface $name): void;
