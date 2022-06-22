@@ -6,38 +6,23 @@ namespace App\Model;
 
 class Mock implements MockInterface
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id;
+    protected int $price = 12;
 
-    /** @var int */
-    protected $price = 12;
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPrice(): int
     {
         return $this->price;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setPrice(int $price): void
     {
         $this->price = $price;

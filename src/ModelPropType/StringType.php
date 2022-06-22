@@ -10,14 +10,9 @@ use Nette\PhpGenerator\InterfaceType;
 
 class StringType implements PropTypeInterface
 {
-    /** @var string */
-    private $name;
-
-    /** @var string|null */
-    private $defaultValue;
-
-    /** @var bool */
-    private $nullable;
+    private string $name;
+    private ?string $defaultValue;
+    private bool $nullable;
 
     public function __construct(string $name, ?string $defaultValue = null)
     {
@@ -26,37 +21,24 @@ class StringType implements PropTypeInterface
         $this->nullable = null === $defaultValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'string';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('protected');
+            ->setVisibility('protected')
+            ->setNullable($this->nullable)
+            ->setType('string')
+        ;
         if (null !== $this->defaultValue) {
             $prop->setValue($this->defaultValue);
         }
-
-        if (!$this->nullable) {
-            $prop->setComment('@var string');
-
-            return;
-        }
-        $prop->setComment('@var string|null');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -66,44 +48,23 @@ class StringType implements PropTypeInterface
 
         $method->setReturnNullable($this->nullable);
         $method->setReturnType('string');
-        $method
-            ->setBody('return $this->' . $this->name . ';');
-        if ($this->nullable) {
-            $method->setComment("\n@return string|null\n");
-
-            return;
-        }
-        $method->setComment("\n@return string\n");
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $method->setReturnType('void');
 
         $method
             ->addParameter($this->name)
             ->setNullable($this->nullable)
-            ->setTypeHint('string');
-
-        if ($this->nullable) {
-            $method->setComment("\n@param string|null $$this->name \n");
-        } else {
-            $method->setComment("\n@param string $$this->name\n");
-        }
-
-        $method->addComment("@return void \n");
+            ->setType('string');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');

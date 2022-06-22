@@ -10,14 +10,9 @@ use Nette\PhpGenerator\InterfaceType;
 
 class IntegerType implements PropTypeInterface
 {
-    /** @var string */
-    private $name;
-
-    /** @var int|null */
-    private $defaultValue;
-
-    /** @var bool */
-    private $nullable;
+    private string $name;
+    private ?float $defaultValue;
+    private bool $nullable;
 
     public function __construct(string $name, ?string $defaultValue = null)
     {
@@ -26,17 +21,11 @@ class IntegerType implements PropTypeInterface
         $this->nullable = null === $defaultValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'int';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProperty(ClassType $classType): void
     {
         $prop = $classType
@@ -44,16 +33,13 @@ class IntegerType implements PropTypeInterface
             ->setVisibility('protected');
 
         if (null !== $this->defaultValue) {
-            $prop->setValue($this->defaultValue);
+            $prop->setValue((int) $this->defaultValue);
         }
 
         $prop->setNullable($this->nullable);
         $prop->setType('int');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -65,9 +51,6 @@ class IntegerType implements PropTypeInterface
         $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
@@ -83,9 +66,6 @@ class IntegerType implements PropTypeInterface
             ->setType('int');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');

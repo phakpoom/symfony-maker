@@ -9,7 +9,7 @@ use Test\ModelPropType\AbstractPropTypeTest;
 
 class FloatTypeTest extends AbstractPropTypeTest
 {
-    public function testGenerated()
+    public function testGenerated(): void
     {
         $this->generate(new FloatType('price'));
 

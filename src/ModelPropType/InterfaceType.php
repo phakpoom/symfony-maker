@@ -16,18 +16,10 @@ use Nette\PhpGenerator\PhpNamespace;
  */
 class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
 {
-    /** @var string */
-    private $name;
+    private string $name;
+    private ?string $fullInterfaceName;
+    private string $interfaceName;
 
-    /** @var string */
-    private $fullInterfaceName;
-
-    /** @var string */
-    private $interfaceName;
-
-    /**
-     * @param string $interfaceName
-     */
     public function __construct(string $name, string $interfaceName = null)
     {
         $this->name = $name;
@@ -35,63 +27,44 @@ class InterfaceType implements PropTypeInterface, NamespaceModifyableInterface
         $this->interfaceName = NameResolver::resolveOnlyClassName($this->fullInterfaceName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'interface (m-1)';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProperty(ClassType $classType): void
     {
-        $prop = $classType
+        $classType
             ->addProperty($this->name)
+            ->setNullable(true)
+            ->setType($this->fullInterfaceName)
             ->setVisibility('protected');
-        $prop->setComment("@var $this->interfaceName|null");
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGetter(ClassType | NetteInterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public')
-        ;
-        $method->setReturnNullable(true);
-        $method->setComment("\n@return $this->interfaceName|null\n");
-        $method->setReturnType($this->fullInterfaceName);
-        $method
-            ->setBody('return $this->' . $this->name . ';');
+            ->setReturnNullable(true)
+            ->setReturnType($this->fullInterfaceName);
+
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSetter(ClassType | NetteInterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
-        $parameter = $method
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+       $method
             ->addParameter($this->name)
             ->setNullable(true)
-        ;
-        $method->setComment("\n@param $this->interfaceName|null $$this->name \n");
-        $method->addComment("@return void \n");
-        $parameter->setTypeHint($this->fullInterfaceName);
+            ->setType($this->fullInterfaceName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('many-to-one');

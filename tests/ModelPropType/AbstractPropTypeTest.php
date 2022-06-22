@@ -8,15 +8,13 @@ use Bonn\Maker\Generator\DoctrineGeneratorInterface;
 use Bonn\Maker\Generator\DoctrineXmlMappingGenerator;
 use Bonn\Maker\Generator\ModelGenerator;
 use Bonn\Maker\Generator\ModelGeneratorInterface;
+use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
 abstract class AbstractPropTypeTest extends AbstractMakerTestCase
 {
-    /** @var ModelGeneratorInterface */
-    protected $generator;
-
-    /** @var DoctrineGeneratorInterface */
-    protected $doctrineGenerator;
+    protected ModelGeneratorInterface $generator;
+    protected DoctrineGeneratorInterface $doctrineGenerator;
 
     protected function setUp(): void
     {
@@ -29,7 +27,7 @@ abstract class AbstractPropTypeTest extends AbstractMakerTestCase
         $this->doctrineGenerator->setManager($this->manager);
     }
 
-    protected function generate(/* array|PropTypeInterface */ $propType)
+    protected function generate(array|PropTypeInterface $propType): void
     {
         $this->generator->generate([
             'class' => 'App\\Model\\Mock',
@@ -44,7 +42,7 @@ abstract class AbstractPropTypeTest extends AbstractMakerTestCase
         ]);
     }
 
-    protected function codeDir()
+    protected function codeDir(): string
     {
         return __DIR__;
     }

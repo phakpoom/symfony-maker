@@ -9,15 +9,7 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 
 interface MockTranslationInterface extends TranslationInterface, ResourceInterface
 {
-    /**
-     * @return string|null
-     */
     public function getName(): ?string;
 
-    /**
-     * @param string|null $name
-     *
-     * @return void
-     */
     public function setName(?string $name): void;
 }

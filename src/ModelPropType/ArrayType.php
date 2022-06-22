@@ -34,39 +34,34 @@ class ArrayType implements PropTypeInterface
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('protected');
+            ->setVisibility('protected')
+            ->setType('array');
         if (null !== $this->defaultValue) {
             $prop->setValue($this->defaultValue);
         }
-
-        $prop->setComment('@var array');
     }
 
-    public function addGetter(ClassType | InterfaceType $classType): void
+    public function addGetter(ClassType|InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public');
-        $method->setReturnNullable(false);
-        $method->setReturnType('array');
-        $method
-            ->setBody('return $this->' . $this->name . ';')
-            ->setComment("\n@return array\n");
+        $method->setReturnNullable(false)
+            ->setReturnType('array')
+            ->setBody('return (array) $this->' . $this->name . ';');
     }
 
-    public function addSetter(ClassType | InterfaceType $classType): void
+    public function addSetter(ClassType|InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $method
             ->addParameter($this->name)
             ->setNullable(false)
-            ->setTypeHint('array');
-        $method->setComment("\n@param array $$this->name \n");
-        $method->addComment("@return void \n");
+            ->setType('array');
     }
 
     public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
