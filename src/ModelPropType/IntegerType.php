@@ -6,17 +6,13 @@ namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 
 class IntegerType implements PropTypeInterface
 {
-    /** @var string */
-    private $name;
-
-    /** @var int|null */
-    private $defaultValue;
-
-    /** @var bool */
-    private $nullable;
+    private string $name;
+    private ?float $defaultValue;
+    private bool $nullable;
 
     public function __construct(string $name, ?string $defaultValue = null)
     {
@@ -25,40 +21,26 @@ class IntegerType implements PropTypeInterface
         $this->nullable = null === $defaultValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'int';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
             ->setVisibility('protected');
 
         if (null !== $this->defaultValue) {
-            $prop->setValue($this->defaultValue);
+            $prop->setValue((int) $this->defaultValue);
         }
 
-        if (!$this->nullable) {
-            $prop->setComment('@var int');
-
-            return;
-        }
-
-        $prop->setComment('@var int|null');
+        $prop->setNullable($this->nullable);
+        $prop->setType('int');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
@@ -66,46 +48,25 @@ class IntegerType implements PropTypeInterface
 
         $method->setReturnNullable($this->nullable);
         $method->setReturnType('int');
-        $method
-            ->setBody('return $this->' . $this->name . ';');
-
-        if ($this->nullable) {
-            $method->setComment("\n@return int|null\n");
-
-            return;
-        }
-
-        $method->setComment("\n@return int\n");
+        $classType->isClass() && $method->setBody('return $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+            ->setVisibility('public');
+
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
 
         $method
             ->addParameter($this->name)
             ->setNullable($this->nullable)
-            ->setTypeHint('int');
-        if ($this->nullable) {
-            $method->setComment("\n@param int|null $$this->name \n");
-        } else {
-            $method->setComment("\n@param int $$this->name\n");
-        }
-
-        $method->addComment("@return void \n");
+            ->setType('int');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);

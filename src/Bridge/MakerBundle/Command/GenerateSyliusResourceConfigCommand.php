@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
 {
-    /** @var SyliusResourceGeneratorInterface */
-    private $generator;
+    private SyliusResourceGeneratorInterface $generator;
 
     public function __construct(
         SyliusResourceGeneratorInterface $generator
@@ -23,7 +22,7 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:sylius:maker')
@@ -32,7 +31,7 @@ class GenerateSyliusResourceConfigCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $resourceDir = $this->guessRootModelDir($input->getArgument('class')) . $this->configs['config_dir'];
 

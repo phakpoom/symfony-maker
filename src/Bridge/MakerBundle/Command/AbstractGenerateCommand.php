@@ -38,7 +38,7 @@ abstract class AbstractGenerateCommand extends Command
         $this->configs = $configs;
     }
 
-    protected function writeCreatedFiles(CodeManagerInterface $manager, StyleInterface $io)
+    protected function writeCreatedFiles(CodeManagerInterface $manager, StyleInterface $io): void
     {
         $createdFiles = array_filter($manager->getCodes(), function (Code $code) {
             return true !== @$code->getExtra()['dump_only'];
@@ -108,7 +108,7 @@ abstract class AbstractGenerateCommand extends Command
         return rtrim(NameResolver::replaceDoubleSlash($ans), '/');
     }
 
-    protected function getFullClassNameFromDir(string $rootDir, string $className)
+    protected function getFullClassNameFromDir(string $rootDir, string $className): string
     {
         // resolve full class name with namespace
         $className = str_replace($this->configs['project_source_dir'], '', $rootDir . '/' . $className);

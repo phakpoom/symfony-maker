@@ -9,8 +9,7 @@ use Bonn\Maker\Generator\TwigExtensionGenerator;
 
 class GenerateTwigExtensionCommand extends CommonServiceCommand
 {
-    /** @var TwigExtensionGenerator */
-    private $generator;
+    private TwigExtensionGenerator $generator;
 
     public function __construct(TwigExtensionGenerator $generator)
     {

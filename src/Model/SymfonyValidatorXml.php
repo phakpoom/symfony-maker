@@ -9,12 +9,8 @@ use FluidXml\FluidXml;
 
 class SymfonyValidatorXml
 {
-    /** @var FluidXml */
-    private $xml;
+    private FluidXml $xml;
 
-    /**
-     * @param null $file
-     */
     public function __construct($file = null)
     {
         if (null !== $file) {
@@ -39,7 +35,7 @@ class SymfonyValidatorXml
         $this->xml = $xml;
     }
 
-    public function getXml()
+    public function getXml(): \FluidXml\FluidXml
     {
         return $this->xml;
     }

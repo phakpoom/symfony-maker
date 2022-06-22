@@ -45,7 +45,7 @@ class EventListenerGenerator extends AbstractGenerator implements GeneratorInter
         $method = $class->addMethod('__construct');
 
         $method = $class->addMethod('onRequest');
-        $method->addParameter('event')->setTypeHint(RequestEvent::class);
+        $method->addParameter('event')->setType(RequestEvent::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

@@ -47,7 +47,7 @@ final class ControllerGenerator extends AbstractSyliusGenerator implements Gener
         $controllerClass = $classNamespace->addClass($className . 'Controller');
 
         $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController');
-        $controllerClass->addExtend('Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController');
+        $controllerClass->setExtends('Sylius\\Bundle\\ResourceBundle\\Controller\\ResourceController');
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

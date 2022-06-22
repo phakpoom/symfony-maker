@@ -9,51 +9,35 @@ use Doctrine\Common\Collections\Collection;
 
 class Mock implements MockInterface
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id;
 
-    /** @var Collection|CommentInterface[] */
-    protected $comments;
+    /** @var Collection<int, CommentInterface> */
+    protected Collection $comments;
 
-    /** @var Collection|PostInterface[] */
-    protected $posts;
+    /** @var Collection<int, PostInterface> */
+    protected Collection $posts;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasComment(CommentInterface $comment): bool
     {
         return $this->comments->contains($comment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addComment(CommentInterface $comment): void
     {
         if (!$this->hasComment($comment)) {
@@ -62,9 +46,6 @@ class Mock implements MockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function removeComment(CommentInterface $comment): void
     {
         if ($this->hasComment($comment)) {
@@ -73,25 +54,16 @@ class Mock implements MockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPosts(): Collection
     {
         return $this->posts;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasPost(PostInterface $post): bool
     {
         return $this->posts->contains($post);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addPost(PostInterface $post): void
     {
         if (!$this->hasPost($post)) {
@@ -100,9 +72,6 @@ class Mock implements MockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function removePost(PostInterface $post): void
     {
         if ($this->hasPost($post)) {

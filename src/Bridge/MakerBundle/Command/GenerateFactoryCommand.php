@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateFactoryCommand extends AbstractGenerateCommand
 {
-    /** @var FactoryGenerator */
-    private $generator;
+    private FactoryGenerator $generator;
 
     public function __construct(FactoryGenerator $generator)
     {
@@ -22,7 +21,7 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:factory:maker')
@@ -31,7 +30,7 @@ class GenerateFactoryCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate([
             'class' => $class = $input->getArgument('class'),

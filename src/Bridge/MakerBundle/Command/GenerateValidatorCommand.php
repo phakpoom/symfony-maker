@@ -9,8 +9,7 @@ use Bonn\Maker\Generator\ValidatorGenerator;
 
 class GenerateValidatorCommand extends CommonServiceCommand
 {
-    /** @var ValidatorGenerator */
-    private $generator;
+    private ValidatorGenerator $generator;
 
     public function __construct(ValidatorGenerator $generator)
     {

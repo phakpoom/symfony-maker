@@ -45,7 +45,7 @@ class ResourceEventListenerGenerator extends AbstractGenerator implements Genera
         $method = $class->addMethod('__construct');
 
         $method = $class->addMethod('methodName');
-        $method->addParameter('event')->setTypeHint(ResourceControllerEvent::class);
+        $method->addParameter('event')->setType(ResourceControllerEvent::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

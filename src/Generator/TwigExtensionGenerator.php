@@ -67,7 +67,7 @@ return [
 PHP
         );
 
-        $class->addExtend(AbstractExtension::class);
+        $class->setExtends(AbstractExtension::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

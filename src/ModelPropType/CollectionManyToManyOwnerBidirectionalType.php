@@ -13,18 +13,12 @@ use Bonn\Maker\Utils\NameResolver;
  */
 class CollectionManyToManyOwnerBidirectionalType extends CollectionManyToManyOwnerUnidirectionalType implements PropTypeInterface, NamespaceModifyableInterface, ConstructResolveInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'collection (m-m) (owner bidirectional)';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $onlyClassName = NameResolver::resolveOnlyClassName($className);
         parent::addDoctrineMapping($className, $XMLElement, $codeManager, $options);

@@ -13,11 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class GenerateTranslationCommand extends AbstractGenerateCommand
 {
-    /** @var TranslationGenerator */
-    private $generator;
+    private TranslationGenerator $generator;
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(TranslationGenerator $generator, ContainerInterface $container)
     {
@@ -27,7 +25,7 @@ class GenerateTranslationCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:translation:maker')
@@ -36,7 +34,7 @@ class GenerateTranslationCommand extends AbstractGenerateCommand
             ->addArgument('bundle', InputArgument::OPTIONAL, 'Bundle');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $translationDir = $this->container->getParameter('kernel.project_dir') . '/' . $this->configs['translations_dir'];
         if ($input->getArgument('bundle')) {

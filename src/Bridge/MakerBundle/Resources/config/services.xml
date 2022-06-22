@@ -7,6 +7,7 @@
     <services>
         <defaults autowire="false" autoconfigure="false" public="true">
             <bind key="$doctrineGenerator" type="service" id="Bonn\Maker\Generator\DoctrineXmlMappingGenerator" />
+            <bind key="$container" type="service" id="service_container" />
         </defaults>
 
         <service class="Bonn\Maker\Writer\FileWriter" id="bonn_maker.writer.file" />

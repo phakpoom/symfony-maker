@@ -6,9 +6,6 @@ namespace Bonn\Maker\Writer;
 
 class FileWriter implements WriterInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function write(string $content, string $locate): void
     {
         // create folder

@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateStateMachineCommand extends AbstractGenerateCommand
 {
-    /** @var StateMachineGenerator */
-    private $generator;
+    private StateMachineGenerator $generator;
 
     public function __construct(StateMachineGenerator $generator)
     {
@@ -22,7 +21,7 @@ class GenerateStateMachineCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:sm:maker')
@@ -31,7 +30,7 @@ class GenerateStateMachineCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configDir = $this->guessRootModelDir($input->getArgument('class')) . $this->configs['config_dir'];
 

@@ -27,7 +27,7 @@ abstract class CommonServiceCommand extends AbstractGenerateCommand
             ->addArgument('name', InputArgument::REQUIRED, 'name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = $this->getHelper('question');
 

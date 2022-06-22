@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateFormCommand extends AbstractGenerateCommand
 {
-    /** @var FormGenerator */
-    private $generator;
+    private FormGenerator $generator;
 
     public function __construct(FormGenerator $generator)
     {
@@ -22,7 +21,7 @@ class GenerateFormCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:form:maker')
@@ -31,7 +30,7 @@ class GenerateFormCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configDir = $this->guessRootModelDir($input->getArgument('class')) . $this->configs['config_dir'];
 

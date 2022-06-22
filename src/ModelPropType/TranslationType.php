@@ -10,7 +10,9 @@ use Bonn\Maker\Model\Code;
 use Bonn\Maker\Utils\DOMIndent;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
+use JetBrains\PhpStorm\Pure;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\PhpNamespace;
 use Webmozart\Assert\Assert;
 
@@ -21,67 +23,47 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
 {
     use ManagerAwareTrait;
 
-    /** @var string */
-    private $name;
+    private string $name;
 
     public function __construct(string $name, string $value = null)
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'translation';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         // nothing
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public');
         $method->setReturnNullable(true);
         $method->setReturnType('string');
-        $method
-            ->setBody('return $this->getTranslation()->get' . ucfirst($this->name) . '();')
-            ->setComment("\n@return string|null\n");
+        $method->setBody('return $this->getTranslation()->get' . ucfirst($this->name) . '();');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType | InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
-            ->setVisibility('public')
-            ->setBody('$this->getTranslation()->set' . ucfirst($this->name) . "($$this->name);");
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->getTranslation()->set' . ucfirst($this->name) . "($$this->name);");
         $method->setReturnType('void');
         $method
             ->addParameter($this->name)
             ->setNullable(true)
-            ->setTypeHint('string');
-        $method->setComment("\n@param string|null $$this->name \n");
-        $method->addComment("@return void \n");
+            ->setType('string');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $fullClassName = $className;
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
@@ -111,12 +93,9 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
         ]));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function modify(PhpNamespace $classNameSpace, PhpNamespace $interfaceNameSpace): void
     {
-        /** @var ClassType $classType */
+        /** @var ClassType | InterfaceType $classType */
         $classType = current($classNameSpace->getClasses());
 
         // ClassTranslation.php
@@ -131,7 +110,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
             $translationClassNameSpace = new PhpNamespace($classNameSpace->getName());
             $translationClassNameSpace->addUse('Sylius\\Component\\Resource\\Model\\AbstractTranslation');
             $translationClass = $translationClassNameSpace->addClass($this->getTranslationClassName($classNameSpace, $classType));
-            $translationClass->addExtend('Sylius\\Component\\Resource\\Model\\AbstractTranslation');
+            $translationClass->setExtends('Sylius\\Component\\Resource\\Model\\AbstractTranslation');
             $translationClass->addImplement($this->getTranslationClassName($classNameSpace, $classType, true) . 'Interface');
 
             $propType = new IntegerType('id');
@@ -156,11 +135,6 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
             ->setVisibility('protected')
             ->setReturnType('Sylius\\Component\\Resource\\Model\\TranslationInterface');
         $method->setBody('return new ' . $classType->getName() . 'Translation();');
-        $method->setComment("\n @return " . $this->getTranslationInterfaceName($classNameSpace, $classType) . "\n");
-
-        foreach ($translationClass->getMethods() as $method) {
-            $method->setComment("\n{@inheritdoc}\n");
-        }
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($translationClassNameSpace->__toString()),
             $this->getOption()['model_dir'] . "/{$translationClass->getName()}.php", [
@@ -191,22 +165,13 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
         $propType->addGetter($translationInterfaceClass);
         $propType->addSetter($translationInterfaceClass);
 
-        foreach ($translationInterfaceClass->getMethods() as $method) {
-            $method->setBody(null);
-        }
-
         $this->manager->persist(new Code(PhpDoctypeCode::render($translationInterfaceNameSpace->__toString()),
             $this->getOption()['model_dir'] . "/{$translationInterfaceClass->getName()}.php", [
                 'namespace' => $translationInterfaceNameSpace,
             ]));
     }
 
-    /**
-     * @param bool $isFull
-     *
-     * @return string
-     */
-    private function getTranslationInterfaceName(PhpNamespace $namespace, ClassType $classType, $isFull = false)
+    private function getTranslationInterfaceName(PhpNamespace $namespace, ClassType | InterfaceType $classType, bool $isFull = false): string
     {
         $className = str_replace('Interface', '', $classType->getName());
         $className = $className . 'TranslationInterface';
@@ -214,12 +179,7 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
         return $isFull ? $namespace->getName() . '\\' . $className : $className;
     }
 
-    /**
-     * @param bool $isFull
-     *
-     * @return string
-     */
-    private function getTranslationClassName(PhpNamespace $namespace, ClassType $classType, $isFull = false)
+    #[Pure] private function getTranslationClassName(PhpNamespace $namespace, ClassType | InterfaceType $classType, bool $isFull = false): string
     {
         $className = $classType->getName() . 'Translation';
 

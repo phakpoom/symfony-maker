@@ -6,9 +6,6 @@ namespace Bonn\Maker\Writer;
 
 class EchoWriter implements WriterInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function write(string $content, string $locate): void
     {
         echo '=========' . $locate . '==========' . "\n";

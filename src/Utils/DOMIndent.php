@@ -22,21 +22,21 @@ class DOMIndent extends \DomDocument
         $this->xmlIndent();
     }
 
-    protected $whiteSpace = '    ';
+    protected string $whiteSpace = '    ';
 
-    public function getWhiteSpaceForIndentation()
+    public function getWhiteSpaceForIndentation(): string
     {
         return $this->whiteSpace;
     }
 
-    public function setWhiteSpaceForIndentation($string)
+    public function setWhiteSpaceForIndentation($string): self
     {
         $this->whiteSpace = $string;
 
         return $this;
     }
 
-    public function xmlIndent()
+    public function xmlIndent(): void
     {
         // Retrieve all text nodes using XPath
         $x = new \DOMXPath($this);
@@ -62,7 +62,7 @@ class DOMIndent extends \DomDocument
      *
      * @return bool
      */
-    private function xmlIndentRecursive($currentNode, $depth)
+    private function xmlIndentRecursive($currentNode, $depth): bool
     {
         $indentCurrent = true;
         if (!is_object($currentNode)) {

@@ -53,13 +53,13 @@ final class FormGenerator extends AbstractSyliusGenerator implements GeneratorIn
 
         $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Form\\Type\\AbstractResourceType');
         $classNamespace->addUse('Symfony\\Component\\Form\\FormBuilderInterface');
-        $formClass->addExtend('Sylius\\Bundle\\ResourceBundle\\Form\\Type\\AbstractResourceType');
+        $formClass->setExtends('Sylius\\Bundle\\ResourceBundle\\Form\\Type\\AbstractResourceType');
 
         $buildFormMethod = $formClass->addMethod('buildForm')->setComment("\n{@inheritdoc}\n");
         $buildFormMethod->setVisibility('public')->setBody('// $builder');
         $buildFormMethod->setReturnType('void');
-        $buildFormMethod->addParameter('builder')->setTypeHint('Symfony\\Component\\Form\\FormBuilderInterface');
-        $buildFormMethod->addParameter('options')->setTypeHint('array');
+        $buildFormMethod->addParameter('builder')->setType('Symfony\\Component\\Form\\FormBuilderInterface');
+        $buildFormMethod->addParameter('options')->setType('array');
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

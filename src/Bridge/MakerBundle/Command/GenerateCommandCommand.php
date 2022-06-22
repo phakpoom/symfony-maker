@@ -9,8 +9,7 @@ use Bonn\Maker\Generator\GeneratorInterface;
 
 class GenerateCommandCommand extends CommonServiceCommand
 {
-    /** @var CommandGenerator */
-    private $generator;
+    private CommandGenerator $generator;
 
     public function __construct(CommandGenerator $generator)
     {

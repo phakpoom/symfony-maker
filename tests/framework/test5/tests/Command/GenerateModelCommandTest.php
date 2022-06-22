@@ -20,21 +20,21 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
             'namespace_prefix' => 'Bonn\\\\'
         ]));
         $output = $this->runWithInput($command, $inputs);
-        $this->assertContains('namespace Bonn\\App\\Model;', $output);
+        $this->assertStringContainsString('namespace Bonn\\App\\Model;', $output);
 
         // [namespace_prefix] with empty
         $command->setConfigs(array_replace($command->getConfigs(), [
             'namespace_prefix' => ''
         ]));
         $output = $this->runWithInput($command, $inputs);
-        $this->assertContains('namespace App\\Model;', $output);
+        $this->assertStringContainsString('namespace App\\Model;', $output);
 
         // [namespace_prefix] with normal
         $command->setConfigs(array_replace($command->getConfigs(), [
             'namespace_prefix' => 'Bonn\\Test'
         ]));
         $output = $this->runWithInput($command, $inputs);
-        $this->assertContains('namespace Bonn\\Test\\App\\Model;', $output);
+        $this->assertStringContainsString('namespace Bonn\\Test\\App\\Model;', $output);
 
         // [bundle_root_dir] it must auto generate namespace prefix with folder
         $command->setConfigs(array_replace($command->getConfigs(), [
@@ -44,12 +44,12 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         ]));
 
         $output = $this->runWithInput($command, ['Test', '2' , 'name', '0', null, '', 'Y']);
-        $this->assertContains($command->getConfigs()['bundle_root_dir'] . '/SomeFeature2', $output);
-        $this->assertContains('namespace App\\SubModule\\SomeFeature2\\Model;', $output);
+        $this->assertStringContainsString($command->getConfigs()['bundle_root_dir'] . '/SomeFeature2', $output);
+        $this->assertStringContainsString('namespace App\\SubModule\\SomeFeature2\\Model;', $output);
 
         $output = $this->runWithInput($command, ['Test', '1' , 'name', '0', null, '', 'Y']);
-        $this->assertContains($command->getConfigs()['bundle_root_dir'] . '/SomeFeature1', $output);
-        $this->assertContains('namespace App\\SubModule\\SomeFeature1\\Model;', $output);
+        $this->assertStringContainsString($command->getConfigs()['bundle_root_dir'] . '/SomeFeature1', $output);
+        $this->assertStringContainsString('namespace App\\SubModule\\SomeFeature1\\Model;', $output);
 
         // [model_dir_name] / [doctrine_mapping_dir_name]
         $command->setConfigs(array_replace($command->getConfigs(), [
@@ -120,15 +120,15 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         $this->assertFileHasCreated(realpath(__DIR__ . '/../../src/App/') . '/Model/Test.php', $output);
 
         $output = $this->runWithInput($command, ['NoClassCache', 'name', '0', null, '', 'Y'], ['op' => 'rollback']);
-        $this->assertContains('No versions for class', $output);
+        $this->assertStringContainsString('No versions for class', $output);
 
         $output = $this->runWithInput($command, ['Test', '0'], ['op' => 'rollback']);
-        $this->assertContains('Please select your version:Test', $output);
-        $this->assertContains('protected $name', $output);
+        $this->assertStringContainsString('Please select your version:Test', $output);
+        $this->assertStringContainsString('protected ?string $name', $output);
 
         $output = $this->runWithInput($command, ['Test', '1'], ['op' => 'rollback']);
-        $this->assertContains('Please select your version:Test', $output);
-        $this->assertContains('protected $description', $output);
+        $this->assertStringContainsString('Please select your version:Test', $output);
+        $this->assertStringContainsString('protected ?string $description', $output);
     }
 
     public function testPropTypeAskDocBlock()
@@ -136,22 +136,22 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         // no docblock
         $command = $this->getCommand();
         $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', 'Y']);
-        $this->assertContains('Enter value (enter for skip)', $output);
+        $this->assertStringContainsString('Enter value (enter for skip)', $output);
 
         // @commandValueSkip
         $command = $this->getCommand();
         $output = $this->runWithInput($command, ['Test', 'name', '3', null, '', 'Y']);
-        $this->assertNotContains('Enter value (enter for skip)', $output);
+        $this->assertStringNotContainsString('Enter value (enter for skip)', $output);
 
         // @commandValueDescription
         $command = $this->getCommand();
         $output = $this->runWithInput($command, ['Test', 'name', '2', null, '', 'Y']);
-        $this->assertContains('Enter true|false (default false)', $output);
+        $this->assertStringContainsString('Enter true|false (default false)', $output);
 
         // @commandValueRequired
         $command = $this->getCommand();
         $output = $this->runWithInput($command, ['Test', 'name', '7', null, null, null, 'TestInterface', '', 'Y']);
-        $this->assertContains('Value cannot be empty', $output);
+        $this->assertStringContainsString('Value cannot be empty', $output);
     }
 
     public function testHasConfirmationBeforeFinish()
@@ -159,7 +159,7 @@ class GenerateModelCommandTest extends AbstractGenerateCommandWebTestCase
         $command = $this->getCommand();
 
         $output = $this->runWithInput($command, ['Test', 'name', '0', null, '', 'n', '', 'Y']);
-        $this->assertContains('Are you sure', $output);
+        $this->assertStringContainsString('Are you sure', $output);
     }
 
     protected function getCommand(): GenerateModelCommand

@@ -6,84 +6,63 @@ namespace Bonn\Maker\ModelPropType;
 
 use Bonn\Maker\Manager\CodeManagerInterface;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
 
 /**
  * @commandValueSkip
  */
 class ArrayType implements PropTypeInterface
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string|null */
-    private $defaultValue;
+    private ?array $defaultValue;
 
-    public function __construct(string $name, ?string $defaultValue = null)
+    public function __construct(string $name, ?array $defaultValue = null)
     {
         $this->name = $name;
         $this->defaultValue = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getTypeName(): string
     {
         return 'array';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addProperty(ClassType $classType)
+    public function addProperty(ClassType $classType): void
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('protected');
+            ->setVisibility('protected')
+            ->setType('array');
         if (null !== $this->defaultValue) {
             $prop->setValue($this->defaultValue);
         }
-
-        $prop->setComment('@var array');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addGetter(ClassType $classType)
+    public function addGetter(ClassType|InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('get' . ucfirst($this->name))
             ->setVisibility('public');
-        $method->setReturnNullable(false);
-        $method->setReturnType('array');
-        $method
-            ->setBody('return $this->' . $this->name . ';')
-            ->setComment("\n@return array\n");
+        $method->setReturnNullable(false)
+            ->setReturnType('array')
+            ->setBody('return (array) $this->' . $this->name . ';');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addSetter(ClassType $classType)
+    public function addSetter(ClassType|InterfaceType $classType): void
     {
         $method = $classType
             ->addMethod('set' . ucfirst($this->name))
             ->setReturnType('void')
-            ->setVisibility('public')
-            ->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
+            ->setVisibility('public');
+        $classType->isClass() && $method->setBody('$this->' . $this->name . ' = $' . $this->name . ';');
         $method
             ->addParameter($this->name)
             ->setNullable(false)
-            ->setTypeHint('array');
-        $method->setComment("\n@param array $$this->name \n");
-        $method->addComment("@return void \n");
+            ->setType('array');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options)
+    public function addDoctrineMapping(string $className, \SimpleXMLElement $XMLElement, CodeManagerInterface $codeManager, array $options): void
     {
         $field = $XMLElement->addChild('field');
         $field->addAttribute('name', $this->name);

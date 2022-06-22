@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+    php:
+        container_name: symfony-maker-php
+        build:
+            context: .
+        volumes:
+        -    ./:/var/www/

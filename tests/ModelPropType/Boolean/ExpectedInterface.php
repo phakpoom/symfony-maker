@@ -8,15 +8,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface MockInterface extends ResourceInterface
 {
-    /**
-     * @return bool
-     */
     public function isActive(): bool;
 
-    /**
-     * @param bool $active
-     *
-     * @return void
-     */
     public function setActive(bool $active): void;
 }

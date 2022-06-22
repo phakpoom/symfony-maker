@@ -6,14 +6,11 @@ namespace Bonn\Maker\Model;
 
 class Code
 {
-    /** @var string */
-    private $content;
+    private string $content;
 
-    /** @var string|null */
-    private $outputPath;
+    private string $outputPath;
 
-    /** @var array */
-    private $extra;
+    private array $extra;
 
     public function __construct(string $content, string $outputPath, array $extra = [])
     {
