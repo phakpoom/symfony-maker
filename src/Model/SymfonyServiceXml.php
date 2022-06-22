@@ -11,12 +11,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class SymfonyServiceXml
 {
-    /** @var FluidXml */
-    private $xml;
+    private FluidXml $xml;
 
-    /**
-     * @param null $file
-     */
     public function __construct($file = null)
     {
         if (null !== $file) {
@@ -109,7 +105,7 @@ class SymfonyServiceXml
         return $already;
     }
 
-    public function getXml()
+    public function getXml(): \FluidXml\FluidXml
     {
         return $this->xml;
     }

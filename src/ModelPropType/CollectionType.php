@@ -19,14 +19,11 @@ class CollectionType implements PropTypeInterface, NamespaceModifyableInterface,
 {
     use PropTypeTrait;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
-    /** @var string */
-    protected $fullInterfaceName;
+    protected ?string $fullInterfaceName;
 
-    /** @var string */
-    protected $interfaceName;
+    protected string $interfaceName;
 
     /**
      * @param string $interfaceName

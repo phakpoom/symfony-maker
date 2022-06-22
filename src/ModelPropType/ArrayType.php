@@ -13,13 +13,11 @@ use Nette\PhpGenerator\InterfaceType;
  */
 class ArrayType implements PropTypeInterface
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string|null */
-    private $defaultValue;
+    private ?array $defaultValue;
 
-    public function __construct(string $name, ?string $defaultValue = null)
+    public function __construct(string $name, ?array $defaultValue = null)
     {
         $this->name = $name;
         $this->defaultValue = [];

@@ -11,8 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractMakerTestCase extends TestCase
 {
-    /** @var CodeManagerInterface */
-    protected $manager;
+    protected CodeManagerInterface $manager;
 
     protected function setUp(): void
     {
@@ -21,14 +20,14 @@ abstract class AbstractMakerTestCase extends TestCase
         $this->manager = new CodeManager(new EchoWriter());
     }
 
-    protected function assertCountFilesWillBeCreated(int $count)
+    protected function assertCountFilesWillBeCreated(int $count): self
     {
         $this->assertCount($count, $this->manager->getCodes());
 
         return $this;
     }
 
-    protected function assertFileWillBeCreated(string $path, string $withContent)
+    protected function assertFileWillBeCreated(string $path, string $withContent): self
     {
         $this->assertEquals($withContent,
             $this->manager->getCodes()[$path]->getContent());
@@ -36,14 +35,14 @@ abstract class AbstractMakerTestCase extends TestCase
         return $this;
     }
 
-    protected function assertFileHasCreated(string $path, string $output)
+    protected function assertFileHasCreated(string $path, string $output): self
     {
         $this->assertContains('======' . $path . '======', $output, "$output hasn't created");
 
         return $this;
     }
 
-    protected function assertFileHasNotCreated(string $path, string $output)
+    protected function assertFileHasNotCreated(string $path, string $output): self
     {
         $this->assertNotContains('======' . $path . '======' . $path, $output, "$output has created");
 

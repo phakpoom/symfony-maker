@@ -16,7 +16,7 @@ class TwigTemplateResolver implements TwigTemplateResolverInterface
         });
 
         $onlyTwigs = array_filter($results, function ($template) {
-            return false !== strpos((string) $template, '.html.twig');
+            return str_contains((string) $template, '.html.twig');
         });
 
         return array_map(function ($template) {

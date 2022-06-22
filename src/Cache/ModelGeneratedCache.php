@@ -12,11 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ModelGeneratedCache implements ModelGeneratedCacheInterface
 {
-    /** @var Filesystem */
-    private $fs;
+    private Filesystem $fs;
 
-    /** @var array */
-    private $options;
+    private array $options;
 
     public function __construct(array $options)
     {
@@ -42,9 +40,6 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
             ->resolve($options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function appendVersion(string $className, string $info, string $modelDir): string
     {
         if (!$this->fs->exists($this->options['cache_dir'])) {
@@ -69,9 +64,6 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
         return $version;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listVersions(string $className): array
     {
         if (!$this->fs->exists($this->getFileLocate($className))) {
@@ -89,9 +81,6 @@ final class ModelGeneratedCache implements ModelGeneratedCacheInterface
         return $lists;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear(?string $className = null): void
     {
         if (!empty($className)) {

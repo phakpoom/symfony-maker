@@ -17,6 +17,7 @@ use Bonn\Maker\ModelPropType\InterfaceType;
 use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
 use Bonn\Maker\ModelPropType\TranslationType;
+use JetBrains\PhpStorm\Pure;
 
 final class PropTypeConverter implements PropTypeConverterInterface
 {
@@ -40,9 +41,9 @@ final class PropTypeConverter implements PropTypeConverterInterface
     ];
 
     /** @var PropTypeInterface[]|array */
-    private $types = self::TYPES;
+    private array $types = self::TYPES;
 
-    public function __construct(?array $types = null)
+    #[Pure] public function __construct(?array $types = null)
     {
         if (null !== $types) {
             $this->types = array_unique(array_merge($this->types, $types));
@@ -55,6 +56,8 @@ final class PropTypeConverter implements PropTypeConverterInterface
     }
 
     /**
+     * @param string $infosString
+     *
      * @return array|PropTypeInterface[]
      */
     public function convertMultiple(string $infosString): array
@@ -68,9 +71,6 @@ final class PropTypeConverter implements PropTypeConverterInterface
         }, explode(self::PROP_SEPARATOR, $infosString));
     }
 
-    /**
-     * @throws \InvalidArgumentException
-     */
     public function convert(string $infoString): PropTypeInterface
     {
         $p = explode(self::VALUE_SEPARATOR, $infoString);
@@ -94,7 +94,7 @@ final class PropTypeConverter implements PropTypeConverterInterface
         return $str;
     }
 
-    public function combineInfos(array $infos): string
+    #[Pure] public function combineInfos(array $infos): string
     {
         return implode(self::PROP_SEPARATOR, $infos);
     }
