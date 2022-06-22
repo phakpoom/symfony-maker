@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateValidatorConfigCommand extends AbstractGenerateCommand
 {
-    /** @var ValidatorConfigGenerator */
-    private $generator;
+    private ValidatorConfigGenerator $generator;
 
     public function __construct(ValidatorConfigGenerator $generator)
     {
@@ -22,7 +21,7 @@ class GenerateValidatorConfigCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:validator_config:maker')
@@ -30,7 +29,7 @@ class GenerateValidatorConfigCommand extends AbstractGenerateCommand
             ->addArgument('full_class_name', InputArgument::REQUIRED, 'Full Class name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate([
             'full_class_name' => $input->getArgument('full_class_name'),

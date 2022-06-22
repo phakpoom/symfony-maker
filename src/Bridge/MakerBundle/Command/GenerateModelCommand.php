@@ -30,17 +30,13 @@ class GenerateModelCommand extends AbstractGenerateCommand
         'rollback',
     ];
 
-    /** @var ModelGeneratorInterface */
-    private $generator;
+    private \Bonn\Maker\Generator\ModelGeneratorInterface $generator;
 
-    /** @var DoctrineGeneratorInterface */
-    private $doctrineGenerator;
+    private \Bonn\Maker\Generator\DoctrineGeneratorInterface $doctrineGenerator;
 
-    /** @var PropTypeConverterInterface */
-    private $converter;
+    private \Bonn\Maker\Converter\PropTypeConverterInterface $converter;
 
-    /** @var ModelGeneratedCacheInterface */
-    private $cache;
+    private \Bonn\Maker\Cache\ModelGeneratedCacheInterface $cache;
 
     /** @var array */
     private $infos = [];
@@ -62,7 +58,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:model:maker')
@@ -245,7 +241,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         return false;
     }
 
-    private function notEmptyValidate()
+    private function notEmptyValidate(): \Closure
     {
         return function ($answer) {
             if (empty($answer)) {
@@ -258,7 +254,7 @@ class GenerateModelCommand extends AbstractGenerateCommand
         };
     }
 
-    private function propertyNameValidate()
+    private function propertyNameValidate(): \Closure
     {
         return function ($answer) {
             if (empty($answer)) {

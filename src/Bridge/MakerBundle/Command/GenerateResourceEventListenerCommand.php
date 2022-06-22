@@ -9,8 +9,7 @@ use Bonn\Maker\Generator\ResourceEventListenerGenerator;
 
 class GenerateResourceEventListenerCommand extends CommonServiceCommand
 {
-    /** @var ResourceEventListenerGenerator */
-    private $generator;
+    private ResourceEventListenerGenerator $generator;
 
     public function __construct(ResourceEventListenerGenerator $generator)
     {

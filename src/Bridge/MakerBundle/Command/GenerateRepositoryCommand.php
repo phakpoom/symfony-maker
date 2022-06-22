@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class GenerateRepositoryCommand extends AbstractGenerateCommand
 {
     /** @var AbstractSyliusGenerator */
-    private $generator;
+    private RepositoryGenerator $generator;
 
     public function __construct(RepositoryGenerator $generator)
     {
@@ -23,7 +23,7 @@ class GenerateRepositoryCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:repository:maker')
@@ -32,7 +32,7 @@ class GenerateRepositoryCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate([
             'class' => $class = $input->getArgument('class'),

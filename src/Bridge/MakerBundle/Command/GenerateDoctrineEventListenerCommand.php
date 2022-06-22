@@ -9,8 +9,7 @@ use Bonn\Maker\Generator\GeneratorInterface;
 
 class GenerateDoctrineEventListenerCommand extends CommonServiceCommand
 {
-    /** @var DoctrineEventListenerGenerator */
-    private $generator;
+    private DoctrineEventListenerGenerator $generator;
 
     public function __construct(DoctrineEventListenerGenerator $generator)
     {

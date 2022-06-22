@@ -19,17 +19,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
 {
-    /** @var SimpleFileGenerator */
-    private $generator;
+    private SimpleFileGenerator $generator;
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
-    /** @var TwigTemplateResolverInterface */
-    private $twigTemplateResolver;
+    private TwigTemplateResolverInterface $twigTemplateResolver;
 
-    /** @var TranslationResolverInterface */
-    private $translationResolver;
+    private TranslationResolverInterface $translationResolver;
 
     public function __construct(
         SimpleFileGenerator $generator,
@@ -45,7 +41,7 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:file:maker')
@@ -53,7 +49,7 @@ class GenerateAllResourceFileFromSourceCommand extends AbstractGenerateCommand
             ->addArgument('file', InputArgument::REQUIRED, 'file name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $projectDir = $this->container->getParameter('kernel.project_dir');
 

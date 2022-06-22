@@ -12,8 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenerateControllerCommand extends AbstractGenerateCommand
 {
-    /** @var ControllerGenerator */
-    private $generator;
+    private ControllerGenerator $generator;
 
     public function __construct(ControllerGenerator $generator)
     {
@@ -22,7 +21,7 @@ class GenerateControllerCommand extends AbstractGenerateCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:controller:maker')
@@ -31,7 +30,7 @@ class GenerateControllerCommand extends AbstractGenerateCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate([
             'class' => $class = $input->getArgument('class'),
