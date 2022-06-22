@@ -45,13 +45,13 @@ class DoctrineEventListenerGenerator extends AbstractGenerator implements Genera
         $method = $class->addMethod('__construct');
 
         $method = $class->addMethod('postPersist');
-        $method->addParameter('args')->setTypeHint(LifecycleEventArgs::class);
+        $method->addParameter('args')->setType(LifecycleEventArgs::class);
 
         $method = $class->addMethod('postUpdate');
-        $method->addParameter('args')->setTypeHint(LifecycleEventArgs::class);
+        $method->addParameter('args')->setType(LifecycleEventArgs::class);
 
         $method = $class->addMethod('preRemove');
-        $method->addParameter('args')->setTypeHint(LifecycleEventArgs::class);
+        $method->addParameter('args')->setType(LifecycleEventArgs::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

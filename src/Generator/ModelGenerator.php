@@ -13,8 +13,11 @@ use Bonn\Maker\ModelPropType\PropTypeInterface;
 use Bonn\Maker\ModelPropType\StringType;
 use Bonn\Maker\Utils\NameResolver;
 use Bonn\Maker\Utils\PhpDoctypeCode;
+use JetBrains\PhpStorm\Pure;
+use Nette\PhpGenerator\ClassLike;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Helpers;
+use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
@@ -139,16 +142,16 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         $this->manager->persist(new Code(PhpDoctypeCode::render($interfaceNamespace->__toString()), $options['model_dir'] . "/$onlyInterfaceClassName.php"));
     }
 
-    protected function append(string $fullClassName, ClassType $prototype, PhpNamespace $classNamespace): string
+    protected function append(string $fullClassName, ClassType | InterfaceType $prototype, PhpNamespace $classNamespace): string
     {
-        $isInterface = $prototype->getType() === ClassType::TYPE_INTERFACE;
+        $isInterface = $prototype->isInterface();
         $constructBody = '';
 
         if (!$isInterface) {
             $prototype->removeProperty('id');
             $prototype->removeMethod('getId');
             $constructBody = $prototype->getMethod('__construct')->getBody();
-            $prototype->getMethod('__construct')->setBody(null);
+            $prototype->getMethod('__construct')->setBody('');
         }
 
         $reflectionClass = new \ReflectionClass($fullClassName);
@@ -178,10 +181,25 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
         if (!$isInterface) {
             $construct = $reflectionClass->getMethod('__construct');
             $line = $construct->getStartLine() - 1;
+
             if ($construct->getDocComment()) {
                 $line = $line - count(explode("\n", $construct->getDocComment())) - 2;
+
+                $classLines[$line] .= "\n{{END_PROP}}\n";
+            } else {
+                $cursorLine = $line;
+                do {
+                    if (0 > $cursorLine) {
+                        break;
+                    }
+
+                    $cursorLine--;
+                } while (!str_ends_with(\trim($classLines[$cursorLine]), ';'));
+
+                $line = $cursorLine;
+
+                $classLines[$line] .= "{{END_PROP}}\n";
             }
-            $classLines[$line] .= "\n{{END_PROP}}\n";
 
             $constructBody = array_map(function ($v) {
                 return Helpers::tabsToSpaces("\t\t" . $v);
@@ -228,14 +246,13 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
 
         if (!$isInterface) {
             $startLineProp = $this->getLine($prototypeLines, 'class') + 2;
-            $endLineProp = $this->getLine($prototypeLines, '    public function __construct') - 4;
+            $endLineProp = $this->getLine($prototypeLines, '    public function __construct') - 1;
 
             // add props
             $propString = implode("\n", array_slice($prototypeLines, $startLineProp, $endLineProp - $startLineProp));
-
             $classString = str_replace('{{END_PROP}}', $propString, $classString);
 
-            $startLineMethod = $this->getLine($prototypeLines, '    public function __construct') + 2;
+            $startLineMethod = $this->getLine($prototypeLines, '    public function __construct') + 4;
             $endLineMethod = count($prototypeLines) - 2;
         } else {
             $startLineMethod = $this->getLine($prototypeLines, '{') + 1;
@@ -244,12 +261,13 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
 
         // add method
         $methodString = implode("\n", array_slice($prototypeLines, $startLineMethod, $endLineMethod - $startLineMethod));
-        $classString = str_replace('{{END_METHOD}}', $methodString, $classString);
 
+        $classString = str_replace('{{END_METHOD}}', $methodString, $classString);
+        
         return $classString;
     }
 
-    protected function getLine(array $lines, string $str, int $start = 0 ): int
+    #[Pure] protected function getLine(array $lines, string $str, int $start = 0 ): int
     {
         foreach ($lines as $lineNumber => $line) {
             if ($lineNumber < $start) {
@@ -263,6 +281,7 @@ final class ModelGenerator extends AbstractGenerator implements ModelGeneratorIn
 
         return -1;
     }
+
     protected function getBodyMethod(string $fullClassName, string $method): string
     {
         $reflectionClass = new \ReflectionClass($fullClassName);

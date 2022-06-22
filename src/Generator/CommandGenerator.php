@@ -68,12 +68,12 @@ PHP
 
         $method = $class->addMethod('execute')
             ->setVisibility('protected')->setReturnType('int');
-        $method->addParameter('input')->setTypeHint(InputInterface::class);
-        $method->addParameter('output')->setTypeHint(OutputInterface::class);
+        $method->addParameter('input')->setType(InputInterface::class);
+        $method->addParameter('output')->setType(OutputInterface::class);
 
         $method->addBody("// do stuff\nreturn 0;");
 
-        $class->addExtend(Command::class);
+        $class->setExtends(Command::class);
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($classNamespace->__toString()), $fileLocate));
 

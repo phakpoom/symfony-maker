@@ -80,7 +80,7 @@ class ValidatorGenerator extends AbstractGenerator implements GeneratorInterface
         $classNamespace->addUse(Constraint::class);
 
         $class = $classNamespace->addClass($options['name']);
-        $class->addExtend(Constraint::class);
+        $class->setExtends(Constraint::class);
         $method = $class->addMethod('getTargets');
         $method->setBody(<<<PHP
 // or change to prop
@@ -104,11 +104,11 @@ PHP
         $classNamespace->addUse(ConstraintValidator::class);
 
         $class = $classNamespace->addClass($options['name'] . 'Validator');
-        $class->addExtend(ConstraintValidator::class);
+        $class->setExtends(ConstraintValidator::class);
         $method = $class->addMethod('validate');
         $method->setComment("\n@param \$value\n@param Constraint \$constraint\n");
         $method->addParameter('value');
-        $method->addParameter('constraint')->setTypeHint(Constraint::class);
+        $method->addParameter('constraint')->setType(Constraint::class);
         $method->setBody(<<<PHP
 // do stuff
 PHP

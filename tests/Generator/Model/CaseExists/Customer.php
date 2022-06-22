@@ -9,47 +9,32 @@ use Doctrine\Common\Collections\Collection;
 
 class Customer implements CustomerInterface
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id;
 
-    /** @var Collection|DummyInterface[] */
-    protected $groups;
+    /** @var Collection<int, DummyInterface> */
+    protected Collection $groups;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->abc = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGroups(): Collection
     {
         return $this->groups;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasGroup(DummyInterface $group): bool
     {
         return $this->groups->contains($group);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addGroup(DummyInterface $group): void
     {
         if (!$this->hasGroup($group)) {
@@ -58,9 +43,6 @@ class Customer implements CustomerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function removeGroup(DummyInterface $group): void
     {
         if ($this->hasGroup($group)) {

@@ -10,8 +10,7 @@ use Bonn\Maker\Tests\AbstractMakerTestCase;
 
 class CommandGeneratorTest extends AbstractMakerTestCase
 {
-    /** @var CommandGenerator */
-    private $generator;
+    private CommandGenerator $generator;
     protected function setUp(): void
     {
         parent::setUp();

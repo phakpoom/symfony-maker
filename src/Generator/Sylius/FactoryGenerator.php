@@ -56,7 +56,7 @@ class FactoryGenerator extends AbstractSyliusGenerator
         $factoryClass->addProperty('className')->setComment("\n @var string \n");
         $factoryClass->addMethod('__construct')
             ->setVisibility('public')->setBody('$this->className = $className;')
-            ->addParameter('className')->setTypeHint('string');
+            ->addParameter('className')->setType('string');
 
         $interfaceName = NameResolver::resolveOnlyClassName($options['class']) . 'Interface';
         $factoryClass->addMethod('createNew')

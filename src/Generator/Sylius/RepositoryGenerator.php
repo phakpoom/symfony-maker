@@ -53,7 +53,7 @@ class RepositoryGenerator extends AbstractSyliusGenerator
 
         $classNamespace->addUse('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
         $classNamespace->addUse('Doctrine\\ORM\\QueryBuilder');
-        $repositoryClass->addExtend('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
+        $repositoryClass->setExtends('Sylius\\Bundle\\ResourceBundle\\Doctrine\\ORM\\EntityRepository');
         $repositoryInterfaceClass = $interfaceNamespace->addInterface($className . 'RepositoryInterface');
         $interfaceNamespace->addUse('Sylius\\Component\\Resource\\Repository\\RepositoryInterface');
         $repositoryInterfaceClass->addExtend('Sylius\\Component\\Resource\\Repository\\RepositoryInterface');
