@@ -2,8 +2,8 @@
 [![Build Status](https://travis-ci.org/phakpoom/symfony-maker.svg?branch=master)](https://travis-ci.org/phakpoom/symfony-maker)
 
 
-## (LTS) master php8+
-## (Drop Support) 1.0.0 php7.2+
+#### (LTS) master php8+
+#### (Drop Support) 1.0.0 php7.2+
 
 ## Installation with composer
 
