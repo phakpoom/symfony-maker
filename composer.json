@@ -18,10 +18,10 @@
     "nette/php-generator": "^4.0",
     "phpdocumentor/reflection-docblock": "^5.3",
     "servo/fluidxml": "^1.21",
-    "symfony/filesystem": "^5.4",
-    "symfony/finder": "^5.4",
-    "symfony/framework-bundle": "^5.4",
-    "symfony/options-resolver": "^5.4"
+    "symfony/filesystem": "^5.4 | ^6.0 | ^7.0",
+    "symfony/finder": "^5.4 | ^6.0 | ^7.0",
+    "symfony/framework-bundle": "^5.4 | ^6.0 | ^7.0",
+    "symfony/options-resolver": "^5.4 | ^6.0 | ^7.0"
   },
   "config": {
     "sort-packages": true,
