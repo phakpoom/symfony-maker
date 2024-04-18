@@ -129,11 +129,12 @@ class TranslationType implements PropTypeInterface, NamespaceModifyableInterface
 
         // move createTranslation to bottom
         // Add createTranslation method
+        $translationClassName = $classType->getNamespace()->getName() . '\\' . $classType->getName() . 'Translation';
         $classType->removeMethod('createTranslation');
         $method = $classType
             ->addMethod('createTranslation')
             ->setVisibility('protected')
-            ->setReturnType('Sylius\\Component\\Resource\\Model\\TranslationInterface');
+            ->setReturnType('Sylius\\Component\\Resource\\Model\\TranslationInterface|' . $translationClassName);
         $method->setBody('return new ' . $classType->getName() . 'Translation();');
 
         $this->manager->persist(new Code(PhpDoctypeCode::render($translationClassNameSpace->__toString()),
