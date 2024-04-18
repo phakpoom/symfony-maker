@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Generator\Sylius;
+namespace tests\Generator\Sylius;
 
 use Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver;
 use Bonn\Maker\Tests\AbstractMakerTestCase;

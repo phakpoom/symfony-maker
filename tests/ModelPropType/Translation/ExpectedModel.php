@@ -48,7 +48,7 @@ class Mock implements MockInterface
         $this->getTranslation()->setDescription($description);
     }
 
-    protected function createTranslation(): TranslationInterface
+    protected function createTranslation(): TranslationInterface|MockTranslation
     {
         return new MockTranslation();
     }
