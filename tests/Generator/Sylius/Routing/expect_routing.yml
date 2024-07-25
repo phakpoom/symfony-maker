@@ -1,0 +1,17 @@
+test_routing_generator_test:
+    defaults:
+        _role_exprs:
+            -
+                _role_expr: "admin_context.ableAccessInMenu('routing_generator_test')"
+    resource: |-
+        alias: test.routing_generator_test
+        section: admin
+        templates: "@BonnAdmin/Crud"
+        redirect: index
+        grid: test_routing_generator_test
+        permission: true
+        vars:
+            all:
+                templates:
+                    form: "_Admin/RoutingGeneratorTest/_form.html.twig"
+    type: sylius.resource

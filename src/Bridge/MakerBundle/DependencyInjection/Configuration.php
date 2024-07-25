@@ -39,6 +39,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('repository_dir')->defaultValue('Doctrine/ORM')->end()
                 ->scalarNode('controller_dir')->defaultValue('Controller')->end()
                 ->scalarNode('doctrine_mapping_dir_name')->defaultValue('Resources/config/doctrine/model')->end()
+                ->scalarNode('grid_dir')->defaultValue('Resources/config/grid')->end()
+                ->scalarNode('routing_dir')->defaultValue('Resources/config/route')->end()
                 ->scalarNode('model_dir_name')->defaultValue('Model')->end()
                 ->scalarNode('cache_dir')->defaultNull()->end()
                 ->scalarNode('cache_max_keep_versions')->defaultValue(20)->end()

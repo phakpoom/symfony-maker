@@ -1,0 +1,3 @@
+imports:
+    - { resource: /test }
+    - { resource: ./grid_generator_test.yml }

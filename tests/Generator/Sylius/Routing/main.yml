@@ -1,0 +1,5 @@
+test:
+    path: /test
+    defaults:
+        _controller: test.controller.test::test
+

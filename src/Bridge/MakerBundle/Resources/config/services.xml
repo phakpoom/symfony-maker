@@ -42,7 +42,6 @@
             <tag name="console.command"/>
         </prototype>
 
-
         <!--SERVICE-->
         <prototype namespace="Bonn\Maker\Bridge\MakerBundle\Service\" resource="../../Service/*" autowire="true" />
     </services>

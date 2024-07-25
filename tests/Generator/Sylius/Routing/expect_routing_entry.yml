@@ -1,0 +1,6 @@
+test:
+    path: /test
+    defaults:
+        _controller: 'test.controller.test::test'
+test_routing_generator_test:
+    resource: ./routing_generator_test.yml
