@@ -28,6 +28,7 @@ final class GridGenerator extends AbstractGenerator implements GeneratorInterfac
     {
         $resolver
             ->setRequired('class')
+            ->setDefined('namespace')
             ->setRequired('grid_dir')
         ;
     }

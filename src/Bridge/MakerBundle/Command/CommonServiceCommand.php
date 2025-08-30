@@ -19,7 +19,7 @@ abstract class CommonServiceCommand extends AbstractGenerateCommand
 
     abstract public function getServiceEntryXmlFileName(): string;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('bonn:' . $this->getServiceTypeName() . ':maker')

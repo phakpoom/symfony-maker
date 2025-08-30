@@ -60,7 +60,7 @@ PHP
         );
 
         $method = $class->addMethod('configure')
-            ->setVisibility('protected');
+            ->setVisibility('protected')->setReturnType('void');
         $method->setBody(<<<PHP
 // addArgument, addOption
 PHP

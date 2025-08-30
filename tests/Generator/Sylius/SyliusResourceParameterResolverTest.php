@@ -7,7 +7,7 @@ namespace tests\Generator\Sylius;
 use Bonn\Maker\Generator\Sylius\SyliusResourceServiceNameResolver;
 use Bonn\Maker\Tests\AbstractMakerTestCase;
 
-class SyliusResourceServiceNameResolverTest extends AbstractMakerTestCase
+class SyliusResourceParameterResolverTest extends AbstractMakerTestCase
 {
     public function testWithoutPrefix()
     {
