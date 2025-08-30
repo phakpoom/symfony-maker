@@ -14,7 +14,7 @@ class GeneratorCommandPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         foreach ($container->findTaggedServiceIds('console.command') as $id => $tags) {
             $definition = $container->getDefinition($id);

@@ -14,7 +14,7 @@ class GeneratorServicePass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         foreach ($container->findTaggedServiceIds('bonn_maker.generator') as $id => $tags) {
             $definition = $container->getDefinition($id);
