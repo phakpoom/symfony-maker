@@ -68,8 +68,21 @@ abstract class AbstractGenerateCommand extends Command
             $resourceDir = implode('/', array_slice($resourceDir, 0, count($resourceDir) - 1));
 
             $classDetail = new \ReflectionClass($className);
-            if (!in_array('Sylius\\Component\\Resource\\Model\\ResourceInterface', $classDetail->getInterfaceNames())) {
-                throw new \InvalidArgumentException(sprintf('Class %s must implement %s', $className, 'Sylius\\Component\\Resource\\Model\\ResourceInterface'));
+            $interfaces = [
+                'Sylius\\Resource\\Model\\ResourceInterface',
+                'Sylius\\Component\\Resource\\Model\\ResourceInterface',
+            ];
+            $isInterfaceOk = false;
+            foreach ($interfaces as $interface) {
+                if (in_array($interface, $classDetail->getInterfaceNames())) {
+                    $isInterfaceOk = true;
+
+                    break;
+                }
+            }
+
+            if (!$isInterfaceOk) {
+                throw new \InvalidArgumentException(sprintf('Class %s must implement %s', $className, 'Sylius\\Resource\\Model\\ResourceInterface'));
             }
         }
 
